@@ -1,7 +1,7 @@
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
-	author: "nobody",
+	name: "Incremental Infinity",
+	id: "iinf",
+	author: "seder3214",
 	pointsName: "points",
 	modFiles: ["layers.js", "tree.js"],
 
@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
+	num: "0.01",
 	name: "Literally nothing",
 }
 
@@ -43,6 +43,11 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if (hasUpgrade("b", 55)) gain = gain.times(upgradeEffect("b", 55))
+	if (hasUpgrade("b", 45)) gain = gain.pow(upgradeEffect("b", 44)).times(2)
+	if (hasUpgrade("b", 43)) gain = gain.times(upgradeEffect("b", 43))
+	if (hasUpgrade("b", 15)) gain = gain.times(upgradeEffect("b", 15))
+	if (hasUpgrade("b", 11)) gain = gain.times(upgradeEffect("b", 11))
 	return gain
 }
 
