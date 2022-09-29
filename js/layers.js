@@ -17,6 +17,21 @@ addLayer("b", {
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+		if (player.i.energy.gte(1)) mult = mult.times(player.i.energy.max(1).pow(0.4))
+		if (hasUpgrade("i", 11)) mult = mult.times(upgradeEffect("i", 11))
+		if (hasUpgrade("b", 94)) mult = mult.times(upgradeEffect("b", 94))
+		if (hasUpgrade("b", 93)) mult = mult.times(upgradeEffect("b", 93))
+		if (hasUpgrade("b", 92)) mult = mult.times(upgradeEffect("b", 92))
+		if (hasUpgrade("b", 91)) mult = mult.times(upgradeEffect("b", 91))
+		if (hasUpgrade("b", 83)) mult = mult.times(upgradeEffect("b", 83))
+		if (hasUpgrade("b", 82)) mult = mult.times(upgradeEffect("b", 82))
+		if (hasUpgrade("b", 81)) mult = mult.times(upgradeEffect("b", 81))
+		if (player.i.points.gte(1)) mult = mult.times(player.i.points.max(1).times(2))
+		if (player.g.points.gte(1)) mult = mult.times(player.g.points.max(1).times(2))
+		if (hasUpgrade("b", 71)) mult = mult.times(upgradeEffect("b", 71))
+		if (hasUpgrade("b", 63)) mult = mult.times(upgradeEffect("b", 63).pow(0.65))
+		if (hasUpgrade("b", 62)) mult = mult.times(upgradeEffect("b", 62))
+		if (hasUpgrade("b", 61)) mult = mult.times(upgradeEffect("b", 61)).pow(20)
 		if (hasUpgrade("b", 34)) mult = mult.times(upgradeEffect("b", 34))
 		if (hasUpgrade("b", 33)) mult = mult.times(upgradeEffect("b", 33))
 		if (hasUpgrade("b", 54)) mult = mult.times(upgradeEffect("b", 54))
@@ -37,6 +52,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		if (hasUpgrade("b", 44)) eff = eff.pow(upgradeEffect("b", 44))
 			if (hasUpgrade("b", 51)) eff = eff.pow(upgradeEffect("b", 51))
 		if (hasUpgrade("b", 52)) eff = eff.times(upgradeEffect("b", 52))
+		if (player.i.points.gte(1)) eff = eff.times(player.i.points.max(1).times(2))
+		if (player.g.points.gte(1)) eff = eff.times(player.g.points.max(1).times(2))
+		if (hasUpgrade("i", 11)) eff = eff.times(upgradeEffect("i", 11))
+			
         return eff;
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -50,10 +69,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
     ],
 	microtabs: {
     stuff: {
-                    "Boosters": {
+                    "Upgrades": {
                 content: [
                     ["blank", "15px"],
-                    ["upgrades", [1,2,3,7,8]]
+                    ["upgrades", [1,2,3,4,5,6,7,8,9,10]]
                 ]
             },
 			                    "Booster Power": {
@@ -61,7 +80,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 content: [
                     ["blank", "15px"],
 					["display-text", () => "You have <h2 style='color: #9BEDF2; text-shadow: 0 0 10px #9BEDF2'>" + format(player.b.pwr) + "</h2> Booster Power. <br>" + "You are generating " + format(tmp.b.effect) + " Booster Power/s"],
-                    ["upgrades", [4,5,6]]
+                    ["upgrades", [4,5]]
                 ]
             },
 	},
@@ -88,7 +107,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		description: "Points boost booster gain.",
 		cost: new Decimal(280),
 				unlocked() {return hasUpgrade("b", 12)},
-		effect() {return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5)).max(1)},
+		effect() {if (hasUpgrade("b", 35)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5).pow(10)).max(1)
+			else return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5)).max(1)},
 		effectDisplay() {return format(upgradeEffect("b", 13)) + "x"},
 		},
 		14: {
@@ -181,7 +201,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		},
 		 35: {
 		title: "Machinering II",
-		description: "Unlock Generators and Incrementalies",
+		description: "Scale up 'Synergism' softcap by ^2",
 		cost: new Decimal(2e50),
 		unlocked() {return hasUpgrade("b", 34)},
 		},
@@ -286,10 +306,209 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 				effect() {return player.b.points.pow(0.2).min(120)},
 						effectDisplay() {return format(upgradeEffect("b", 55)) + "x"},
 		},
+						61: {
+		title: "Power SSR",
+		description: "Boosters boost booster gain",
+		cost: new Decimal(1.2e61),
+		unlocked() {return hasUpgrade("b", 35)},
+				effect() {return player.b.points.pow(0.002).min(2)},
+						effectDisplay() {return "^" + format(upgradeEffect("b", 61))},
+		},
+						62: {
+		title: "Mult Booster",
+		description: "Power gain boost boooster gain",
+		cost: new Decimal(1.5e67),
+		unlocked() {return hasUpgrade("b", 61)},
+				effect() {return tmp.b.effect.times(3).min(50)},
+						effectDisplay() {return format(upgradeEffect("b", 62)) + "x"},
+		},
+						63: {
+		title: "Div boost",
+		description: "Boost point gain based on boosters/1e10.",
+		cost: new Decimal(3e151),
+		unlocked() {return hasUpgrade("b", 62)},
+				effect() {return player.points.times(player.b.points.div(1e10)).max(1).min(25)},
+						effectDisplay() {return format(upgradeEffect("b", 63)) + "x"},
+		},
+						64: {
+		title: "More Points",
+		description: "Boost point gain based on Power gain",
+		cost: new Decimal(1e195),
+		unlocked() {return hasUpgrade("b", 63)},
+				effect() {return player.points.div(tmp.b.effect).min(1000).max(1)},
+						effectDisplay() {return  format(upgradeEffect("b", 64)) + "x"},
+		},
+								65: {
+		title: "Over Points",
+		description: "Boost point gain based on boosters",
+		cost: new Decimal(3e202),
+		unlocked() {return hasUpgrade("b", 64)},
+				effect() {return player.points.pow(12).div(player.b.points).min(13).max(1)},
+						effectDisplay() {return  format(upgradeEffect("b", 65)) + "x"},
+		},
+										71: {
+		title: "Start Pos",
+		description: "Boost booster gain by points^points",
+		cost: new Decimal(1e204),
+		unlocked() {return hasUpgrade("b", 65)},
+				effect() {if (hasUpgrade("b", 71)) return player.points.max(1).pow(player.points).min(205)
+					else return player.points.min(1)},
+						effectDisplay() {return  format(upgradeEffect("b", 71)) + "x"},
+		},
+										72: {
+		title: "Infinity starts here",
+		description: "Gain 100% of boosters per sec",
+		cost: Decimal.pow(10,308),
+		unlocked() {return hasUpgrade("b", 71)},
+		},
+										73: {
+		title: "Infinity Booster",
+		description: "Gain 500% of boosters per sec",
+		cost: Decimal.pow(10,310),
+		unlocked() {return hasUpgrade("b", 72)},
+		},
+										74: {
+		title: "Infinity Overload?",
+		description: "Gain 5e10% of boosters per sec",
+		cost: Decimal.pow(10,311),
+		unlocked() {return hasUpgrade("b", 73)},
+		},
+										75: {
+		title: "Infinery I",
+		description: "Unlock Generators and Incrementals",
+		cost: Decimal.pow(10,321),
+		unlocked() {return hasUpgrade("b", 74)},
+		},
+										81: {
+		title: "Incremental Booster",
+		description: "Unspent Incrementals boost booster gain",
+		cost: Decimal.pow(10,348),
+						effect() {return player.i.points.add(1).pow(2).min(15).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 81)) + "x"},
+		unlocked() {return player.i.best.gte(1)},
+		},
+										82: {
+		title: "Unincremental Booster",
+		description: "Best Incrementals boost booster gain",
+		cost: Decimal.pow(10,375),
+						effect() {return player.i.best.add(1).pow(2.5).min(35).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 82)) + "x"},
+		unlocked() {return hasUpgrade("b", 81)},
+		},
+												83: {
+		title: "Effect Booster",
+		description: "Best and unspent Incrementals boost booster gain",
+		cost: Decimal.pow(10,409),
+						effect() {return player.i.best.add(1).add(player.i.points).pow(2.5).min(35).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 83)) + "x"},
+		unlocked() {return hasUpgrade("b", 82)},
+		},
+														84: {
+		title: "Int Booster",
+		description: "Decrease Incremental cost by points amount",
+		cost: Decimal.pow(10,463),
+						effect() {return player.points.log10(player.points).pow(5).min(5e8).max(1)},
+						effectDisplay() {return "/" + format(upgradeEffect("b", 84))},
+		unlocked() {return hasUpgrade("b", 83)},
+		},
+														85: {
+		title: "Decrease Booster",
+		description: "Decrease Incremental cost by boosters",
+		cost: Decimal.pow(10.02,463),
+						effect() {return player.b.points.pow(8).min(1e9).max(1)},
+						effectDisplay() {return "/" + format(upgradeEffect("b", 85))},
+		unlocked() {return hasUpgrade("b", 84)},
+		},
+																91: {
+		title: "Area Booster",
+		description: "Points*Incremental gives an exponental boost to booster gain",
+		cost: Decimal.pow(10.04,514),
+						effect() {return player.points.pow(0.015).times(player.i.points.pow(0.015)).min(150).max(1)},
+						effectDisplay() {return  format(upgradeEffect("b", 91)) + "x"},
+		unlocked() {return (player.i.best.gte(2))},
+		},
+																		92: {
+		title: "Merge Booster",
+		description: "Boosters*Incremental gives an exponental boost to booster gain",
+		cost: Decimal.pow(10.025,554),
+						effect() {return player.b.points.pow(0.002).times(player.i.points.pow(0.015)).min(150).max(1)},
+						effectDisplay() {return  format(upgradeEffect("b", 92)) + "x"},
+		unlocked() {return hasUpgrade("b", 91)},
+		},
+																		93: {
+		title: "Ext Booster",
+		description: "Boost boosters based on upgrades amount",
+		cost: Decimal.pow(10.025,609),
+						effect() {let ret = Decimal.pow(1.1, player.b.upgrades.length)
+						return ret;},
+						effectDisplay() {return format(upgradeEffect("b", 93)) + "x"},
+		unlocked() {return  hasUpgrade("b", 92)},
+		},
+																		94: {
+		title: "Pre-final Booster",
+		description: "Boost boosters based on points",
+		cost: Decimal.pow(10,698),
+						effect() {return player.points.pow(0.012).min(500).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 94)) + "x"},
+		unlocked() {return hasUpgrade("b", 93)},
+		},
+																				95: {
+		title: "Final Booster",
+		description: "Boost points based on Incrementals",
+		cost: Decimal.pow(10.01,735),
+						effect() {return player.i.points.pow(100).min(1e24).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 95)) + "x"},
+		unlocked() {return hasUpgrade("b", 94)},
+		},
+																				101: {
+		title: "Mini-Energy Booster",
+		description: "Boost Energy gain by points",
+		cost: Decimal.pow(10.01,1212),
+						effect() {return player.points.pow(0.02).min(1e12).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 101)) + "x"},
+		unlocked() {return hasUpgrade("i", 11)},
+		},
+																				102: {
+		title: "Semi-Energy Booster",
+		description: "Boost Energy gain by boosters",
+		cost: Decimal.pow(10.01,1262),
+						effect() {return player.b.points.pow(0.15).min(1e12).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 102)) + "x"},
+		unlocked() {return hasUpgrade("b", 101)},
+		},
+																				103: {
+		title: "Energy Booster",
+		description: "Boost Energy gain by boosters^2",
+		cost: Decimal.pow(10.01,1475),
+						effect() {return player.b.points.pow(0.3).min(1e100).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 103)) + "x"},
+		unlocked() {return hasUpgrade("b", 102)},
+		},
+																				104: {
+		title: "Mega-Energy Booster",
+		description: "Boost Energy gain by boosters^3",
+		cost: Decimal.pow(10.01,3280),
+						effect() {return player.b.points.pow(0.6).min(1e300).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 104)) + "x"},
+		unlocked() {return hasUpgrade("b", 103)},
+		},
+																						105: {
+		title: "Ultra-Energy Booster",
+		description: "Boost Energy gain by boosters^10",
+		cost: Decimal.pow(10.01,8680),
+						effect() {return player.b.points.pow(1).min(Decimal.pow(10, 2500)).max(1)},
+						effectDisplay() {return format(upgradeEffect("b", 105)) + "x"},
+		unlocked() {return hasUpgrade("b", 104)},
+		},
 	},
 	update(diff) {
 		if (hasUpgrade("b", 32)) return player.b.pwr = player.b.pwr.add(tmp.b.effect.times(diff))
 	},
+			passiveGeneration() {
+				if (hasUpgrade("b", 74)) return (hasUpgrade("b", 74)?5e10:0)
+if (hasUpgrade("b", 73)) return (hasUpgrade("b", 73)?5:0)				
+					if (hasUpgrade("b", 72)) return (hasUpgrade("b", 72)?1:0)
+  },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -299,31 +518,85 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 addLayer("i", {
     name: "incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "I", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    position: 1,
+effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'>" + format(player.i.points.max(1).times(2)) + "x</h2> to Booster and Power gain <br>"},	// Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
+		best: new Decimal(0),
+		energy: new Decimal(0),
     }},
+				    effect() {
+        if (!hasUpgrade("i", 11))
+            return new Decimal(1);
+        let eff = Decimal.pow(1);
+		if (player.i.energy.gte(1)) eff = eff.times(player.i.points.max(1).pow(0.45).add(player.b.points.pow(0.1)).min(1e9))
+			if (hasUpgrade("b", 101)) eff = eff.times(upgradeEffect("b", 101))
+				if (hasUpgrade("b", 102)) eff = eff.times(upgradeEffect("b", 102))
+			if (hasUpgrade("b", 103)) eff = eff.times(upgradeEffect("b", 103))
+			if (hasUpgrade("b", 104)) eff = eff.times(upgradeEffect("b", 104))
+			if (hasUpgrade("b", 105)) eff = eff.times(upgradeEffect("b", 105))
+				if (hasUpgrade("i", 12)) eff = eff.times(upgradeEffect("i", 12))
+        return eff;
+    },
     color: "#F2CD9B",
 	branches: ["b"],
-    requires: new Decimal(1e32), // Can be a function that takes requirement increases into account
+    requires() {return Decimal.pow(10,321)}, // Can be a function that takes requirement increases into account
     resource: "incrementals", // Name of prestige currency
-    baseResource: "points", // Name of resource prestige is based on
-    baseAmount() {return player.points}, // Get the current amount of baseResource
-    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.1, // Prestige currency exponent
+    baseResource: "boosters", // Name of resource prestige is based on
+    baseAmount() {return player.b.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 11, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+		if (hasUpgrade("b", 85)) mult = mult.div(upgradeEffect("b", 85))
+		if (hasUpgrade("b", 84)) mult = mult.div(upgradeEffect("b", 84))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
+			        tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["microtabs", "stuff"],
+        ["blank", "25px"],
+    ],
+	microtabs: {
+    stuff: {
+                    "Upgrades": {
+                content: [
+                    ["blank", "15px"],
+					["display-text", () => "You have <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'>" + format(player.i.energy) + "</h2> Energy, which gains <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'> <br>" + format(player.i.energy.max(1).pow(0.4)) + "x</h2> boost to booster gain"],
+                    ["upgrades", [1,2,3]]
+                ]
+            },
+	},
+	},
+	upgrades: {
+		11: {
+			title: "Incremenergy!",
+			description: "Unspent Incrementals boost booster gain and start gaining 1 energy/s",
+			cost: new Decimal(3),
+			effect() {return player.i.points.max(1).times(3.5)},
+			effectDisplay() {return upgradeEffect("i", 11) + "x"},
+		},
+		12: {
+			title: "Exponent?",
+			description: "Unspent Incrementals boost energy gain",
+			cost: new Decimal(4),
+			effect() {return player.i.points.max(1).times(Decimal.pow(10, 309))},
+			effectDisplay() {return upgradeEffect("i", 12) + "x"},
+		},
+	},
+		update(diff) {
+		if (hasUpgrade("i", 11)) return player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
+	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return hasUpgrade("b", 35)}
+    layerShown(){return (hasUpgrade("b", 75) || player[this.layer].unlocked)}
 })
 addLayer("g", {
     name: "generator", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -335,12 +608,15 @@ addLayer("g", {
     }},
     color: "#E99BF2",
 	branches: ["b"],
-    requires: new Decimal(1e32), // Can be a function that takes requirement increases into account
-    resource: "incrementals", // Name of prestige currency
-    baseResource: "points", // Name of resource prestige is based on
-    baseAmount() {return player.points}, // Get the current amount of baseResource
-    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.1, // Prestige currency exponent
+	effectDescription() {return "which are gaining <h2 style='color: #E99BF2; text-shadow: 0 0 10px #E99BF2'>" + format(player.g.points.max(1).times(2)) + "x</h2> to Booster and Power gain <br>"},
+    requires() {
+			if (player.g.points.gte(1)) return Decimal.pow(19,126200)
+		else return Decimal.pow(10,64817)},// Can be a function that takes requirement increases into account
+    resource: "generators", // Name of prestige currency
+    baseResource: "boosters", // Name of resource prestige is based on
+    baseAmount() {return player.b.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -352,5 +628,5 @@ addLayer("g", {
     hotkeys: [
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return hasUpgrade("b", 35)}
+    layerShown(){return (hasUpgrade("b", 75) || player[this.layer].unlocked)}
 })
