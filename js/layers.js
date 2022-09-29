@@ -610,8 +610,8 @@ addLayer("g", {
 	branches: ["b"],
 	effectDescription() {return "which are gaining <h2 style='color: #E99BF2; text-shadow: 0 0 10px #E99BF2'>" + format(player.g.points.max(1).times(2)) + "x</h2> to Booster and Power gain <br>"},
     requires() {
-			if (player.g.points.gte(1)) return Decimal.pow(19,126200)
-		else return Decimal.pow(10,64817)},// Can be a function that takes requirement increases into account
+			if (player.g.points.gte(1)) return Decimal.pow(10,104260)
+		else return Decimal.pow(10,59265)},// Can be a function that takes requirement increases into account
     resource: "generators", // Name of prestige currency
     baseResource: "boosters", // Name of resource prestige is based on
     baseAmount() {return player.b.points}, // Get the current amount of baseResource
