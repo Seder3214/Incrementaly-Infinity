@@ -455,7 +455,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 																				95: {
 		title: "Final Booster",
 		description: "Boost points based on Incrementals",
-		cost: Decimal.pow(10.01,735),
+		cost: Decimal.pow(10,735),
 						effect() {return player.i.points.pow(100).min(1e24).max(1)},
 						effectDisplay() {return format(upgradeEffect("b", 95)) + "x"},
 		unlocked() {return hasUpgrade("b", 94)},
