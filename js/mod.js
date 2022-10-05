@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.08",
+	num: "0.2",
 	name: "Literally Infinity + Hotkeys",
 }
 
