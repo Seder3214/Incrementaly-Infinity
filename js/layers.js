@@ -26,7 +26,7 @@ addLayer("b", {
 		if (hasUpgrade("i", 21)) mult = mult.times(upgradeEffect("i", 21))
 		if (hasUpgrade("i", 14)) mult = mult.times(upgradeEffect("i", 14))
 		if (hasUpgrade("g", 12)) mult = mult.times(upgradeEffect("g", 12)).pow(upgradeEffect("g", 12).times(2))
-		if (hasUpgrade("g", 11)) mult = mult.times(upgradeEffect("g", 11)).pow(upgradeEffect("g", 11).div(1.8))
+		if (hasUpgrade("g", 11)) mult = mult.times(upgradeEffect("g", 11)).pow(upgradeEffect("g", 11).div(1.3))
 		if (player.i.energy.gte(1)) mult = mult.times(player.i.energy.max(1).pow(0.4))
 		if (hasUpgrade("i", 11)) mult = mult.times(upgradeEffect("i", 11))
 		if (hasUpgrade("b", 94)) mult = mult.times(upgradeEffect("b", 94))

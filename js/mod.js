@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.22",
+	num: "0.24",
 	name: "Literally Infinity + Generators",
 }
 
