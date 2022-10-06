@@ -698,7 +698,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 		33: {
 					title: "Its",
 			description: "Booster^2 boost incrementals passive hardcap",
-			cost: new Decimal(9005500),
+			cost: new Decimal(2000000),
 			unlocked() {return hasUpgrade("i", 32)},
 			effect() {return player.b.points.max(1).pow(2.2).min(15)},
 			effectDisplay() {
