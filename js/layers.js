@@ -7,7 +7,7 @@ addLayer("b", {
 		points: new Decimal(0),
 		best: new Decimal(0),
         pwr: new Decimal(0),
-		auto: false,
+		auto: true,
     }},
 	automate() {},
 	autoUpgrade() {return (hasMilestone("i", 11) && player.b.auto)},
@@ -544,8 +544,9 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 		sci: new Decimal(2000000),
     }},
 					    pasgain() {
-            let gain = new Decimal(0.125);
+            let gain = new Decimal(0.175);
 			let sc = new Decimal(2000000);
+		if (player.ex.points.gte(1)) gain = gain.times(2)
 		if (hasUpgrade("i", 22)) gain = gain.times(upgradeEffect("i", 22))
 		if (hasUpgrade("i", 23)) gain = gain.times(upgradeEffect("i", 23))
 		if (hasUpgrade("i", 24)) gain = gain.times(upgradeEffect("i", 24))
@@ -744,7 +745,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 		43: {
 					title: "Booster",
 			description: "Hardcap boosts its own and energy gain",
-			cost: new Decimal(1.03e12),
+			cost: new Decimal(1.02e12),
 			unlocked() {return hasUpgrade("i", 42)},
 			effect() {return player.i.sci.pow(0.3).min(20)},
 			effectDisplay(){ return format(upgradeEffect("i", 43)) + "x"},
@@ -752,7 +753,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 		44: {
 					title: "Gain",
 			description: "Hardcap boosts booster gain and self-boost hardcap",
-			cost: new Decimal(2.06e13),
+			cost: new Decimal(2.05e13),
 			unlocked() {return hasUpgrade("i", 42)},
 			effect() {return player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)).times(upgradeEffect("i", 43)).times(player.i.sci.pow(300)).pow(1500).min(Decimal.pow(10, 3000000))},
 			effectDisplay(){ return format(upgradeEffect("i", 44)) + "x"},
@@ -771,8 +772,14 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			done() { return (player.i.points.gte(10)) },			
     },
 		},
+					    		doReset(resettingLayer) {
+			if (layers[resettingLayer].row <= layers[this.layer].row) return
+			let keep = [];
+			 if (hasUpgrade("g", 31)) keep.push("milestones");
+			             layerDataReset("i", keep)
+		},
 		update(diff) {
-		if (hasUpgrade("i", 21)) return player.i.points = player.i.points.add(tmp.i.pasgain.times(diff))
+		if (hasMilestone("i", 12)) return player.i.points = player.i.points.add(tmp.i.pasgain.times(diff))
 		if (hasUpgrade("i", 11)) return player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
@@ -954,6 +961,12 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			done() { return (player.g.points.gte(68)) },		
     },
 			},
+			    		doReset(resettingLayer) {
+			if (layers[resettingLayer].row <= layers[this.layer].row) return
+			let keep = [];
+			 if (hasUpgrade("g", 31)) keep.push("milestones");
+			             layerDataReset("g", keep)
+		},
 				update(diff) {
 		if (hasUpgrade("g", 14)) return player.g.energy = player.g.energy.add(tmp.g.effect.times(diff))
 	},
