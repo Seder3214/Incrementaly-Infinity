@@ -779,7 +779,9 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			             layerDataReset("i", keep)
 		},
 		update(diff) {
-		if (hasMilestone("i", 12)) return player.i.points = player.i.points.add(tmp.i.pasgain.times(diff))
+		if (hasMilestone("i", 12)) {
+			player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
+			player.i.points = player.i.points.add(tmp.i.pasgain.times(diff))}
 		if (hasUpgrade("i", 11)) return player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
