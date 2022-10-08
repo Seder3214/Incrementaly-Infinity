@@ -898,7 +898,7 @@ addLayer("g", {
 		22: {
 			title: "Exponents",
 			description: "Each Generator upgrade boosts Generator Power gain",
-			cost: new Decimal(8e46),
+			cost: new Decimal(5e46),
 			unlocked() {return hasUpgrade("g", 21)},
 			effect() {let ret = Decimal.pow(1e10, player.g.upgrades.length)
 				return ret},
@@ -990,7 +990,7 @@ addLayer("ex", {
 	branches: ["g"],
 	effectDescription() {return "which are gaining <h2 style='color: #ffb6c1; text-shadow: 0 0 10px #ffb6c1'>" + format(player.ex.points.max(1).add(1)) + "x</h2> to Incrementals gain <br>"},
     requires() { return new Decimal(80)},// Can be a function that takes requirement increases into account
-    resource: "generators", // Name of prestige currency
+    resource: "expantaNum", // Name of prestige currency
     baseResource: "generators", // Name of resource prestige is based on
     baseAmount() {return player.g.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
