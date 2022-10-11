@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.37",
-	name: "Literally Infinity + FIX 2",
+	num: "0.54",
+	name: "Literally Infinity + ExpantaNums",
 }
 
 let changelog = `<h1>Changelog:</h1><br>

@@ -20,6 +20,7 @@ addLayer("b", {
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+if (hasUpgrade("ex", 13)) mult = mult.times(upgradeEffect("ex", 13))
 				if (player.g.energy.gte(1)) mult = mult.times(player.g.energy.max(1).pow(0.4))
 		if (hasUpgrade("g", 13)) mult = mult.times(upgradeEffect("g", 13)).pow(upgradeEffect("g", 13).times(1e4))
 		if (hasUpgrade("i", 44)) mult = mult.times(upgradeEffect("i", 44))
@@ -105,7 +106,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		title: "Boost!",
 		description: "Boosters boost point gain.",
 		cost: new Decimal(1),
-		effect() {if (hasUpgrade("b", 25)) return player.b.points.pow(0.5).min(.34e9)
+		effect() {if (hasUpgrade("ex", 11)) return player.b.points.pow(0.5).min(upgradeEffect("ex", 11).times(.34e9)).max(1)
+			if (hasUpgrade("b", 25)) return player.b.points.pow(0.5).min(.34e9)
 			else return player.b.points.pow(2.2).min(upgradeEffect("b", 21).times(20)).max(1.5)},
 		effectDisplay() {return format(upgradeEffect("b", 11)) + "x"},
 		},
@@ -546,7 +548,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 					    pasgain() {
             let gain = new Decimal(0.175);
 			let sc = new Decimal(2000000);
-		if (player.ex.points.gte(1)) gain = gain.times(2)
+		if (player.ex.points.gte(1) || hasUpgrade("ex", 11)) gain = gain.times(2)
 		if (hasUpgrade("i", 22)) gain = gain.times(upgradeEffect("i", 22))
 		if (hasUpgrade("i", 23)) gain = gain.times(upgradeEffect("i", 23))
 		if (hasUpgrade("i", 24)) gain = gain.times(upgradeEffect("i", 24))
@@ -565,6 +567,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 		if (hasUpgrade("i", 42)) sc = sc.times(upgradeEffect("i", 42))
 		if (hasUpgrade("i", 43)) sc = sc.times(upgradeEffect("i", 43))
 		if (hasUpgrade("i", 44)) sc = sc.times(sc.pow(300))
+		if (hasUpgrade("ex", 14)) sc = sc.times(gain)
 		if (player.i.points.gte(sc)) gain = gain.div(gain).sub(1)
         return gain;
     },
@@ -775,7 +778,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 					    		doReset(resettingLayer) {
 			if (layers[resettingLayer].row <= layers[this.layer].row) return
 			let keep = [];
-			 if (hasUpgrade("g", 31)) keep.push("milestones");
+								if (hasUpgrade("g", 31)|| player.ex.points.gte(1)) keep.push("milestones");
 			             layerDataReset("i", keep)
 		},
 		update(diff) {
@@ -839,7 +842,7 @@ addLayer("g", {
 	},
 	},
 					    effect() {
-        if (!hasUpgrade("i", 11))
+        if (!hasUpgrade("g", 14))
             return new Decimal(1);
         let eff = Decimal.pow(1);
 		if (player.g.energy.gte(1)) eff = eff.times(player.g.points.pow(1.8).add(player.g.energy.pow(2))).min(1e25)
@@ -966,7 +969,8 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			    		doReset(resettingLayer) {
 			if (layers[resettingLayer].row <= layers[this.layer].row) return
 			let keep = [];
-			 if (hasUpgrade("g", 31)) keep.push("milestones");
+			if (hasUpgrade("ex", 14)) keep.push("upgrades");
+			 if (hasUpgrade("g", 31)|| player.ex.points.gte(1)) keep.push("milestones");
 			             layerDataReset("g", keep)
 		},
 				update(diff) {
@@ -995,10 +999,12 @@ addLayer("ex", {
     resource: "expantaNum", // Name of prestige currency
     baseResource: "generators", // Name of resource prestige is based on
     baseAmount() {return player.g.points}, // Get the current amount of baseResource
-    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 2, // Prestige currency exponent
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.2, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+		if (hasUpgrade("ex", 14)) mult = mult.times(upgradeEffect("ex", 14))
+		if (hasUpgrade("ex", 12)) mult = mult.times(upgradeEffect("ex", 12))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -1012,20 +1018,77 @@ addLayer("ex", {
     ],
 	microtabs: {
     stuff: {
-                    "Upgrades": {
+                    "Main": {
                 content: [
                     ["blank", "15px"],
-                    ["upgrades", [1,2,3,4]]
+                    ["upgrades", [1,2,3,4,10,11,12]]
                 ]
             },
-			                    "Milestones": {
+                    "Milestones": {
                 content: [
                     ["blank", "15px"],
                     "milestones"
                 ]
             },
+			                    "ExBoosters": {
+									unlocked() {return hasUpgrade("ex", 45)},
+                content: [
+                    ["blank", "15px"],
+                    ["upgrades", [5,6,7]],
+					["buyables", [1]]
+                ]
+            },
+			                    "Nums": {
+				unlocked() {return hasUpgrade("ex", 75)},
+                content: [
+                    ["blank", "15px"],
+                    ["buyables", [2,3]],
+					 ["upgrades", [8,9]]
+                ]
+            },
 	},
 	},
+	upgrades: {
+		11: {
+			title: "ExpantaNum Booster",
+			description: "Unspent ExpantaNums boost [Boost!] softcap",
+			cost: new Decimal(1),
+			effect() {return player.ex.points.times(3e300).pow(player.ex.points.max(1)).min(Decimal.pow(10, 300000)).max(Decimal.pow(10, 320))},
+			effectDisplay() {return format(upgradeEffect("ex", 11)) + "x"},
+		},
+		12: {
+			title: "ExEnergy",
+			description: "Points boost ExpantaNum gain",
+			cost: new Decimal(2),
+			unlocked() {return hasUpgrade("ex", 11)},
+			effect() {return player.points.pow(0.0015).min(20)},
+			effectDisplay() {return format(upgradeEffect("ex", 12)) + "x"},
+		},
+		13: {
+			title: "ExPoints",
+			description: "Generators under 10 gives a bonus to booster gain",
+			cost: new Decimal(55),
+			unlocked() {return hasUpgrade("ex", 12)},
+			effect() {return player.g.points.max(1).min(10).times(Decimal.pow(1e10, 1e13)).max(1)},
+			effectDisplay() {return format(upgradeEffect("ex", 13)) + "x"},
+		},
+		14: {
+			title: "ExExPoints",
+			description: "Passive incremental gain after 1e12 gives a boost to generator gain",
+			cost: new Decimal(80),
+			unlocked() {return hasUpgrade("ex", 13)},
+			effect() {if (tmp.i.pasgain.gte(3e12)) return tmp.i.pasgain.pow(0.0001)
+				else return player.points.min(1)},
+			effectDisplay() {return format(upgradeEffect("ex", 14)) + "x"},
+		},
+	},
+				milestones: {
+		11: {
+			requirementDescription: "30 ExpantaNums",
+			effectDescription: "Keep Generator upgrades on reset",
+			done() { return (player.ex.points.gte(30)) },		
+    },
+				},
     row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "e", description: "E: Reset for ExpantaNums", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
