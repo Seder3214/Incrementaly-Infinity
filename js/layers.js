@@ -897,7 +897,7 @@ addLayer("g", {
         unlocked: false,
 		points: new Decimal(0),
 		energy: new Decimal(0),
-		auto: false,
+		auto: true,
     }},
     color: "#E99BF2",
 	branches: ["b"],
