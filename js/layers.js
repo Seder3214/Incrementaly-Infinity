@@ -830,7 +830,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			description: "Generators boost energy gain",
 			cost: new Decimal(Decimal.pow(1e9, 4.06e41)),
 			unlocked() {return (hasUpgrade("i", 61))},
-			effect() {return player.g.points.pow(1e46)},
+			effect() {return player.g.points.pow(1e47)},
 			effectDisplay(){ return format(upgradeEffect("i", 62)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
