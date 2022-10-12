@@ -776,7 +776,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 					title: "ExpantaNums",
 			description: "Expantanums boosts energy gain",
 			cost: new Decimal(Decimal.pow(1e9, 1.14e5)),
-			unlocked() {return (upgradeEffect("ex", 31).gte(1))},
+			unlocked() {return (upgradeEffect("ex", 31).gte(2))},
 			effect() {return player.ex.points.pow(1.6e4)},
 			effectDisplay(){ return format(upgradeEffect("i", 51)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
@@ -818,7 +818,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 					title: "Incrementals",
 			description: "Expantanum boost energy gain at boosted rate",
 			cost: new Decimal(Decimal.pow(1e9, 2.28e11)),
-			unlocked() {return (upgradeEffect("ex", 31).gte(2))},
+			unlocked() {return (upgradeEffect("ex", 31).gte(3))},
 			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 1e9))},
 			effectDisplay(){ return format(upgradeEffect("i", 61)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
@@ -1067,7 +1067,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			title: "Generators^2",
 			description: "Boost Generator Power gain by itself",
 			cost: new Decimal(330),
-			unlocked() {return upgradeEffect("ex", 33).gte(1)},
+			unlocked() {return upgradeEffect("ex", 33).gte(2)},
 			effect() {return player.g.energy.pow(0.05)},
 			effectDisplay() {return format(upgradeEffect("g", 41)) + "x"},
 		},
@@ -1330,8 +1330,9 @@ addLayer("ex", {
 			description: "Each of e10 expantaNums unlocks a new row of Incrementals upgrades (MAX: 2)",
 			cost: new Decimal(3e16),
 			unlocked() {return hasUpgrade("ex", 31)},
-			effect() {if (player.ex.points.gte(1e20)) return player.ex.points.min(2)
-				if (player.ex.points.gte(1e10)) return player.ex.points.min(1)},
+			effect() {if (player.ex.points.gte(1e20)) return player.ex.points.min(3)
+				if (player.ex.points.gte(1e10)) return player.ex.points.min(2)
+					else return player.ex.points.gte(1)},
 			effectDisplay() {return "+" + format(upgradeEffect("ex", 32))},
 		},
 						33: {
@@ -1339,7 +1340,8 @@ addLayer("ex", {
 			description: "Each of e50 expantaNums unlocks a new row of Generator upgrades (MAX: 1)",
 			cost: new Decimal(Decimal.pow(1e9, 4.03e52)),
 			unlocked() {return hasUpgrade("i", 64)},
-			effect() {if (player.ex.points.gte(1e50)) return player.ex.points.min(1)},
+			effect() {if (player.ex.points.gte(1e50)) return player.ex.points.min(2)
+				else return player.ex.points.min(1)},
 			effectDisplay() {return "+" + format(upgradeEffect("ex", 33))},
 		},
 						34: {
