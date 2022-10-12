@@ -1328,11 +1328,11 @@ addLayer("ex", {
 		},
 						32: {
 			title: "Exnumation",
-			description: "Each of e10 expantaNums unlocks a new row of Incrementals upgrades (MAX: 2)",
+			description: "Each of e16/e20 expantaNums unlocks a new row of Incrementals upgrades (MAX: 2)",
 			cost: new Decimal(3e16),
 			unlocked() {return hasUpgrade("ex", 31)},
 			effect() {if (player.ex.points.gte(1e20)) return player.ex.points.min(3)
-				if (player.ex.points.gte(1e10)) return player.ex.points.min(2)
+				else if (player.ex.points.gte(1e16)) return player.ex.points.min(2)
 					else return player.ex.points.gte(1)},
 			effectDisplay() {return "+" + format(upgradeEffect("ex", 32))},
 		},
