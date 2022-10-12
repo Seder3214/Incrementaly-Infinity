@@ -1068,7 +1068,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			description: "Boost Generator Power gain by itself",
 			cost: new Decimal(330),
 			unlocked() {return upgradeEffect("ex", 33).gte(2)},
-			effect() {return player.g.energy.pow(0.05)},
+			effect() {return player.g.energy.pow(0.05).max(1)},
 			effectDisplay() {return format(upgradeEffect("g", 41)) + "x"},
 		},
 				42: {
@@ -1076,7 +1076,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			description: "Generators boosts Generator Power gain",
 			cost: new Decimal(.7e205),
 			unlocked() {return hasUpgrade("g", 41)},
-			effect() {return tmp.g.effect.pow(0.03)},
+			effect() {return tmp.g.effect.pow(0.03).max(1)},
 			effectDisplay() {return format(upgradeEffect("g", 42)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
