@@ -1067,7 +1067,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			title: "Generators^2",
 			description: "Boost Generator Power gain by itself",
 			cost: new Decimal(330),
-			unlocked() {return (upgradeEffect("ex", 33).gte(1))},
+			unlocked() {return upgradeEffect("ex", 33).gte(1)},
 			effect() {return player.g.energy.pow(0.05)},
 			effectDisplay() {return format(upgradeEffect("g", 41)) + "x"},
 		},
