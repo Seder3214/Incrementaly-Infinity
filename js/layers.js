@@ -1111,7 +1111,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			description: "Apply Generator Power to expantaNum gain at boosted rate (^1e67)",
 			cost: new Decimal(Decimal.pow(10, 399)),
 			unlocked() {return hasUpgrade("g", 43)},
-			effect() {return tmp.g.effect.pow(1e67)},
+			effect() {return tmp.g.effect.pow(1e67).max(1)},
 			effectDisplay() {return format(upgradeEffect("g", 45)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
