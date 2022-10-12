@@ -819,7 +819,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			description: "Expantanum boost energy gain at boosted rate",
 			cost: new Decimal(Decimal.pow(1e9, 2.28e11)),
 			unlocked() {return (upgradeEffect("ex", 31).gte(3))},
-			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 1e60))},
+			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 1e40))},
 			effectDisplay(){ return format(upgradeEffect("i", 61)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency

@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.75",
+	num: "0.76",
 	name: "Literally Infinity + ExpantaNumming layer",
 }
 
