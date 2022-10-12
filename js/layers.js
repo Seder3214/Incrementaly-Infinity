@@ -970,7 +970,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			if (layers[resettingLayer].row <= layers[this.layer].row) return
 			let keep = [];
 			if (hasUpgrade("ex", 14)) keep.push("upgrades");
-			 if (hasUpgrade("g", 31)|| player.ex.points.gte(1)) keep.push("milestones");
+			 else if (hasUpgrade("g", 31)|| player.ex.points.gte(1)) keep.push("milestones");
 			             layerDataReset("g", keep)
 		},
 				update(diff) {
