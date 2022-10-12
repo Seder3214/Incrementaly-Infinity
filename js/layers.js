@@ -1130,6 +1130,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			let keep = [];
 			if (hasMilestone("ex", 11)) keep.push("upgrades")
 			  else if (hasUpgrade("g", 31)|| player.ex.points.gte(1)) keep.push("milestones");
+		  layerDataReset("g", keep)
 		},
 				update(diff) {
 		if (hasUpgrade("g", 14)) return player.g.energy = player.g.energy.add(tmp.g.effect.times(diff))
