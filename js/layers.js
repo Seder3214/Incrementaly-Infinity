@@ -1338,10 +1338,10 @@ addLayer("ex", {
 		},
 						33: {
 			title: "Exnumation II",
-			description: "Each of e50 expantaNums unlocks a new row of Generator upgrades (MAX: 1)",
+			description: "Each of ee50 expantaNums unlocks a new row of Generator upgrades (MAX: 1)",
 			cost: new Decimal(Decimal.pow(1e9, 4.03e52)),
 			unlocked() {return hasUpgrade("i", 64)},
-			effect() {if (player.ex.points.gte(1e50)) return player.ex.points.min(2)
+			effect() {if (player.ex.points.gte(Decimal.pow(1e9,1e50))) return player.ex.points.min(2)
 				else return player.ex.points.min(1)},
 			effectDisplay() {return "+" + format(upgradeEffect("ex", 33))},
 		},
