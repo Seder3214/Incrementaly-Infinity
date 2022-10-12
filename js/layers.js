@@ -819,7 +819,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			description: "Expantanum boost energy gain at boosted rate",
 			cost: new Decimal(Decimal.pow(1e9, 2.28e11)),
 			unlocked() {return (upgradeEffect("ex", 31).gte(3))},
-			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 1e25))},
+			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 1e60))},
 			effectDisplay(){ return format(upgradeEffect("i", 61)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
@@ -1287,7 +1287,7 @@ addLayer("ex", {
 				23: {
 			title: "Penta-Boost",
 			description: "Passive ExpantaNums gain boosts itself gain",
-			cost: new Decimal(76040),
+			cost: new Decimal(120040),
 			unlocked() {return hasUpgrade("ex", 22)},
 			effect() {let gain = layers.ex.gainMult().times(1.192).min(150).max(1)
 			return gain.pow(1.2)},
@@ -1312,7 +1312,7 @@ addLayer("ex", {
 						26: {
 			title: "Expandation IV",
 			description: "Energy boosts expantaNum gain",
-			cost: new Decimal(2.34e11),
+			cost: new Decimal(2.35e11),
 			unlocked() {return hasUpgrade("ex", 25)},
 			effect() {return tmp.i.effect.pow(0.3).max(1).min(100)},
 			effectDisplay() {return format(upgradeEffect("ex", 26)) + "x"},
