@@ -902,7 +902,7 @@ addLayer("g", {
     color: "#E99BF2",
 	branches: ["b"],
 			automate() {},
-	autoPrestige() {return (hasMilestone("ex", 13) && player.ex.auto)},
+	autoPrestige() {return (hasMilestone("ex", 13) && player.g.auto)},
 	effectDescription() {return "which are gaining <h2 style='color: #E99BF2; text-shadow: 0 0 10px #E99BF2'>" + format(player.g.points.max(1).add(1)) + "x</h2> to Booster and Power gain <br>"},
     requires() { return Decimal.pow(10,59265)},// Can be a function that takes requirement increases into account
     resource: "generators", // Name of prestige currency
