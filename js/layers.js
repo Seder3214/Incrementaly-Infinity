@@ -1139,7 +1139,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			title: "Generateness II",
 			description: "Apply Energy to Generator Power gain at boosted rate (^4e154)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 500))),
-			unlocked() {return player.ex.buyables[23].gte(1)},
+			unlocked() {return hasUpgrade("g", 51)},
 			effect() {return tmp.i.effect.pow(4e154).min(Decimal.pow(1e300, Decimal.pow(40, 1500)))},
 			effectDisplay() {return format(upgradeEffect("g", 52)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
@@ -1150,7 +1150,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			title: "Generateness III",
 			description: "Apply Boosters to Generator Power gain at boosted rate (^2e154)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 1500))),
-			unlocked() {return player.ex.buyables[23].gte(1)},
+			unlocked() {return hasUpgrade("g", 52)},
 			effect() {return player.b.points.pow(2e154).min(Decimal.pow(1e300, Decimal.pow(40, 3500)))},
 			effectDisplay() {return format(upgradeEffect("g", 53)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
@@ -1161,7 +1161,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			title: "Generateness IV",
 			description: "Apply Self to Self gain at boosted rate (^1e308)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 3500))),
-			unlocked() {return player.ex.buyables[23].gte(1)},
+			unlocked() {return hasUpgrade("g", 53)},
 			effect() {return player.g.energy.pow(1e308).pow(1e308).min(Decimal.pow(1e300, Decimal.pow(40, 15500)))},
 			effectDisplay() {return format(upgradeEffect("g", 54)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
@@ -1172,7 +1172,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			title: "Generateness IV",
 			description: "Apply Points to Generator Power gain at boosted rate (^1e308)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 15500))),
-			unlocked() {return player.ex.buyables[23].gte(1)},
+			unlocked() {return hasUpgrade("g", 54)},
 			effect() {return player.points.pow(Decimal.pow(1e308, 1e308)).min(Decimal.pow(1e300, Decimal.pow(40, 150500)))},
 			effectDisplay() {return format(upgradeEffect("g", 55)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
