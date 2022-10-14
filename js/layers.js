@@ -593,6 +593,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			if (hasUpgrade("i", 61)) eff = eff.times(upgradeEffect("i", 61))
 			if (hasUpgrade("i", 62)) eff = eff.times(upgradeEffect("i", 62))
 			if (hasUpgrade("i", 63)) eff = eff.times(upgradeEffect("i", 63))
+				if (player.ex.buyables[22].gte(1)) eff = eff.times(buyableEffect("ex", 22))
 		
         return eff;
     },
@@ -777,7 +778,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			description: "Expantanums boosts energy gain",
 			cost: new Decimal(Decimal.pow(1e9, 1.14e5)),
 			unlocked() {return (upgradeEffect("ex", 31).gte(2))},
-			effect() {return player.ex.points.pow(1.6e4)},
+			effect() {return player.ex.points.pow(1.6e4).max(1)},
 			effectDisplay(){ return format(upgradeEffect("i", 51)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
@@ -819,7 +820,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			description: "Expantanum boost energy gain at boosted rate",
 			cost: new Decimal(Decimal.pow(1e9, 2.28e11)),
 			unlocked() {return (upgradeEffect("ex", 31).gte(3))},
-			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 4e41))},
+			effect() {return player.ex.points.pow(1e4).sub(player.ex.points.pow(3)).min(Decimal.pow(1e9, 4e41)).max(1)},
 			effectDisplay(){ return format(upgradeEffect("i", 61)) + "x"},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
@@ -930,7 +931,7 @@ addLayer("g", {
                 content: [
                     ["blank", "15px"],
 					["display-text", () => "You have <h2 style='color: #E99BF2; text-shadow: 0 0 10px #E99BF2'>" + format(player.g.energy) + "</h2> Generator Power, which gains <h2 style='color: #E99BF2; text-shadow: 0 0 10px #E99BF2'> <br>" + format(player.g.energy.max(1).pow(0.4)) + "x</h2> boost to booster gain"],
-                    ["upgrades", [1,2,3,4]]
+                    ["upgrades", [1,2,3,4,5]]
                 ]
             },
 			                    "Milestones": {
@@ -953,6 +954,12 @@ addLayer("g", {
 	if (hasUpgrade("g", 42)) eff = eff.times(upgradeEffect("g", 42))
 	if (hasUpgrade("g", 43)) eff = eff.times(upgradeEffect("g", 43))
 	if (hasUpgrade("g", 44)) eff = eff.times(upgradeEffect("g", 44))
+	if (player.ex.buyables[22].gte(1)) eff = eff.times(buyableEffect("ex", 22))
+	if (hasUpgrade("g", 51)) eff = eff.times(upgradeEffect("g", 51))
+		if (hasUpgrade("g", 52)) eff = eff.times(upgradeEffect("g", 52))
+	if (hasUpgrade("g", 53)) eff = eff.times(upgradeEffect("g", 53))
+	if (hasUpgrade("g", 54)) eff = eff.times(upgradeEffect("g", 54))
+		if (hasUpgrade("g", 55)) eff = eff.times(upgradeEffect("g", 55))
         return eff;
     },
 		upgrades: {
@@ -1117,6 +1124,61 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
                 currencyLayer: "g"
 		},
+				51: {
+			title: "Generateness I",
+			description: "Apply expantanum to Generator Power gain at boosted rate (^1e154)",
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 307))),
+			unlocked() {return player.ex.buyables[23].gte(1)},
+			effect() {return player.ex.points.pow(2e154).min(Decimal.pow(1e300, Decimal.pow(40, 500)))},
+			effectDisplay() {return format(upgradeEffect("g", 51)) + "x"},
+currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
+                currencyInternalName: "energy", // Use if using a nonstandard currency
+                currencyLayer: "g"
+		},
+				52: {
+			title: "Generateness II",
+			description: "Apply Energy to Generator Power gain at boosted rate (^4e154)",
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 500))),
+			unlocked() {return player.ex.buyables[23].gte(1)},
+			effect() {return tmp.i.effect.pow(4e154).min(Decimal.pow(1e300, Decimal.pow(40, 1500)))},
+			effectDisplay() {return format(upgradeEffect("g", 52)) + "x"},
+currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
+                currencyInternalName: "energy", // Use if using a nonstandard currency
+                currencyLayer: "g"
+		},
+				53: {
+			title: "Generateness III",
+			description: "Apply Boosters to Generator Power gain at boosted rate (^2e154)",
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 1500))),
+			unlocked() {return player.ex.buyables[23].gte(1)},
+			effect() {return player.b.points.pow(2e154).min(Decimal.pow(1e300, Decimal.pow(40, 3500)))},
+			effectDisplay() {return format(upgradeEffect("g", 53)) + "x"},
+currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
+                currencyInternalName: "energy", // Use if using a nonstandard currency
+                currencyLayer: "g"
+		},
+				54: {
+			title: "Generateness IV",
+			description: "Apply Self to Self gain at boosted rate (^1e308)",
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 3500))),
+			unlocked() {return player.ex.buyables[23].gte(1)},
+			effect() {return player.g.energy.pow(1e308).pow(1e308).min(Decimal.pow(1e300, Decimal.pow(40, 15500)))},
+			effectDisplay() {return format(upgradeEffect("g", 54)) + "x"},
+currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
+                currencyInternalName: "energy", // Use if using a nonstandard currency
+                currencyLayer: "g"
+		},
+				55: {
+			title: "Generateness IV",
+			description: "Apply Points to Generator Power gain at boosted rate (^1e308)",
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 15500))),
+			unlocked() {return player.ex.buyables[23].gte(1)},
+			effect() {return player.points.pow(Decimal.pow(1e308, 1e308)).min(Decimal.pow(1e300, Decimal.pow(40, 150500)))},
+			effectDisplay() {return format(upgradeEffect("g", 55)) + "x"},
+currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
+                currencyInternalName: "energy", // Use if using a nonstandard currency
+                currencyLayer: "g"
+		},
 		},
 			milestones: {
 		11: {
@@ -1150,6 +1212,8 @@ addLayer("ex", {
         unlocked: false,
 		points: new Decimal(0),
 		energy: new Decimal(0),
+		nums: new Decimal(0),
+		numess: new Decimal(0),
     }},
     color: "#ffb6c1",
 	branches: ["g"],
@@ -1175,7 +1239,15 @@ addLayer("ex", {
 		if (hasUpgrade("ex", 16)) mult = mult.times(upgradeEffect("ex", 16))
 		if (hasUpgrade("ex", 14)) mult = mult.times(upgradeEffect("ex", 14))
 		if (hasUpgrade("ex", 12)) mult = mult.times(upgradeEffect("ex", 12))
+		if (player.ex.buyables[21].gte(1)) mult = mult.times(buyableEffect("ex", 21))
+		if (player.ex.buyables[24].gte(1)) mult = mult.times(buyableEffect("ex", 24))
         return mult
+    },
+						    effect() {
+							if (hasUpgrade("ex", 42))
+			return new Decimal(5);
+        if (hasUpgrade("ex", 35))
+            return new Decimal(0.3);
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
@@ -1209,10 +1281,14 @@ addLayer("ex", {
                 ]
             },
 			                    "Nums": {
-				unlocked() {return hasUpgrade("ex", 75)},
+				unlocked() {return hasUpgrade("ex", 35)},
                 content: [
+									["display-text", () => "You have <h2 style='color: #ffb6c1; text-shadow: 0 0 10px #ffb6c1'>" + format(player.ex.numess) + "</h2> Num essences" + "<br> You have <h2 style='color: #ffb6c1; text-shadow: 0 0 10px #ffb6c1'>" + format(player.ex.buyables[11]) + "</h2> Nums."],
                     ["blank", "15px"],
-                    ["buyables", [2,3]],
+                    ["buyables", [1]],
+					["blank", "5px"],
+					["buyables", [2,3]],
+					["clickables", [1]],
 					 ["upgrades", [8,9]]
                 ]
             },
@@ -1256,7 +1332,7 @@ addLayer("ex", {
 			description: "ExpantaNums boost [Synergism] gain",
 			cost: new Decimal(1240),
 			unlocked() {return hasUpgrade("ex", 14)},
-			effect() {return player.ex.points.pow(Decimal.pow(10, 3400)).min(Decimal.pow(1e10, 345000))},
+			effect() {return player.ex.points.pow(Decimal.pow(10, 3400)).min(Decimal.pow(1e10, 345000)).max(1)},
 			effectDisplay() {return format(upgradeEffect("ex", 15)) + "x"},
 		},
 		16: {
@@ -1350,7 +1426,8 @@ addLayer("ex", {
 			description: "Generator Power*Energy boost expantanum gain",
 			cost: new Decimal(Decimal.pow(1e9, 1.36e69)),
 			unlocked() {return hasUpgrade("g", 45)},
-			effect() {return player.g.energy.times(player.i.energy).pow(0.3).min(Decimal.pow(1e9, 1e307))},
+			effect() {
+				return player.g.energy.times(player.i.energy).pow(0.3).min(Decimal.pow(1e9, 1e307))},
 			effectDisplay() {return format(upgradeEffect("ex", 34)) + "x"},
 		},
 						35: {
@@ -1358,6 +1435,30 @@ addLayer("ex", {
 			description: "Unlock new tab",
 			cost: new Decimal(Decimal.pow(1e11, 1.36e306)),
 			unlocked() {return hasUpgrade("ex", 34)},
+		},
+						36: {
+			title: "Numerize II",
+			description: "Now you can buy 2 Nums",
+						unlocked() {return hasUpgrade("ex", 35)},
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 300))),
+		},
+								41: {
+			title: "Numerize III",
+			description: "Now you can buy 4 Nums",
+						unlocked() {return hasUpgrade("ex", 36)},
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(60, 299.7))),
+			unlocked() {return hasUpgrade("ex", 35)}		},
+										42: {
+			title: "ExNumerize",
+			description: "Now you can buy 16 Nums and boost Num Essence Gain",
+						unlocked() {return hasUpgrade("g", 51)},
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 150500))),
+		},
+										43: {
+			title: "ExBoosterize",
+			description: "Unlock a new tab",
+						unlocked() {return hasUpgrade("ex", 42)},
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 1500500))),
 		},
 	},
 				milestones: {
@@ -1378,6 +1479,141 @@ addLayer("ex", {
 			toggles: [["g", "auto"]],			
     },
 				},
+				buyables: {
+									      11: {
+        title: "Reset for Nums",
+        cost(x) {return new Decimal(1).add(x.times(1.5).max(1))},
+        display() {let data = tmp[this.layer].buyables[this.id]
+		if (hasUpgrade("ex",42)) return `Next At ${format(this.cost())} Num Essences (Max: 16)`
+		if (hasUpgrade("ex",41)) return `Next At ${format(this.cost())} Num Essences (Max: 4)`
+		if (hasUpgrade("ex",36)) return `Next At ${format(this.cost())} Num Essences (Max: 2)`
+			else return `Next At ${format(this.cost())} Num Essences (Max: 1)`},
+		canAfford() { if (hasUpgrade("ex", 42)) return (player.ex.numess.gte(this.cost()) && player.ex.buyables[11].lt(16))
+		if (hasUpgrade("ex", 41)) return (player.ex.numess.gte(this.cost()) && player.ex.buyables[11].lt(4))
+		if (hasUpgrade("ex", 36)) return (player.ex.numess.gte(this.cost()) && player.ex.buyables[11].lt(2))
+			else return (player.ex.numess.gte(this.cost()) && player.ex.buyables[11].lt(1))},
+        buy() {
+          player.ex.numess = player.ex.numess.sub(this.cost())
+		  player.ex.points = player.ex.points.sub(player.ex.points)
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+				      21: {
+        title: "Decimal",
+        cost(x) {return new Decimal(1).add(x).times(player.ex.buyables[22].add(1)).times(player.ex.buyables[23].times(8).max(1)).times(player.ex.buyables[24].add(1)).max(1)},
+				canAfford() {return player.ex.buyables[11].gte(this.cost())},
+        display() {return `Boost ExpantaNum gain by Decimal Level<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Nums<br>Effect: +${format(this.effect())}x`},
+        buy() {
+          player.ex.buyables[11] = player.ex.buyables[11].sub(this.cost())
+		  player.ex.points = player.ex.points.sub(player.ex.points)
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          let eff = x.times(Decimal.pow(1e300, Decimal.pow(40, 3e2))).pow(x.pow(20).max(1))
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+				      22: {
+        title: "Boolean",
+        cost(x) {return new Decimal(1).add(x).times(player.ex.buyables[21].add(1)).times(player.ex.buyables[23].times(8).max(1)).times(player.ex.buyables[24].add(1)).max(1)},
+				canAfford() {return player.ex.buyables[11].gte(this.cost())},
+        display() {return `Boost Generator Power and Energy effects by Boolean Level<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Nums<br>Effect: +${format(this.effect())}x`},
+        buy() {
+          player.ex.buyables[11] = player.ex.buyables[11].sub(this.cost())
+		  player.ex.points = player.ex.points.sub(player.ex.points)
+		  player.g.energy = player.g.energy.sub(player.g.energy)
+		  player.i.energy = player.i.energy.sub(player.i.energy)
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          let eff = x.times(Decimal.pow(Decimal.pow(1e170, 1e170), 1e300)).pow(x.pow(30).max(1))
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+				      23: {
+        title: "Double",
+		purchaseLimit: 1,
+        cost(x) {return new Decimal(4).add(x).times(player.ex.buyables[21].add(1)).times(player.ex.buyables[22].add(1)).times(player.ex.buyables[24].add(1)).max(1)},
+				canAfford() {return player.ex.buyables[11].gte(this.cost())},
+        display() {return `Every Double level adds +1 to Exnumation effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Nums<br>Effect: +${format(this.effect())} row`},
+        buy() {
+          player.ex.buyables[11] = player.ex.buyables[11].sub(this.cost())
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          let eff = x
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+				      24: {
+        title: "Double-decimal",
+				purchaseLimit: 1,
+        cost(x) {return new Decimal(16).add(x).times(player.ex.buyables[21].add(1)).times(player.ex.buyables[22].add(1)).times(player.ex.buyables[23].add(1)).max(1)},
+				canAfford() {return player.ex.buyables[11].gte(this.cost())},
+        display() {return `Every Double-Decimal level adds softcap boost to all gains<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Nums<br>Effect: +${format(this.effect())}x`},
+        buy() {
+          player.ex.buyables[11] = player.ex.buyables[11].sub(this.cost())
+		  player.ex.points = player.ex.points.sub(player.ex.points)
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          let eff = x.times(Decimal.pow(1e300, Decimal.pow(40, 1500500)))
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+    },
+	clickables: {
+		      11: {
+        display() {return `Respec Nums`},
+        onClick() {
+          if(confirm("Are you sure you want to respec? This will cause a Nums tab reset and you will not get points back!")){
+			  player.ex.buyables[11] = new Decimal(0)
+            player.ex.buyables[21] = new Decimal(0)
+            player.ex.buyables[22] = new Decimal(0)
+			player.ex.buyables[23] = new Decimal(0)
+			player.ex.buyables[24] = new Decimal(0)
+            player.ex.numess = new Decimal(0)
+			player.ex.points = new Decimal(0)
+			player.g.energy = new Decimal(0)
+			player.i.energy = new Decimal(0)
+          }
+        },
+        canClick() {return true},
+        style: {
+          width: "100px",
+          minHeight: "50px",
+        },
+      },
+	},
+	update(diff) {
+		if (player.ex.points.gte(Decimal.pow(1e10, 1e306))) 
+			player.ex.numess = player.ex.numess.add(tmp.ex.effect.times(diff))
+	},
 								passiveGeneration() {
 				if (hasMilestone("ex", 12)) return (hasMilestone("ex", 12)?0.1:0)
   },
