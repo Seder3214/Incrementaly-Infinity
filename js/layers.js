@@ -1169,7 +1169,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
                 currencyLayer: "g"
 		},
 				55: {
-			title: "Generateness IV",
+			title: "Generateness V",
 			description: "Apply Points to Generator Power gain at boosted rate (^1e308)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 15500))),
 			unlocked() {return hasUpgrade("g", 54)},
