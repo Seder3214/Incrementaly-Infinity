@@ -1151,7 +1151,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			description: "Apply Boosters to Generator Power gain at boosted rate (^2e154)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 1500))),
 			unlocked() {return hasUpgrade("g", 52)},
-			effect() {return player.b.points.pow(2e154).min(Decimal.pow(1e300, Decimal.pow(40, 3500)))},
+			effect() {return player.b.points.pow(2e154).min(Decimal.pow(1e300, Decimal.pow(40, 3500))).max(1)},
 			effectDisplay() {return format(upgradeEffect("g", 53)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
@@ -1162,7 +1162,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 			description: "Apply Self to Self gain at boosted rate (^1e308)",
 			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 3500))),
 			unlocked() {return hasUpgrade("g", 53)},
-			effect() {return player.g.energy.pow(1e308).pow(1e308).min(Decimal.pow(1e300, Decimal.pow(40, 15500)))},
+			effect() {return player.g.energy.pow(1e308).pow(1e308).min(Decimal.pow(1e300, Decimal.pow(40, 15500))).max(1)},
 			effectDisplay() {return format(upgradeEffect("g", 54)) + "x"},
 currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
