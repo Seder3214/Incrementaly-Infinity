@@ -1127,7 +1127,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 				51: {
 			title: "Generateness I",
 			description: "Apply expantanum to Generator Power gain at boosted rate (^1e154)",
-			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 304))),
+			cost: new Decimal(Decimal.pow(1e300, Decimal.pow(40, 303))),
 			unlocked() {return player.ex.buyables[23].gte(1)},
 			effect() {return player.ex.points.pow(2e154).min(Decimal.pow(1e300, Decimal.pow(40, 500)))},
 			effectDisplay() {return format(upgradeEffect("g", 51)) + "x"},
