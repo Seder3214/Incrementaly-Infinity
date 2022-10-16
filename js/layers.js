@@ -1503,7 +1503,7 @@ addLayer("ex", {
 		},
 										51: {
 			title: "Boosting",
-			description: "Start Producing ExBoosters (Slowly decreases boosters)",
+			description: "Start Producing ExBoosters",
 						unlocked() {return hasUpgrade("ex", 43)},
 			cost() { return new Decimal(Decimal.pow(1e300, Decimal.pow(40, 1500499)))},
 		},
@@ -1623,6 +1623,12 @@ addLayer("ex", {
                 currencyInternalName: "exboost", // Use if using a nonstandard currency
                 currencyLayer: "ex"
 		},
+												61: {
+			title: "Incrementing",
+			description: "Start Producing ExIncrementals",
+						unlocked() {return hasUpgrade("ex", 43)},
+			cost() {return new Decimal(Decimal.pow(1e300, Decimal.pow(40, 160000500)))},
+		},
 																		62: {
 			title: "Incrementaly Booster",
 			description: "Integer level boosts ExIncrementals gain",
@@ -1664,13 +1670,6 @@ addLayer("ex", {
 						currencyDisplayName: "ExIncrementals", // Use if using a nonstandard currency
                 currencyInternalName: "exinc", // Use if using a nonstandard currency
                 currencyLayer: "ex"
-		},
-	
-										61: {
-			title: "Incrementing",
-			description: "Start Producing ExIncrementals (Slowly decreases incrementals",
-						unlocked() {return hasUpgrade("ex", 43)},
-			cost() {return new Decimal(Decimal.pow(1e300, Decimal.pow(40, 160000500)))},
 		},
 	},
 				milestones: {
