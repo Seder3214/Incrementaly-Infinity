@@ -1648,7 +1648,7 @@ addLayer("ex", {
 																				64: {
 			title: "TetrExion",
 			description: "ExBoosters gives an additional exponent to ExIncrementals gain",
-						unlocked() {return hasUpgrade("ex", 62)},
+						unlocked() {return hasUpgrade("ex", 63)},
 			cost() { return new Decimal(45000000)},
 						effect() {return player.ex.exboost.pow(0.01)},
 			effectDisplay() {return "^" + format(upgradeEffect("ex", 64))},
@@ -1659,7 +1659,7 @@ addLayer("ex", {
 																				65: {
 			title: "Finally!",
 			description: "ExBoosters applies to ExIncremental gain and ExIncrementals applies to ExBooster gain",
-						unlocked() {return hasUpgrade("ex", 62)},
+						unlocked() {return hasUpgrade("ex", 64)},
 			cost() { return new Decimal(4e10)},
 						currencyDisplayName: "ExIncrementals", // Use if using a nonstandard currency
                 currencyInternalName: "exinc", // Use if using a nonstandard currency

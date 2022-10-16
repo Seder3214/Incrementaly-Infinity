@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.1",
+	num: "0.93.2",
 	name: "Literally Expanta | Nums",
 }
 
