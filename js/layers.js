@@ -1311,7 +1311,7 @@ addLayer("ex", {
 	},
 	},
 						    incr() {
-        if (hasUpgrade("ex", 61))
+        if (!hasUpgrade("ex", 61) || hasUpgrade("ex", 61))
             exp = new Decimal(0.015)
         let eff = exp.pow(1);
 		if (hasUpgrade("ex", 62)) eff = eff.times(upgradeEffect("ex", 62))
@@ -1321,7 +1321,7 @@ addLayer("ex", {
         return eff;
     },
 							    boost() {
-        if (hasUpgrade("ex", 51))
+        if (!hasUpgrade("ex", 51) || hasUpgrade("ex", 51))
             exp = new Decimal(0.025)
         let eff = exp.pow(1);
 		if (hasUpgrade("ex", 52)) eff = eff.times(upgradeEffect("ex", 52))
