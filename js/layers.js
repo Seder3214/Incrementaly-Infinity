@@ -1468,7 +1468,7 @@ addLayer("ex", {
 			cost: new Decimal(Decimal.pow(1e9, 1.36e69)),
 			unlocked() {return hasUpgrade("g", 45)},
 			effect() {
-				return player.g.energy.times(player.i.energy).pow(0.3).min(Decimal.pow(1e9, 1e307))},
+				return player.g.energy.times(player.i.energy).pow(0.3).min(Decimal.pow(1e9, 1e307)).max(1)},
 			effectDisplay() {return format(upgradeEffect("ex", 34)) + "x"},
 		},
 						35: {
