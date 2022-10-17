@@ -1256,6 +1256,8 @@ addLayer("ex", {
 			return new Decimal(10);
         if (hasUpgrade("ex", 35))
             return new Decimal(0.3);
+				if (player.ex.points.gte(Decimal.pow(1e10, 1e306)))
+					return new Decimal(0.15)
 		
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
