@@ -20,6 +20,9 @@ addLayer("b", {
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+		if (hasUpgrade("m", 15)) mult = mult.times(upgradeEffect("m", 11)).times(upgradeEffect("m", 13))
+		if (hasUpgrade("m", 13) & inChallenge("m", 11)) mult = mult.times(upgradeEffect("m", 13))
+				if (hasUpgrade("m", 11) & inChallenge("m", 11)) mult = mult.times(upgradeEffect("m", 11))
 				if (hasUpgrade("i", 64)) mult = mult.times(player.i.energy.max(1).pow(0.4))
 if (hasUpgrade("ex", 13)) mult = mult.times(upgradeEffect("ex", 13))
 				if (player.g.energy.gte(1)) mult = mult.times(player.g.energy.max(1).pow(0.4))
@@ -65,6 +68,9 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
         if (!hasUpgrade("b", 32))
             return new Decimal(1);
         let eff = Decimal.pow(1);
+		if (hasUpgrade("m", 15)) eff = eff.times(upgradeEffect("m", 14))
+		if (hasUpgrade("m", 14) & inChallenge("m", 11)) eff = eff.times(upgradeEffect("m", 14))
+		if (inChallenge("m", 11)) eff = eff.div(5)
 		if (hasUpgrade("b", 42)) eff = eff.times(upgradeEffect("b", 42))
 		if (hasUpgrade("b", 44)) eff = eff.pow(upgradeEffect("b", 44))
 			if (hasUpgrade("b", 51)) eff = eff.pow(upgradeEffect("b", 51))
@@ -107,7 +113,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		title: "Boost!",
 		description: "Boosters boost point gain.",
 		cost: new Decimal(1),
-		effect() {if (hasUpgrade("ex", 11)) return player.b.points.pow(0.5).min(upgradeEffect("ex", 11).times(.34e9)).max(1)
+		effect() {
+			if (inChallenge("m", 11) && hasUpgrade("b", 21)) return player.b.points.pow(2.2).min(upgradeEffect("b", 21).times(4)).max(1.5)
+			if (inChallenge("m", 11)) return player.b.points.pow(2.2).min(10).max(1.5)
+			if (hasUpgrade("ex", 11)) return player.b.points.pow(0.5).min(upgradeEffect("ex", 11).times(.34e9)).max(1)
 			if (hasUpgrade("b", 25)) return player.b.points.pow(0.5).min(.34e9)
 			else return player.b.points.pow(2.2).min(upgradeEffect("b", 21).times(20)).max(1.5)},
 		effectDisplay() {return format(upgradeEffect("b", 11)) + "x"},
@@ -117,7 +126,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		description: "Boosters boost booster gain.",
 		cost: new Decimal(20),
 		unlocked() {return hasUpgrade("b", 11)},
-		effect() {return player.b.points.pow(0.6).min(upgradeEffect("b", 22).times(20)).max(1)},
+		effect() {if (inChallenge("m", 11)) return player.b.points.pow(0.6).min(upgradeEffect("b", 22).times(4)).max(1)
+			else return player.b.points.pow(0.6).min(upgradeEffect("b", 22).times(20)).max(1)},
 		effectDisplay() {return format(upgradeEffect("b", 12)) + "x"},
 		},
 		13: {
@@ -125,7 +135,9 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		description: "Points boost booster gain.",
 		cost: new Decimal(280),
 				unlocked() {return hasUpgrade("b", 12)},
-		effect() {if (hasUpgrade("ex", 15)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5).pow(10).times(upgradeEffect("ex", 15))).max(1)
+		effect() {if (inChallenge("m", 11) && hasUpgrade("b", 22)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(7)).max(1)
+		if (inChallenge("m", 11)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(3.5)).max(1)
+			if (hasUpgrade("ex", 15)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5).pow(10).times(upgradeEffect("ex", 15))).max(1)
 			if (hasUpgrade("b", 35)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5).pow(10)).max(1)
 			else return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5)).max(1)},
 		effectDisplay() {return format(upgradeEffect("b", 13)) + "x"},
@@ -133,50 +145,61 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		14: {
 		title: "Best Power",
 		description: "Best Boosters boost booster gain.",
-		cost: new Decimal(3200),
+		cost() {if (inChallenge("m", 11)) return new Decimal(1250)
+			else return new Decimal(3200)},
 				unlocked() {return hasUpgrade("b", 13)},
-		effect() {return player.b.best.pow(0.3).max(1).min(4e13)},
+		effect() {if (inChallenge("m", 11)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(2.5)).max(1)
+			else return player.b.best.pow(0.3).max(1).min(4e13)},
 		effectDisplay() {return format(upgradeEffect("b", 14)) + "x"},
 		},
 		15: {
 		title: "Point Booster",
 		description: "Point gain boosts themselves",
-		cost: new Decimal(25000),
+		cost() {if (inChallenge("m", 11)) return new Decimal(3100)
+			else return new Decimal(25000)},
 				unlocked() {return hasUpgrade("b", 14)},
-		effect() {return getPointGen().pow(0.5).max(1)},
+		effect() { return getPointGen().pow(0.5).max(1)},
 		effectDisplay() {return format(upgradeEffect("b", 15)) + "x"},
 		},
 		21: {
 		title: "Softcap Booster",
 		description: "Increase 'Boost!' softcap by points",
-		cost: new Decimal(1005000),
-		unlocked() {return hasUpgrade("b", 15)},
-		effect() {if (hasUpgrade("b", 21)) return player.points.pow(1.15).min(upgradeEffect("b", 23).times(50))
+		cost() {if (inChallenge("m", 11)) return new Decimal(15000)
+			else return new Decimal(1005000)},
+		unlocked() {
+			return hasUpgrade("b", 15)},
+		effect() {if (inChallenge("m", 11)) return player.points.pow(1.15).min(upgradeEffect("b", 23).times(10))
+			if (hasUpgrade("b", 21)) return player.points.pow(1.15).min(upgradeEffect("b", 23).times(50))
 			else return player.points.min(1)},
 		effectDisplay() {return format(upgradeEffect("b", 21)) + "x"},
 		},
 		22: {
 		title: "Boosting Feature",
 		description: "Increase 'Synergism' softcap by best boosters",
-		cost: new Decimal(328600000),
+		cost() {if (inChallenge("m", 11)) return new Decimal(28000)
+			else return new Decimal(328600000)},
 		unlocked() {return hasUpgrade("b", 21)},
-		effect() {if (hasUpgrade("b", 21)) return player.b.points.pow(0.3).min(upgradeEffect("b", 23).times(10))
+		effect() {if (inChallenge("m", 11)) return player.b.points.pow(0.3).min(upgradeEffect("b", 23).times(2))
+			if (hasUpgrade("b", 21)) return player.b.points.pow(0.3).min(upgradeEffect("b", 23).times(10))
 			else return player.points.min(1)},
 		effectDisplay() {return format(upgradeEffect("b", 22)) + "x"},
 		},
 		23: {
 		title: "Ancient Boost!",
 		description: "Increase all booster upgrades softcap by 3.00x",
-		cost: new Decimal(4e9),
+		cost() {if (inChallenge("m", 11)) return new Decimal(78000)
+			else return new Decimal(4e9)},
 		unlocked() {return hasUpgrade("b", 22)},
-		effect() {if (hasUpgrade("b", 23)) return player.points.min(3)
+		effect() {
+			if (hasUpgrade("b", 23)) return player.points.min(3)
 			else return player.points.min(1)},
 		effectDisplay() {return format(upgradeEffect("b", 23)) + "x"},
 		},
 		24: {
 		title: "Synergism v2",
 		description: "Each booster upgrade boost booster gain",
-		cost: new Decimal(3e11),
+		cost() {if (inChallenge("m", 11)) return new Decimal(2000000)
+			else return new Decimal(3e11)},
 		unlocked() {return hasUpgrade("b", 23)},
 		effect() {let ret = Decimal.pow(1.2, player.b.upgrades.length)
 		return ret;},
@@ -185,27 +208,32 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		25: {
 		title: "Sneaky Booster",
 		description: "Scale 'Boost!' softcap but decrease its effect",
-		cost: new Decimal(3e12),
+		cost() {if (inChallenge("m", 11)) return new Decimal(16000000)
+			else return new Decimal(3e12)},
 		unlocked() {return hasUpgrade("b", 24)},
 		},
 		31: {
 		title: "Booster Booster",
 		description: "Best booster scale booster gain",
-		cost: new Decimal(3e19),
+		cost() {if (inChallenge("m", 11)) return new Decimal(1e9)
+			else return new Decimal(3e19)},
 		effect() {return player.b.best.pow(0.5).max(1).min(20)},
-		unlocked() {return hasUpgrade("b", 25)},
+		unlocked() {
+			 return hasUpgrade("b", 25)},
 		effectDisplay() {return format(upgradeEffect("b", 31)) + "x"},
 		},
 		32: {
 		title: "Super Booster",
 		description: "Unlock new tab",
-		cost: new Decimal(1e22),
+		cost() {if (inChallenge("m", 11)) return new Decimal(1e13)
+			else return new Decimal(1e22)},
 		unlocked() {return hasUpgrade("b", 31)},
 		},
         33: {
 		title: "Boostering",
 		description: "Power boost boosters gain",
-		cost: new Decimal(1e40),
+		cost() {if (inChallenge("m", 11)) return new Decimal(3e28)
+			else return new Decimal(1e40)},
 				effect() {return player.b.pwr.pow(0.15).min(50)},
 		unlocked() {return hasUpgrade("b", 55)},
 		effectDisplay() {return format(upgradeEffect("b", 33)) + "x"},
@@ -213,7 +241,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		 34: {
 		title: "Machinering",
 		description: "Points boost boosters gain",
-		cost: new Decimal(3e45),
+		cost() {if (inChallenge("m", 11)) return new Decimal(4e30)
+			else return new Decimal(3e45)},
 				effect() {return player.points.pow(0.15).min(100)},
 		unlocked() {return hasUpgrade("b", 33)},
 		effectDisplay() {return format(upgradeEffect("b", 34)) + "x"},
@@ -221,7 +250,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		 35: {
 		title: "Machinering II",
 		description: "Scale up 'Synergism' softcap by ^2",
-		cost: new Decimal(2e50),
+		cost() {if (inChallenge("m", 11)) return new Decimal(4e34)
+			else return new Decimal(2e50)},
 		unlocked() {return hasUpgrade("b", 34)},
 		},
 				41: {
@@ -229,7 +259,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		description: "Power boosts boosters gain",
 		cost: new Decimal(10),
 		effect() {return player.b.pwr.pow(0.5).max(1).min(30)},
-		unlocked() {return hasUpgrade("b", 32)},
+		unlocked() {
+			return hasUpgrade("b", 32)},
 		effectDisplay() {return format(upgradeEffect("b", 41)) + "x"},
 				currencyDisplayName: "Power", // Use if using a nonstandard currency
                 currencyInternalName: "pwr", // Use if using a nonstandard currency
@@ -260,7 +291,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 				44: {
 		title: "Exponent Booster",
 		description: "Points boosts power gain",
-		cost: new Decimal(5e22),
+		cost() {if (inChallenge("m", 11)) return new Decimal(3e15)
+			else return new Decimal(5e22)},
 		effect() {return player.points.pow(0.014).max(1).min(upgradeEffect("b", 53).times(1.5))},
 		unlocked() {return hasUpgrade("b", 43)},
 		effectDisplay() {return "^" + format(upgradeEffect("b", 44))},
@@ -277,8 +309,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 				51: {
 		title: "Power Ex",
 		description: "Each boosters upgrades gives a boost to Power gain",
-		cost: new Decimal(1e28),
-		unlocked() {return hasUpgrade("b", 45)},
+		cost() {if (inChallenge("m", 11)) return new Decimal(1e18)
+			else return new Decimal(1e28)},
+		unlocked() {
+		 return hasUpgrade("b", 45)},
 				effect() {let ret = Decimal.pow(1.05, player.b.upgrades.length)
 		return ret;},
 						effectDisplay() {return "^" + format(upgradeEffect("b", 51))},
@@ -309,7 +343,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 				54: {
 		title: "Powering Boosters",
 		description: "Power boosts boosters gain",
-		cost: new Decimal(360000000),
+		cost() {if (inChallenge("m", 11)) return new Decimal(16000000)
+			else return new Decimal(360000000)},
 		unlocked() {return hasUpgrade("b", 53)},
 				effect() {return player.b.pwr.pow(0.5).min(30)},
 						effectDisplay() {return format(upgradeEffect("b", 54)) + "x"},
@@ -320,7 +355,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 				55: {
 		title: "Power Mastery",
 		description: "Boosters boost point gain",
-		cost: new Decimal(5e32),
+		cost() {if (inChallenge("m", 11)) return new Decimal(5e22)
+			else return new Decimal(5e32)},
 		unlocked() {return hasUpgrade("b", 54)},
 				effect() {return player.b.points.pow(0.2).min(120)},
 						effectDisplay() {return format(upgradeEffect("b", 55)) + "x"},
@@ -329,7 +365,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		title: "Power SSR",
 		description: "Boosters boost booster gain",
 		cost: new Decimal(1.2e61),
-		unlocked() {return hasUpgrade("b", 35)},
+		unlocked() {
+			return hasUpgrade("b", 35)},
 				effect() {return player.b.points.pow(0.002).min(2)},
 						effectDisplay() {return "^" + format(upgradeEffect("b", 61))},
 		},
@@ -1197,6 +1234,10 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 		  layerDataReset("g", keep)
 		},
 				update(diff) {
+					if (hasUpgrade("m", 21)) {
+						 player.g.energy = player.g.energy.add(tmp.g.effect.times(diff))
+						 player.g.points = player.g.points.add(diff)
+					}
 		if (hasUpgrade("g", 14)) return player.g.energy = player.g.energy.add(tmp.g.effect.times(diff))
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
@@ -1252,6 +1293,8 @@ addLayer("ex", {
 						    effect() {
 								if (hasUpgrade("ex", 73))
 									return new Decimal(upgradeEffect("ex", 73).times(1.5))
+									if (hasUpgrade("m", 24))
+			return new Decimal(100);
 							if (hasUpgrade("ex", 42))
 			return new Decimal(10);
         if (hasUpgrade("ex", 35))
@@ -1317,6 +1360,7 @@ addLayer("ex", {
         if (!hasUpgrade("ex", 61) || hasUpgrade("ex", 61))
             exp = new Decimal(0.015)
         let eff = exp.pow(1);
+		if (hasUpgrade("m", 25)) eff = eff.times(10)
 		if (hasUpgrade("ex", 62)) eff = eff.times(upgradeEffect("ex", 62))
 		if (hasUpgrade("ex", 63)) eff = eff.times(upgradeEffect("ex", 63))
 			if (hasUpgrade("ex", 64)) eff = eff.pow(upgradeEffect("ex", 64))
@@ -1327,6 +1371,7 @@ addLayer("ex", {
         if (!hasUpgrade("ex", 51) || hasUpgrade("ex", 51))
             exp = new Decimal(0.025)
         let eff = exp.pow(1);
+		if (hasUpgrade("m", 25)) eff = eff.times(10)
 		if (hasUpgrade("ex", 52)) eff = eff.times(upgradeEffect("ex", 52))
 		if (hasUpgrade("ex", 53)) eff = eff.times(upgradeEffect("ex", 53))
 		if (hasUpgrade("ex", 54)) eff = eff.times(upgradeEffect("ex", 54))
@@ -1852,6 +1897,8 @@ addLayer("ex", {
       },
 	},
 	update(diff) {
+		if (hasUpgrade("m", 23))
+			player.ex.points = player.ex.points.add(diff)
 						if (hasUpgrade("ex", 61))
 			player.ex.exinc = player.ex.exinc.add(tmp.ex.incr.times(diff))
 				if (hasUpgrade("ex", 51))
@@ -1875,7 +1922,7 @@ addLayer("m", {
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
-		energy: new Decimal(0),
+		masB: new Decimal(0),
     }},
     color: "#fcf174",
 	branches: ["i"],
@@ -1893,6 +1940,16 @@ addLayer("m", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
+							    masBt() {
+        if (!hasChallenge("m", 11) || hasChallenge("m", 11))
+            exp = new Decimal(0.6)
+        let eff = exp.pow(1);
+						if (hasUpgrade("m", 12) & inChallenge("m", 11)) eff = eff.times(upgradeEffect("m", 12))
+		if (hasUpgrade("m", 13) & inChallenge("m", 11)) eff = eff.times(upgradeEffect("m", 13))
+					if (hasUpgrade("m", 15)) eff = eff.times(upgradeEffect("m", 12)).times(upgradeEffect("m", 13)).times(eff)
+		if (hasUpgrade("m", 22)) eff = eff.times(upgradeEffect("m", 22))
+        return eff;
+    },
 				        tabFormat: [
         "main-display",
         "prestige-button",
@@ -1901,22 +1958,167 @@ addLayer("m", {
     ],
 	microtabs: {
     stuff: {
-                    "Upgrades": {
+                    "Masteries": {
                 content: [
                     ["blank", "15px"],
-                    ["upgrades", [1,2,3,4]]
+                    ["challenges", [1]],
+					["blank", "15px"]
                 ]
             },
-			                    "Milestones": {
+			                    "Mastered Boosters": {
                 content: [
                     ["blank", "15px"],
-                    "milestones"
+										["display-text", () => "You have <h2 style='color: #FFA500; text-shadow: 0 0 10px #FFA500'>" + format(player.m.masB) + "</h2> Mastered Boosters"],
+                    "upgrades"
                 ]
             },
 	},
 	},
+	challenges: {
+    11: {
+		completionLimit: 3,
+        name() {return "Mastery - Boosters (" + formatWhole(challengeCompletions("m",11)) + "/3)"},
+        challengeDescription: "While in this challenge, some upgrades in first 2 row of Boosters effects are /5 less efficient, and its cost massively reduced",
+        canComplete: function() {if (challengeCompletions("m", 11) == 2) return player.b.points.gte(3e34)
+			if (challengeCompletions("m", 11) == 1) return player.b.points.gte(1.46e12)
+			else return player.b.points.gte(16000000)},
+		goalDescription() {if (challengeCompletions("m", 11) == 2) return "3e34 Boosters"
+			if (challengeCompletions("m", 11) == 1) return "1.46e12 Boosters"
+			else return "16000000 Boosters"},
+ rewardDescription: "Start generating Mastered Boosters and unlock one more row of Mastered Booster upgrades at first and last completion",
+ style() {
+	return {
+		'border-top-left-radius': '30px',
+		'border-top-right-radius': '0',
+		'border-bottom-right-radius': '0',
+		'border-bottom-left-radius': '30px',
+		'width': '400px',
+		'height': '230px',
+	}
+ },
+    },
+},
+upgrades: {
+	11: {
+		title: "Mastered Mastery",
+		description: "Mastered Boosters boosts booster gain while in Mastery challenges",
+		cost: new Decimal(15),
+		effect() {return player.m.masB.pow(0.78)},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+				effectDisplay() {return format(upgradeEffect("m", 11)) + "x"},
+		
+	},
+	12: {
+		title: "Boosted Mastery",
+		description: "<h5>Each buyed Booster upgrade boosts Mastered Boosters gain, but while you are in Mastery challenges</h5>",
+		cost: new Decimal(40),
+		unlocked() {return hasUpgrade("m", 11)},
+		effect() {let ret = Decimal.pow(1.25, player.b.upgrades.length)
+		return ret},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+				effectDisplay() {return format(upgradeEffect("m", 12)) + "x"},
+		
+	},
+	13: {
+		title: "Exponential Growth",
+		description: "<h5>Number of Mastery - Booster completions boosts Booster and Mastered Boosters gain in Mastery challenges</h5>",
+		cost: new Decimal(630),
+		unlocked() {return hasUpgrade("m", 12)},
+		effect() {let ret = Decimal.pow(3.65, challengeCompletions("m", 11)).max(1)
+		return ret},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+				effectDisplay() {return format(upgradeEffect("m", 13)) + "x"},
+		
+	},
+	14: {
+		title: "Exponential Growth",
+		description: "Boost Booster Power gain by Mastered Boosters",
+		cost: new Decimal(3650),
+		unlocked() {return hasUpgrade("m", 13)},
+		effect() {return player.m.masB.pow(0.15)},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+				effectDisplay() {return format(upgradeEffect("m", 14)) + "x"},
+		
+	},
+	15: {
+		title: "Applying",
+		description: "Now all upgrades effect works even if you arent in challenge",
+		cost: new Decimal(15650),
+		unlocked() {return hasUpgrade("m", 14)},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+		
+	},
+	21: {
+		title: "Automate",
+		description: "Now you will passive generate 1 generators/s",
+		cost: new Decimal(25000000),
+		unlocked() {return (hasUpgrade("m", 15) && challengeCompletions("m", 11) == 3)},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+		
+	},
+	22: {
+		title: "Generators Mastery",
+		description: "Generators gives a boost to Mastered Boosters gain",
+		cost: new Decimal(46000000),
+		effect() {return player.g.points},
+		unlocked() {return (hasUpgrade("m", 21))},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+				effectDisplay() {return format(upgradeEffect("m", 22)) + "x"},
+		
+	},
+	23: {
+		title: "Automate II",
+		description: "Now you will passive generate 1 expantaNums/s",
+		cost: new Decimal(2.3e9),
+		effect() {return player.g.points},
+				unlocked() {return (hasUpgrade("m", 22))},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+		
+	},
+	24: {
+		title: "Automate III",
+		description: "Now you will passive generate 100 Nums/s",
+		cost: new Decimal(4e9),
+		effect() {return player.g.points},
+				unlocked() {return (hasUpgrade("m", 23))},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+		
+	},
+	25: {
+		title: "Last One",
+		description: "Passive generate 10/s ExBoosters <br>and Incrementals ",
+		cost: new Decimal(6e9),
+		effect() {return player.g.points},
+				unlocked() {return (hasUpgrade("m", 24))},
+								currencyDisplayName: "Mastered Boosters", // Use if using a nonstandard currency
+                currencyInternalName: "masB", // Use if using a nonstandard currency
+                currencyLayer: "m",
+		
+	},
+},
 	doReset() {
 		layerDataReset("ex")
+	},
+	update(diff){
+		if (hasChallenge("m", 11)) return player.m.masB = player.m.masB.add(tmp.m.masBt.times(diff))
 	},
     row: 3, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
