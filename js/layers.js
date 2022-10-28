@@ -825,7 +825,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 				52: {
 					title: "Boosts",
 			description: "Apply Energy effect to energy gain",
-			cost: new Decimal(Decimal.pow(1e9, 1.458e5)),
+			cost: new Decimal(Decimal.pow(1e9, 1.454e5)),
 			unlocked() {return (hasUpgrade("i", 51))},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "energy", // Use if using a nonstandard currency
