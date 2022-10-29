@@ -1221,9 +1221,9 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 		},
 			milestones: {
 		11: {
-			requirementDescription: "68 Generators",
+			requirementDescription: "11 Generators",
 			effectDescription: "Gain 1e30% of Booster gain on reset",
-			done() { return (player.g.points.gte(68)) },		
+			done() { return (player.g.points.gte(11)) },		
     },
 			},
 			    		doReset(resettingLayer) {
