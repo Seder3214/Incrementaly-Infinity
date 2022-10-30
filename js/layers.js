@@ -1419,25 +1419,25 @@ addLayer("ex", {
 		15: {
 			title: "Expandation",
 			description: "ExpantaNums boost [Synergism] gain",
-			cost: new Decimal(1240),
+			cost: new Decimal(240),
 			unlocked() {return hasUpgrade("ex", 14)},
 			effect() {return player.ex.points.pow(Decimal.pow(10, 3400)).min(Decimal.pow(1e10, 345000)).max(1)},
 			effectDisplay() {return format(upgradeEffect("ex", 15)) + "x"},
 		},
 		16: {
 			title: "Expandation II",
-			description: "Generators after 150 gives boost to ExpantaNum gain",
-			cost: new Decimal(1840),
+			description: "Generators after 135 gives boost to ExpantaNum gain",
+			cost: new Decimal(840),
 			unlocked() {return hasUpgrade("ex", 15)},
-			effect() {return player.g.points.sub(150).max(1).pow(0.6).min(12500)},
+			effect() {return player.g.points.sub(135).max(1).pow(0.6).min(12500)},
 			effectDisplay() {return format(upgradeEffect("ex", 16)) + "x"},
 		},
 				21: {
 			title: "Expandation III",
-			description: "Generators after 180 gives boost to ExpantaNum gain",
-			cost: new Decimal(7640),
+			description: "Generators after 155 gives boost to ExpantaNum gain",
+			cost: new Decimal(5640),
 			unlocked() {return hasUpgrade("ex", 16)},
-			effect() {return player.g.points.sub(180).max(1).pow(1.2).min(12500)},
+			effect() {return player.g.points.sub(155).max(1).pow(1.2).min(12500)},
 			effectDisplay() {return format(upgradeEffect("ex", 21)) + "x"},
 		},
 				22: {
@@ -1722,9 +1722,9 @@ addLayer("ex", {
 	},
 				milestones: {
 		11: {
-			requirementDescription: "30 ExpantaNums",
+			requirementDescription: "15 ExpantaNums",
 			effectDescription: "Keep Generator upgrades on reset",
-			done() { return (player.ex.points.gte(30)) },		
+			done() { return (player.ex.points.gte(15)) },		
     },
 		12: {
 			requirementDescription: "2500 ExpantaNums",
