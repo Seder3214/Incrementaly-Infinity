@@ -954,6 +954,9 @@ addLayer("g", {
         mult = new Decimal(1)
         return mult
     },
+	    canBuyMax() {
+        return hasMilestone("ex", 12)
+    },
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
@@ -1726,16 +1729,15 @@ addLayer("ex", {
 			effectDescription: "Keep Generator upgrades on reset",
 			done() { return (player.ex.points.gte(15)) },		
     },
-		12: {
+		13: {
 			requirementDescription: "2500 ExpantaNums",
 			effectDescription: "Gain 10% of ExpantaNum",
 			done() { return (player.ex.points.gte(2500)) },		
     },
-		13: {
-			requirementDescription: "e1e56 ExpantaNums",
-			effectDescription: "Auto-buy Generators",
-			done() { return player.ex.points.gte(Decimal.pow(1e9, 2e52))},
-			toggles: [["g", "auto"]],			
+		12: {
+			requirementDescription: "200 ExpantaNums",
+			effectDescription: "You can bulk buy generators",
+			done() { return player.ex.points.gte(200)},		
     },
 				},
 				buyables: {
@@ -1907,7 +1909,7 @@ addLayer("ex", {
 			player.ex.numess = player.ex.numess.add(tmp.ex.effect.times(diff))
 	},
 								passiveGeneration() {
-				if (hasMilestone("ex", 12)) return (hasMilestone("ex", 12)?0.1:0)
+				if (hasMilestone("ex", 13)) return (hasMilestone("ex", 13)?0.1:0)
   },
     row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
