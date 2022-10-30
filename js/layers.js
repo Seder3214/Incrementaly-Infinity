@@ -948,8 +948,7 @@ addLayer("g", {
     baseResource: "boosters", // Name of resource prestige is based on
     baseAmount() {return player.b.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent() {if (hasMilestone("ex", 13)) return new Decimal(34)
-		else return new Decimal(17.86)}, // Prestige currency exponent
+    exponent() { return new Decimal(17.86)}, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
