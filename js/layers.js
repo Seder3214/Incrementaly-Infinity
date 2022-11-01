@@ -1000,7 +1000,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
       },
 						},
 		update(diff) {
-		if (hasMilestone("i", 12)) {
+		if (hasMilestone("i", 12) && !inChallenge("m", 12)) {
 			player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
 			player.i.points = player.i.points.add(tmp.i.pasgain.times(diff))}
 		if (hasUpgrade("i", 11)) return player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
