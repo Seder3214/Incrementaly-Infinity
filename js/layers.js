@@ -20,6 +20,8 @@ addLayer("b", {
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+		if (hasUpgrade("i", 74)) mult = mult.times(upgradeEffect("i", 74))
+				if (hasUpgrade("i", 71)) mult = mult.times(upgradeEffect("i", 71))
 		if (hasUpgrade("m", 15)) mult = mult.times(upgradeEffect("m", 11)).times(upgradeEffect("m", 13))
 		if (hasUpgrade("m", 13) & inChallenge("m", 11)) mult = mult.times(upgradeEffect("m", 13))
 				if (hasUpgrade("m", 11) & inChallenge("m", 11)) mult = mult.times(upgradeEffect("m", 11))
@@ -135,7 +137,9 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		description: "Points boost booster gain.",
 		cost: new Decimal(280),
 				unlocked() {return hasUpgrade("b", 12)},
-		effect() {if (inChallenge("m", 11) && hasUpgrade("b", 22)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(7)).max(1)
+		effect() {if (hasUpgrade("i", 73)) return player.points.pow(1e120).min(upgradeEffect("i", 73).times(7)).max(1)
+			if (hasUpgrade("i", 72)) return player.points.pow(1e12).min(upgradeEffect("i", 72).times(7)).max(1)
+			if (inChallenge("m", 11) && hasUpgrade("b", 22)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(7)).max(1)
 		if (inChallenge("m", 11)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(3.5)).max(1)
 			if (hasUpgrade("ex", 15)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5).pow(10).times(upgradeEffect("ex", 15))).max(1)
 			if (hasUpgrade("b", 35)) return player.points.pow(0.8).min(upgradeEffect("b", 23).times(5).pow(10)).max(1)
@@ -583,6 +587,7 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 		best: new Decimal(0),
 		energy: new Decimal(0),
 		sci: new Decimal(2000000),
+		a: new Decimal(0),
     }},
 					    pasgain() {
             let gain = new Decimal(0.175);
@@ -652,6 +657,9 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
+	canBuyMax(){
+		return (hasUpgrade("i", 73))
+	},
 			        tabFormat: [
         "main-display",
         "prestige-button",
@@ -661,11 +669,21 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 	microtabs: {
     stuff: {
                     "Upgrades": {
+						unlocked() {return (!inChallenge("m", 12))},
                 content: [
                     ["blank", "15px"],
 					["display-text", () => "You are gaining <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'>" + format(tmp.i.pasgain) + "</h2> Incrementals/s" ],
 					["display-text", () => "You have <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'>" + format(player.i.energy) + "</h2> Energy, which gains <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'> <br>" + format(player.i.energy.max(1).pow(0.4)) + "x</h2> boost to booster gain"],
-                    "upgrades"
+                    ["upgrades", [1,2,3,4,5,6]]
+                ]
+            },
+			"Allocations": {
+										unlocked() {return (inChallenge("m", 12))},
+                content: [
+                    ["blank", "15px"],
+			["display-text", () => "You have <h2 style='color: #F2CD9B; text-shadow: 0 0 10px #F2CD9B'>" + format(player.i.buyables[11]) + "</h2> Allocations"],
+			"buyables",
+                    ["upgrades", [7,8,9,10]]
                 ]
             },
 			                    "Milestones": {
@@ -896,6 +914,53 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
                 currencyInternalName: "energy", // Use if using a nonstandard currency
                 currencyLayer: "i",
 		},
+		71: {
+					title: "Booster Allocation",
+			description: "Boost Booster gain by allocations amount. <br> Req: 1 Incremental",
+			cost: new Decimal(1),
+			unlocked() {return true},
+						effect() {return player.i.buyables[11].add(1).pow(Decimal.pow(1.2, 106))},
+			canAfford() {return player.i.buyables[11].gte(1)},
+			pay() {return player.i.buyables[11] = player.i.buyables[11].sub(1)},
+			effectDisplay() {return "x" + format(upgradeEffect("i", 71))},
+				currencyDisplayName: "Allocations", // Use if using a nonstandard currency
+		},
+		72: {
+					title: "Booster Allocation II",
+			description: "Scale [Synergism] effect by generators amount. <br> Req: 3 Incremental",
+			cost: new Decimal(3),
+						unlocked() {return (hasUpgrade("i", 71))},
+			unlocked() {return true},
+						effect() {return player.g.points.add(1).pow(Decimal.pow(1.2, 1040))},
+			canAfford() {return player.i.buyables[11].gte(3)},
+			pay() {return player.i.buyables[11] = player.i.buyables[11].sub(1)},
+			effectDisplay() {return "x" + format(upgradeEffect("i", 72))},
+				currencyDisplayName: "Allocations", // Use if using a nonstandard currency
+		},
+		73: {
+					title: "Booster Allocation III",
+			description: "Scale [Synergism] effect by generators amount and bulk buy Incrementals. <br> Req: 5 Incremental",
+			cost: new Decimal(5),
+						unlocked() {return (hasUpgrade("i", 72))},
+			unlocked() {return true},
+						effect() {return player.g.points.add(1).pow(Decimal.pow(1.2, 2020))},
+			canAfford() {return player.i.buyables[11].gte(5)},
+			pay() {return player.i.buyables[11] = player.i.buyables[11].sub(1)},
+			effectDisplay() {return "x" + format(upgradeEffect("i", 73))},
+				currencyDisplayName: "Allocations", // Use if using a nonstandard currency
+		},
+		74: {
+					title: "Allocation X",
+			description: "Boost Boosters by generators amount and bulk buy Incrementals. <br> Req: 100 Incremental",
+			cost: new Decimal(100),
+						unlocked() {return (hasUpgrade("i", 73))},
+			unlocked() {return true},
+						effect() {return player.g.points.add(1).pow(Decimal.pow(1.2, 5020))},
+			canAfford() {return player.i.buyables[11].gte(5)},
+			pay() {return player.i.buyables[11] = player.i.buyables[11].sub(1)},
+			effectDisplay() {return "x" + format(upgradeEffect("i", 73))},
+				currencyDisplayName: "Allocations", // Use if using a nonstandard currency
+		},
 	},
 	milestones: {
 		11: {
@@ -916,6 +981,24 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 							 if (hasUpgrade("g", 31)|| player.ex.points.gte(1)) keep.push("milestones");
 			             layerDataReset("i", keep)
 		},
+						buyables: {
+									      11: {
+        title: "Reset for Allocation",
+        cost(x) {return new Decimal(3).times(x.add(1).add(player.g.points))},
+        display() {let data = tmp[this.layer].buyables[this.id]
+ return `Next At ${format(this.cost())} Incrementals`},
+		canAfford() {return (player.i.points.gte(this.cost()))},
+        buy() {
+		  player.i.points = player.i.points.sub(this.cost())
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+						},
 		update(diff) {
 		if (hasMilestone("i", 12)) {
 			player.i.energy = player.i.energy.add(tmp.i.effect.times(diff))
@@ -940,12 +1023,13 @@ addLayer("g", {
     color: "#E99BF2",
 	branches: ["b"],
 	effectDescription() {return "which are gaining <h2 style='color: #E99BF2; text-shadow: 0 0 10px #E99BF2'>" + format(player.g.points.max(1).add(1)) + "x</h2> to Booster and Power gain <br>"},
-    requires() { return Decimal.pow(10,59265)},// Can be a function that takes requirement increases into account
+    requires() {return Decimal.pow(10,59265)},// Can be a function that takes requirement increases into account
     resource: "generators", // Name of prestige currency
     baseResource: "boosters", // Name of resource prestige is based on
     baseAmount() {return player.b.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent() { return new Decimal(17.86)}, // Prestige currency exponent
+    exponent() {if (inChallenge("m", 12)) return new Decimal(50)
+		else return new Decimal(17.86)}, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -1233,7 +1317,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 		  layerDataReset("g", keep)
 		},
 				update(diff) {
-					if (hasUpgrade("m", 21)) {
+					if (hasUpgrade("m", 21) && !inChallenge("m", 12)) {
 						 player.g.energy = player.g.energy.add(tmp.g.effect.times(diff))
 						 player.g.points = player.g.points.add(diff)
 					}
@@ -1895,7 +1979,7 @@ addLayer("ex", {
       },
 	},
 	update(diff) {
-		if (hasUpgrade("m", 23))
+		if (hasUpgrade("m", 23)  && !inChallenge("m", 12))
 			player.ex.points = player.ex.points.add(diff)
 						if (hasUpgrade("ex", 61))
 			player.ex.exinc = player.ex.exinc.add(tmp.ex.incr.times(diff))
@@ -1921,6 +2005,7 @@ addLayer("m", {
         unlocked: false,
 		points: new Decimal(0),
 		masB: new Decimal(0),
+		a: new Decimal(0),
     }},
     color: "#fcf174",
 	branches: ["i"],
@@ -1967,7 +2052,15 @@ addLayer("m", {
                 content: [
                     ["blank", "15px"],
 										["display-text", () => "You have <h2 style='color: #FFA500; text-shadow: 0 0 10px #FFA500'>" + format(player.m.masB) + "</h2> Mastered Boosters"],
-                    "upgrades"
+                    ["upgrades", [1,2]]
+                ]
+            },
+			                    "Allocations": {
+                content: [
+                    ["blank", "15px"],
+										["display-text", () => "You have <h2 style='color: #FFA500; text-shadow: 0 0 10px #FFA500'>" + format(player.m.a) + "</h2> Allocations"],
+										"buyables",
+                    ["upgrades", [3,4]]
                 ]
             },
 	},
@@ -1990,6 +2083,24 @@ addLayer("m", {
 		'border-top-right-radius': '0',
 		'border-bottom-right-radius': '0',
 		'border-bottom-left-radius': '30px',
+		'width': '400px',
+		'height': '230px',
+	}
+ },
+    },
+	    12: {
+		completionLimit: 1,
+        name() {return "Mastery - Incrementals (" + formatWhole(challengeCompletions("m",12)) + "/1)"},
+        challengeDescription: "While in this challenge, Upgrades tab in Incrementals will be change to Allocations tab. Automation doesnt work in this challenge",
+        canComplete: function() {return player.i.points.gte(2e38)},
+		goalDescription() { return "2e38 Incrementals"},
+ rewardDescription: "Unlock Allocations.",
+ style() {
+	return {
+		'border-top-left-radius': '0',
+		'border-top-right-radius': '0',
+		'border-bottom-right-radius': '0',
+		'border-bottom-left-radius': '0',
 		'width': '400px',
 		'height': '230px',
 	}
