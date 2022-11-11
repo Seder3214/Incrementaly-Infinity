@@ -2499,7 +2499,7 @@ addLayer("a", {
 		        42: {
             name: "You're Smart II",
             done() {
-                if (hasUpgrade("ex", 41)) return true
+                if (hasUpgrade("ex", 42)) return true
             },
             tooltip: "Get ExNumerize <br>Reward: 326000 AP",
 			onComplete() {
