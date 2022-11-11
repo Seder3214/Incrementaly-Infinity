@@ -2471,9 +2471,9 @@ addLayer("a", {
             done() {
                 if (hasUpgrade("ex", 33)) return true
             },
-            tooltip: "Get Exnumation II <br>Reward: 7000 AP",
+            tooltip: "Get Exnumation II <br>Reward: 37000 AP",
 			onComplete() {
-				return player.a.points = player.a.points.add(7000)
+				return player.a.points = player.a.points.add(37000)
 			},
         },
 		        36: {
@@ -2481,9 +2481,9 @@ addLayer("a", {
             done() {
                 if (hasUpgrade("ex", 35)) return true
             },
-            tooltip: "Unlock Nums <br>Reward: 17000 AP",
+            tooltip: "Unlock Nums <br>Reward: 85000 AP",
 			onComplete() {
-				return player.a.points = player.a.points.add(17000)
+				return player.a.points = player.a.points.add(85000)
 			},
         },
 		        41: {
@@ -2491,9 +2491,9 @@ addLayer("a", {
             done() {
                 if (player.ex.buyables[23].gte(1)) return true
             },
-            tooltip: "Get 1 Double Level <br>Reward: 46000 AP",
+            tooltip: "Get 1 Double Level <br>Reward: 146000 AP",
 			onComplete() {
-				return player.a.points = player.a.points.add(46000)
+				return player.a.points = player.a.points.add(146000)
 			},
         },
 		        42: {
@@ -2501,9 +2501,9 @@ addLayer("a", {
             done() {
                 if (hasUpgrade("ex", 41)) return true
             },
-            tooltip: "Get ExNumerize <br>Reward: 126000 AP",
+            tooltip: "Get ExNumerize <br>Reward: 326000 AP",
 			onComplete() {
-				return player.a.points = player.a.points.add(126000)
+				return player.a.points = player.a.points.add(326000)
 			},
         },
 		        43: {
@@ -2511,9 +2511,9 @@ addLayer("a", {
             done() {
                 if (hasUpgrade("ex", 51)) return true
             },
-            tooltip: "Start Producing ExBoosters <br>Reward: 500000 AP",
+            tooltip: "Start Producing ExBoosters <br>Reward: 800000 AP",
 			onComplete() {
-				return player.a.points = player.a.points.add(500000)
+				return player.a.points = player.a.points.add(800000)
 			},
         },
 		        44: {
@@ -2521,9 +2521,9 @@ addLayer("a", {
             done() {
                 if (hasUpgrade("ex", 61)) return true
             },
-            tooltip: "Start Producing ExIncrementals <br>Reward: 800000 AP",
+            tooltip: "Start Producing ExIncrementals <br>Reward: 1600000 AP",
 			onComplete() {
-				return player.a.points = player.a.points.add(800000)
+				return player.a.points = player.a.points.add(1600000)
 			},
         },
 		        45: {
