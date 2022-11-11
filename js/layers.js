@@ -2608,7 +2608,7 @@ addLayer("a", {
 		},
     },
     tabFormat: ["blank", ["display-text", function() {
-        return "<h4 style='color: #808080;'>Achievements: " + player.a.achievements.length + "/" + (Object.keys(tmp.a.achievements).length - 2) + "</h4><br>You have <h3 style='color: yellow; text-shadow: 0 0 10px yellow'>" + format(player.a.points) + "</h3> Achievement Points, <br><h4 style='color: #808080;'>Giving x" + format(player.a.points.add(1).pow(0.56).pow(player.a.points.sub(1.2e6).max(1))) + " to point gain (not working in challenges)</h4>"
+        return "<h4 style='color: #808080;'>Achievements: " + player.a.achievements.length + "/" + (Object.keys(tmp.a.achievements).length - 2) + "</h4><br>You have <h3 style='color: yellow; text-shadow: 0 0 10px yellow'>" + format(player.a.points) + "</h3> Achievement Points, <br><h4 style='color: #808080;'>Giving x" + format(player.a.points.add(1).pow(0.56).pow(player.a.points.sub(1.2e6).max(1))) + " to point gain (not working in challenges)</h4><br>" + "<h4 style='color: #808080;'>The effect massively boosts at 1.2e6 AP" + "</h4>"
     }
     ], "blank", "blank", "achievements", ],
 }, )
