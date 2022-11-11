@@ -781,13 +781,13 @@ effectDescription() {return "which are gaining <h2 style='color: #F2CD9B; text-s
 			unlocked() {return hasUpgrade("i", 32)},
 			effect() {return player.b.points.max(1).pow(2.2).min(15)},
 			effectDisplay() {
-				if (hasUpgrade("i", 44)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)).times(upgradeEffect("i", 43)).times(player.i.sci.pow(300)))+"</b>"
-				if (hasUpgrade("i", 43)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)).times(upgradeEffect("i", 43)))+"</b>"
-				if (hasUpgrade("i", 42)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)))+"</b>"
-				if (hasUpgrade("i", 41)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)))+"</b>"
-			if (hasUpgrade("i", 34)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b>  <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34))) + "</b>"
-				if (hasUpgrade("i", 33)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33))) + "</b>"
-				else return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Softcap is</b> <b>" + format(player.i.sci) + "</b>"},
+				if (hasUpgrade("i", 44)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)).times(upgradeEffect("i", 43)).times(player.i.sci.pow(300)))+"</b>"
+				if (hasUpgrade("i", 43)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)).times(upgradeEffect("i", 43)))+"</b>"
+				if (hasUpgrade("i", 42)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)).times(upgradeEffect("i", 42)))+"</b>"
+				if (hasUpgrade("i", 41)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34)).times(upgradeEffect("i", 41)))+"</b>"
+			if (hasUpgrade("i", 34)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b>  <b>" + format(player.i.sci.times(upgradeEffect("i", 33)).times(upgradeEffect("i", 34))) + "</b>"
+				if (hasUpgrade("i", 33)) return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b> <b>" + format(player.i.sci.times(upgradeEffect("i", 33))) + "</b>"
+				else return format(upgradeEffect("i", 33)) + "x" + "<br> <b>Current Hardcap is</b> <b>" + format(player.i.sci) + "</b>"},
 		},
 		34: {
 					title: "Own Hardcap",
@@ -1317,7 +1317,7 @@ currencyDisplayName: "Generator Power", // Use if using a nonstandard currency
 		  layerDataReset("g", keep)
 		},
 				update(diff) {
-					if (hasUpgrade("m", 21) && !inChallenge("m", 12)) {
+					if (hasUpgrade("m", 21) && !inChallenge("m", 12) && !inChallenge("m", 11)) {
 						 player.g.energy = player.g.energy.add(tmp.g.effect.times(diff))
 						 player.g.points = player.g.points.add(diff)
 					}
@@ -1979,7 +1979,7 @@ addLayer("ex", {
       },
 	},
 	update(diff) {
-		if (hasUpgrade("m", 23)  && !inChallenge("m", 12))
+		if (hasUpgrade("m", 23) && !inChallenge("m", 12) && !inChallenge("m", 11))
 			player.ex.points = player.ex.points.add(diff)
 						if (hasUpgrade("ex", 61))
 			player.ex.exinc = player.ex.exinc.add(tmp.ex.incr.times(diff))
@@ -2085,6 +2085,7 @@ addLayer("m", {
 		'border-bottom-left-radius': '30px',
 		'width': '400px',
 		'height': '230px',
+				'border-right': '2',
 	}
  },
     },
@@ -2103,6 +2104,7 @@ addLayer("m", {
 		'border-bottom-left-radius': '0',
 		'width': '400px',
 		'height': '230px',
+		'border-left': '0',
 	}
  },
     },
@@ -2288,3 +2290,325 @@ addLayer("c", {
     ],
     layerShown(){return false},
 })
+addLayer("a", {
+    startData() {
+        return {
+            unlocked: true,
+			points: new Decimal(0),
+        }
+    },
+    color: "yellow",
+    row: "side",
+    layerShown() {
+        return true
+    },
+    tooltip() {
+        return ("Achievements")
+    },
+    achievements: {
+        11: {
+            name: "Starting Booster",
+            done() {
+                return player.b.points.gte(10)
+            },
+            tooltip: "Get 10 Boosters. <br>Reward: 2 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(2)
+			},
+        },
+        12: {
+            name: "Three upgrades in a row!",
+            done() {
+                if (hasUpgrade("b", 13)) return true
+            },
+            tooltip: "Get <b>Synergism</b>. <br>Reward: 2 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(2)
+			},
+        },
+        13: {
+            name: "More upgrades?!",
+            done() {
+                if (hasUpgrade("b", 21)) return true
+            },
+            tooltip: "Buy first upgrade in 2nd row <br>Reward: 5 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(5)
+			},
+        },
+        14: {
+            name: "That's really much!",
+            done() {
+                if (hasUpgrade("b", 31)) return true
+            },
+            tooltip: "Buy first upgrade in 3rd row <br>Reward: 10 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(10)
+			},
+        },
+        15: {
+            name: "Over-upgrading!",
+            done() {
+                if (hasUpgrade("b", 41)) return true
+            },
+            tooltip: "Buy first upgrade in 4nd row <br>Reward: 20 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(20)
+			},
+        },
+        16: {
+            name: "Over-over-upgrading!",
+            done() {
+                if (hasUpgrade("b", 51)) return true
+            },
+            tooltip: "Buy first upgrade in 5nd row <br>Reward: 75 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(75)
+			},
+        },
+        21: {
+            name: "Upgrades Mansion",
+            done() {
+                if (hasUpgrade("b", 61)) return true
+            },
+            tooltip: "Buy first upgrade in 6nd row <br>Reward: 125 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(125)
+			},
+        },
+        22: {
+            name: "Incrementy",
+            done() {
+                return player.i.points.gte(1)
+            },
+            tooltip: "Get 1 Incremental <br>Reward: 225 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(225)
+			},
+        },
+        23: {
+            name: "Energizer",
+            done() {
+                return player.i.energy.gte(1)
+            },
+            tooltip: "Get 1 Energy <br>Reward: 285 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(285)
+			},
+        },
+        24: {
+            name: "Hardcap?!",
+            done() {
+                if (hasUpgrade("i", 33)) return true
+            },
+            tooltip: "Get to Incrementals Hardcap <br>Reward: 500 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(500)
+			},
+        },
+        25: {
+            name: "Many Increment<br>als",
+            done() {
+                return player.i.points.gte(1e308)
+            },
+            tooltip: "Get more than 1e308 Incrementals <br>Reward: 1500 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1500)
+			},
+        },
+        26: {
+            name: "Generating Achievements",
+            done() {
+                return player.g.points.gte(1)
+            },
+            tooltip: "Get 1 Generator <br>Reward: 300 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(300)
+			},
+        },
+		        31: {
+            name: "Generator Powers",
+            done() {
+                return player.g.energy.gte(1)
+            },
+            tooltip: "Get 1 Generator Power <br>Reward: 700 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(700)
+			},
+        },
+		        32: {
+            name: "A new adventure",
+            done() {
+                return player.ex.points.gte(1)
+            },
+            tooltip: "Get 1 Expantanum <br>Reward: 2900 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(2900)
+			},
+				},
+		        33: {
+            name: "Expandations",
+            done() {
+                if (hasUpgrade("ex", 15)) return true
+            },
+            tooltip: "Get Expandation <br>Reward: 3300 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(3300)
+			},
+        },
+		        34: {
+            name: "Go back to Incremen<br>ting...",
+            done() {
+                if (hasUpgrade("ex", 32)) return true
+            },
+            tooltip: "Get Exnumation <br>Reward: 5000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(5000)
+			},
+        },
+		        35: {
+            name: "Go back to Generat<br>ors...",
+            done() {
+                if (hasUpgrade("ex", 33)) return true
+            },
+            tooltip: "Get Exnumation II <br>Reward: 7000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(7000)
+			},
+        },
+		        36: {
+            name: "Numerizing Begins",
+            done() {
+                if (hasUpgrade("ex", 35)) return true
+            },
+            tooltip: "Unlock Nums <br>Reward: 17000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(17000)
+			},
+        },
+		        41: {
+            name: "You're Smart I",
+            done() {
+                if (player.ex.buyables[23].gte(1)) return true
+            },
+            tooltip: "Get 1 Double Level <br>Reward: 46000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(46000)
+			},
+        },
+		        42: {
+            name: "You're Smart II",
+            done() {
+                if (hasUpgrade("ex", 41)) return true
+            },
+            tooltip: "Get ExNumerize <br>Reward: 126000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(126000)
+			},
+        },
+		        43: {
+            name: "Ex-ing Boosters",
+            done() {
+                if (hasUpgrade("ex", 51)) return true
+            },
+            tooltip: "Start Producing ExBoosters <br>Reward: 500000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(500000)
+			},
+        },
+		        44: {
+            name: "Ex-ing Incrementals",
+            done() {
+                if (hasUpgrade("ex", 61)) return true
+            },
+            tooltip: "Start Producing ExIncrementals <br>Reward: 800000 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(800000)
+			},
+        },
+		        45: {
+            name: "Mastering Time",
+            done() {
+                return player.m.points.gte(1)
+            },
+            tooltip: "Get 1 Mastery <br>Reward: 1.2e7 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1.2e7)
+			},
+        },
+		        46: {
+            name: "Automating I",
+            done() {
+                if (hasUpgrade("m", 15)) return true
+            },
+            tooltip: "Finish 1 row of Mastered Boosters Upgrades <br>Reward: 1e9 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e9)
+			},
+		},
+		        51: {
+            name: "Challenging",
+            done() {
+                if (challengeCompletions("m",11) == 3) return true
+            },
+            tooltip: "Mastery Boosters for 3 times <br>Reward: 2e10 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(2e10)
+			},
+		},
+		        52: {
+            name: "Automating II",
+            done() {
+                if (hasUpgrade("m", 25)) return true
+            },
+            tooltip: "Finish 2 rows of Mastered Boosters Upgrades <br>Reward: 1e12 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e12)
+			},
+		},
+		        53: {
+            name: "Mastery Time II",
+            done() {
+                return player.m.points.gte(2)
+            },
+            tooltip: "Get 2 Masteries <br>Reward: 1e15 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e15)
+			},
+		},
+		        54: {
+            name: "Allocations!",
+            done() {
+                if (hasUpgrade("i", 71)) return true
+            },
+            tooltip: "Buy 1st Alloctaion while in challenge <br>Reward: 1e22 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e22)
+			},
+		},
+		        55: {
+            name: "More Incermentals",
+            done() {
+                if (hasUpgrade("i", 73)) return true
+            },
+            tooltip: "Buy 3rd Alloctaion while in challenge <br>Reward: 1e25 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e25)
+			},
+		},
+		        56: {
+            name: "Challenging II",
+            done() {
+                if (hasChallenge("m",12)) return true
+            },
+            tooltip: "Mastery Incrementals <br>Reward: 1e30 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e30)
+			},
+		},
+    },
+    tabFormat: ["blank", ["display-text", function() {
+        return "<h4 style='color: #808080;'>Achievements: " + player.a.achievements.length + "/" + (Object.keys(tmp.a.achievements).length - 2) + "</h4><br>You have <h3 style='color: yellow; text-shadow: 0 0 10px yellow'>" + format(player.a.points) + "</h3> Achievement Points, <br><h4 style='color: #808080;'>Giving x" + format(player.a.points.add(1).pow(0.56).pow(player.a.points.sub(1.2e7).pow(2).max(1))) + " to point gain (not working in challenges)</h4>"
+    }
+    ], "blank", "blank", "achievements", ],
+}, )

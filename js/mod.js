@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.6.1",
-	name: "Literally Early Automation",
+	num: "0.95",
+	name: "Literally Achievements",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -43,6 +43,7 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if (hasAchievement("a", 11) && (!inChallenge("m", 11) && (!inChallenge("m",12)))) gain = gain.times(player.a.points.add(1).pow(0.56).pow(player.a.points.sub(10000).pow(2).max(1)))
 	if (hasUpgrade("b", 95)) gain = gain.times(upgradeEffect("b", 95))
 	if (hasUpgrade("b", 65)) gain = gain.times(upgradeEffect("b", 65))
 	if (hasUpgrade("b", 64)) gain = gain.times(upgradeEffect("b", 64))
@@ -65,7 +66,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.points.gte(new Decimal("eee280000000"))
 }
 
 
