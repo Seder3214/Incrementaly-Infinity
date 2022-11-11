@@ -1544,7 +1544,7 @@ addLayer("ex", {
 				24: {
 			title: "Octo-Boost",
 			description: "Boost Generator Power by Generators under 25",
-			cost: new Decimal(1e11),
+			cost: new Decimal(3e10),
 			unlocked() {return hasUpgrade("ex", 23)},
 			effect() {return player.g.points.min(25).pow(20).max(1)},
 			effectDisplay() {return format(upgradeEffect("ex", 24)) + "x"},
@@ -1552,7 +1552,7 @@ addLayer("ex", {
 				25: {
 			title: "Power-Boost",
 			description: "Generator Power boosts expantaNum gain",
-			cost: new Decimal(1.65e11),
+			cost: new Decimal(5e10),
 			unlocked() {return hasUpgrade("ex", 24)},
 			effect() {return tmp.g.effect.pow(0.02).max(1)},
 			effectDisplay() {return format(upgradeEffect("ex", 25)) + "x"},
@@ -1560,7 +1560,7 @@ addLayer("ex", {
 						26: {
 			title: "Expandation IV",
 			description: "Energy boosts expantaNum gain",
-			cost: new Decimal(2.35e11),
+			cost: new Decimal(8e10),
 			unlocked() {return hasUpgrade("ex", 25)},
 			effect() {return tmp.i.effect.pow(0.3).max(1).min(100)},
 			effectDisplay() {return format(upgradeEffect("ex", 26)) + "x"},
@@ -1568,7 +1568,7 @@ addLayer("ex", {
 						31: {
 			title: "Expandation V",
 			description: "Each ExpantaNum milestones gives a boost to itself",
-			cost: new Decimal(2e12),
+			cost: new Decimal(1e12),
 			unlocked() {return hasUpgrade("ex", 25)},
 			effect() {let ret = Decimal.pow(18, player.ex.milestones.length)
 			return ret;},
