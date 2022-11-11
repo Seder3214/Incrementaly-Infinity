@@ -2407,7 +2407,7 @@ addLayer("a", {
 			},
         },
         25: {
-            name: "Many Increment<br>als",
+            name: "<h4>Many Incrementals</h4>",
             done() {
                 return player.i.points.gte(1e308)
             },
@@ -2447,7 +2447,7 @@ addLayer("a", {
 			},
 				},
 		        33: {
-            name: "Expandations",
+            name: "<h4>Expandations</h4>",
             done() {
                 if (hasUpgrade("ex", 15)) return true
             },
@@ -2457,7 +2457,7 @@ addLayer("a", {
 			},
         },
 		        34: {
-            name: "Go back to Incremen<br>ting...",
+            name: "<h4>Go back to Incrementing...</h4>",
             done() {
                 if (hasUpgrade("ex", 32)) return true
             },
@@ -2467,7 +2467,7 @@ addLayer("a", {
 			},
         },
 		        35: {
-            name: "Go back to Generat<br>ors...",
+            name: "<h4>Go back to Generators...</h4>",
             done() {
                 if (hasUpgrade("ex", 33)) return true
             },
@@ -2517,7 +2517,7 @@ addLayer("a", {
 			},
         },
 		        44: {
-            name: "Ex-ing Incrementals",
+            name: "<h4>Ex-ing Incrementals</h4>",
             done() {
                 if (hasUpgrade("ex", 61)) return true
             },
