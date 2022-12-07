@@ -11,7 +11,8 @@ addLayer("b", {
 		auto: true,
     }},
 	automate() {},
-	autoUpgrade() {return (hasMilestone("i", 11) && player.b.auto)},
+	autoUpgrade() { return (!hasAchievement("a", 71) && player.b.auto)
+		else return (hasMilestone("i", 11) && player.b.auto)},
     color() {if (hasAchievement("a", 71)) return "#78a2b7"
 		else return "#9BEDF2"},
     requires() {if (hasAchievement("a", 71)) return new Decimal.pow(10,941)
