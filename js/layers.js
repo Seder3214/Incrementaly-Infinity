@@ -2315,6 +2315,7 @@ addLayer("c", {
 			title: "Hydrogen II",
 			description: "Buyed upgrades boosts Generate Hydrogen effect",
 			cost: new Decimal(1825),
+			unlocked() {return (hasUpgrade("c", 11))},
 			effect() {if (hasUpgrade("c", 12)) ret = Decimal.pow(1.5, player.c.upgrades.length)
 				else ret = new Decimal(1)
 				return ret},
@@ -2327,6 +2328,7 @@ addLayer("c", {
 			title: "Hydrogen III",
 			description: "Add base to Generate Hydrogen effect for each buyed upgrade",
 			cost: new Decimal(11630),
+						unlocked() {return (hasUpgrade("c", 12))},
 			effect() {if (hasUpgrade("c", 15)) ret = Decimal.pow(1.05, player.c.upgrades.length)
 				else if (hasUpgrade("c", 13)) ret = Decimal.pow(0.65, player.c.upgrades.length)
 				else ret = new Decimal(0)
@@ -2340,6 +2342,7 @@ addLayer("c", {
 			title: "Hydrogen IV",
 			description: "Scale Generate Hydrogen effect formula",
 			cost: new Decimal(65450),
+			unlocked() {return (hasUpgrade("c", 13))},
 			currencyDisplayName: "Hydrogen", // Use if using a nonstandard currency
             currencyInternalName: "h", // Use if using a nonstandard currency
             currencyLayer: "c",
@@ -2348,6 +2351,7 @@ addLayer("c", {
 			title: "Hydrogen V",
 			description: "Unlock extra buyable and boost Hydrogen III effect",
 			cost: new Decimal(255450),
+			unlocked() {return (hasUpgrade("c", 14))},
 			currencyDisplayName: "Hydrogen", // Use if using a nonstandard currency
             currencyInternalName: "h", // Use if using a nonstandard currency
             currencyLayer: "c",
@@ -2356,6 +2360,7 @@ addLayer("c", {
 			title: "Hydrogen VI",
 			description: "Add a free levels to Generate Hydrogen for each buyed upgrade",
 			cost: new Decimal(1e19),
+			unlocked() {return (hasUpgrade("c", 15))},
 			effect() {if (hasUpgrade("c", 21)) return player.c.upgrades.length
 			else return new Decimal(0)},
 						effectDisplay() {return "+" + format(upgradeEffect("c",21))},
@@ -2367,6 +2372,7 @@ addLayer("c", {
 			title: "Hydrogen VII",
 			description: "Add a free levels to Mix Hydrogen for each buyed upgrade",
 			cost: new Decimal(1e32),
+			unlocked() {return (hasUpgrade("c", 21))},
 			effect() {if (hasUpgrade("c", 22)) ret = Decimal.pow(7, player.c.upgrades.length)
 			else ret = new Decimal(0)
 		return ret;},
@@ -2379,6 +2385,7 @@ addLayer("c", {
 			title: "Hydrogen VIII",
 			description: "Add a free levels to Generate Hydrogen for each buyed upgrade",
 			cost: new Decimal(1e45),
+			unlocked() {return (hasUpgrade("c", 22))},
 			effect() {if (hasUpgrade("c", 23)) ret = Decimal.div(35, player.c.upgrades.length)
 			else ret = new Decimal(0)
 		return ret;},
@@ -2391,6 +2398,7 @@ addLayer("c", {
 			title: "Hydrogen IX",
 			description: "Apply Hydrogen to point gain",
 			cost: new Decimal(1e53),
+			unlocked() {return (hasUpgrade("c", 23))},
 			effect() {if (hasUpgrade("c", 24)) return player.c.h.pow(1e36)
 			else return new Decimal(0)},
 						effectDisplay() {return format(upgradeEffect("c",24)) + "x"},
@@ -2402,6 +2410,7 @@ addLayer("c", {
 			title: "Hydrogen X",
 			description: "Unlock new Element",
 			cost: new Decimal(3),
+			unlocked() {return (hasUpgrade("c", 24))},
 		},
 	},
 	buyables: {
