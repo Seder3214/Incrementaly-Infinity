@@ -2445,7 +2445,7 @@ addLayer("c", {
           player.c.h = player.c.h.sub(this.cost())
           setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
-        unlocked() {return true},
+				unlocked() {return (hasUpgrade("c", 15))},
         effect(x) {
           let eff = x.add(upgradeEffect("c", 22)).pow(2.15).max(1)
           return eff
@@ -2458,7 +2458,6 @@ addLayer("c", {
 	  						      21: {
         title: "Generate Lithium",
 				purchaseLimit: 1,
-				unlocked() {return (hasUpgrade("c", 25))},
         cost(x) {return new Decimal(3).pow(x.add(1))},
 		canAfford() {return (player.c.points.gte(this.cost()))},
         display() { return `Generate A New Element<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 21)).add(upgradeEffect("c", 23)))}<br>Cost: ${format(this.cost())} Chemicals<br>Element gains: +${format(this.effect())} Hydrogen/s`},
@@ -2466,7 +2465,7 @@ addLayer("c", {
           player.c.points = player.c.points.sub(this.cost())
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
-        unlocked() {return true},
+				unlocked() {return (hasUpgrade("c", 25))},
         effect(x) {
  eff = x.add(1).times(player.c.li.pow(0.15).add(0.75))
           return eff
