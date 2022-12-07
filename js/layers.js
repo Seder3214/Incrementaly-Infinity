@@ -2272,7 +2272,7 @@ addLayer("c", {
     }},
     color: "#d9ff66",
 	branches: ["b"],
-	effectDescription() {return "which are gaining <h2 style='color: #d9ff66; text-shadow: 0 0 10px #d9ff66'>" + format(player.c.points.max(1).add(1)) + "x</h2> to Incrementals gain <br> <h4 style='color: #808080;'>You have " + format(player.c.h) + " Hydrogen</h4><br><h4 style='color: #808080;'>You have " + format(player.c.li) + " Lithium</h4>"},
+	effectDescription() {return "<h4 style='color: #808080;'>You have " + format(player.c.h) + " Hydrogen</h4><br><h4 style='color: #808080;'>You have " + format(player.c.li) + " Lithium</h4>"},
     requires() { return new Decimal(Decimal.pow(1e280, 0.5e29))},// Can be a function that takes requirement increases into account
     resource: "Chemicals", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
@@ -2719,6 +2719,9 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
           height: "120px",
         },
       },
+	},
+	doReset() {
+		layerDataReset("b")
 	},
 	update(diff) {
 				if (player.c.buyables[21].gte(1)) {
