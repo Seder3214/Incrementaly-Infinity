@@ -14,16 +14,18 @@ addLayer("b", {
 	autoUpgrade() {return (hasMilestone("i", 11) && player.b.auto)},
     color() {if (hasAchievement("a", 71)) return "#78a2b7"
 		else return "#9BEDF2"},
-    requires() {if (hasAchievement("a", 71)) return new Decimal(1e36)
+    requires() {if (hasAchievement("a", 71)) return new Decimal.pow(10,941)
 		else return new Decimal(10)}, // Can be a function that takes requirement increases into account
     resource() {if (hasAchievement("a", 71)) return "Physics"
 		else return "boosters"}, // Name of prestige currency
-    baseResource() {if (hasAchievement("a", 71)) return "Chemicals"
+    baseResource() {if (hasAchievement("a", 71)) return "Lithium"
 		else return"points"}, // Name of resource prestige is based on
-    baseAmount() {if (hasAchievement("a", 71)) return player.c.points
+    baseAmount() {if (hasAchievement("a", 71)) return player.c.li
 		else return player.points}, // Get the current amount of baseResource
-    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.5, // Prestige currency exponent
+    type() {if (hasAchievement("a", 71)) return "static"
+		else return "normal"}, // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent() {if (hasAchievement("a", 71)) return new Decimal(5)
+		else return new Decimal(0.5)}, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (hasUpgrade("i", 74)) mult = mult.times(upgradeEffect("i", 74))
@@ -101,9 +103,16 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 	microtabs: {
     stuff: {
                     "Upgrades": {
+						unlocked() {return (!hasAchievement("a", 71))},
                 content: [
                     ["blank", "15px"],
                     ["upgrades", [1,2,3,4,5,6,7,8,9,10]]
+                ]
+            },
+                    "Physical Phenomenas": {
+						unlocked() {return (player.b.points.gte(1))},
+                content: [
+                    ["blank", "15px"],
                 ]
             },
 			                    "Booster Power": {
@@ -2288,13 +2297,16 @@ addLayer("c", {
                     "Lab": {
                 content: [
                     ["blank", "15px"],
-                    ["buyables", [1,2,3,4]]
+                    ["buyables", [1,2,4]]
                 ]
             },
 			                    "Fuses": {
                 content: [
                     ["blank", "15px"],
-                    ["upgrades", [1,2,3,4]]
+                    ["upgrades", [1,2]],
+					["buyables", [3]],
+					["blank", "10px"],
+					["upgrades", [3]],
                 ]
             },
 	},
@@ -2412,6 +2424,70 @@ addLayer("c", {
 			cost: new Decimal(3),
 			unlocked() {return (hasUpgrade("c", 24))},
 		},
+		31: {
+			title: "Lithium VI",
+			description: "Apply Hydrogen to Lithium gain",
+			cost: new Decimal(5e269),
+			unlocked() {return (player.c.buyables[35].gte(2))},
+			effect() {if (hasUpgrade("c", 31)) return player.c.h
+			else return new Decimal(0)},
+						effectDisplay() {return format(upgradeEffect("c",31)) + "x"},
+			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
+            currencyInternalName: "li", // Use if using a nonstandard currency
+            currencyLayer: "c",
+		},
+		32: {
+			title: "Lithium VII",
+			description: "Add base to Lithium IV for each buyed upgrade",
+			cost: Decimal.pow(10, 345),
+			unlocked() {return (hasUpgrade("c", 31))},
+			effect() {if (hasUpgrade("c", 32)) ret = Decimal.pow(2.25, player.c.upgrades.length)
+			else ret = new Decimal(0)
+		return ret;},
+						effectDisplay() {return "+" + format(upgradeEffect("c",32))},
+			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
+            currencyInternalName: "li", // Use if using a nonstandard currency
+            currencyLayer: "c",
+		},
+		33: {
+			title: "Lithium VIII",
+			description: "Add base to Lithium V for each buyed upgrade",
+			cost: Decimal.pow(10, 452),
+			unlocked() {return (hasUpgrade("c", 32))},
+			effect() {if (hasUpgrade("c", 33)) ret = Decimal.pow(1.25, player.c.upgrades.length)
+			else ret = new Decimal(0)
+		return ret;},
+						effectDisplay() {return "+" + format(upgradeEffect("c",33))},
+			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
+            currencyInternalName: "li", // Use if using a nonstandard currency
+            currencyLayer: "c",
+		},
+		34: {
+			title: "Lithium IX",
+			description: "Add base to Lithium IV & V for each buyed upgrade",
+			cost: Decimal.pow(10, 536),
+			unlocked() {return (hasUpgrade("c", 33))},
+			effect() {if (hasUpgrade("c", 34)) ret = Decimal.pow(2.25, player.c.upgrades.length)
+			else ret = new Decimal(0)
+		return ret;},
+						effectDisplay() {return "+" + format(upgradeEffect("c",34))},
+			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
+            currencyInternalName: "li", // Use if using a nonstandard currency
+            currencyLayer: "c",
+		},
+		35: {
+			title: "Lithium X",
+			description: "Add levels of Lithium I, II and III as a base for Lithium IV and V. Unlock modes",
+			cost: Decimal.pow(10, 581),
+			unlocked() {return (hasUpgrade("c", 34))},
+			effect() {if (hasUpgrade("c", 35)) return player.c.buyables[31].add(player.c.buyables[32]).add(player.c.buyables[33]).times(1000)
+			else ret = new Decimal(0)
+		return ret;},
+						effectDisplay() {return "+" + format(upgradeEffect("c",35))},
+			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
+            currencyInternalName: "li", // Use if using a nonstandard currency
+            currencyLayer: "c",
+		},
 	},
 	buyables: {
 						      11: {
@@ -2426,7 +2502,7 @@ addLayer("c", {
         },
         unlocked() {return true},
         effect(x) {
-			if (hasUpgrade("c", 14)) eff = x.add(upgradeEffect("c", 21)).pow(10).add(upgradeEffect("c", 13)).add(buyableEffect("c", 12)).times(player.c.h.pow(0.35)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12))
+			if (hasUpgrade("c", 14)) eff = x.add(upgradeEffect("c", 21)).add(buyableEffect("c", 41)).add(buyableEffect("c", 43)).pow(10).add(upgradeEffect("c", 13)).add(buyableEffect("c", 12)).times(player.c.h.pow(0.35)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12))
           else eff = x.add(upgradeEffect("c", 21)).add(upgradeEffect("c", 23)).pow(10).add(upgradeEffect("c", 13)).times(player.c.h.pow(0.15).add(0.5)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12))
           return eff
         },
@@ -2440,7 +2516,7 @@ addLayer("c", {
 		purchaseLimit: 130,
         cost(x) {return new Decimal(15000000).times(x.pow(4).add(1))},
 		canAfford() {return (player.c.h.gte(this.cost()))},
-        display() {return `Add more base to <Generate Hydrogen> effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Chemicals<br>Effect: +${format(this.effect())}`},
+        display() {return `Add more base to Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Chemicals<br>Effect: +${format(this.effect())}`},
         buy() {
           player.c.h = player.c.h.sub(this.cost())
           setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -2467,7 +2543,175 @@ addLayer("c", {
         },
 				unlocked() {return (hasUpgrade("c", 25))},
         effect(x) {
- eff = x.add(1).times(player.c.li.pow(0.15).add(0.75))
+ eff = x.add(1).times(player.c.li.pow(0.15).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31))
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+	  						      31: {
+        title: "Lithium I",
+				purchaseLimit: 100,
+        cost(x) {return new Decimal(32).pow(x.pow(0.55).add(1))},
+		canAfford() {return (player.c.li.gte(this.cost()))},
+        display() { return `Boost Generate Lithium effect (based on Lithium)<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: ${format(this.effect())}x`},
+        buy() {
+          player.c.li = player.c.li.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 25))},
+        effect(x) {
+if (player.c.buyables[31].gte(1)) eff = x.add(1).times(3).times(player.c.li.pow(0.3).max(1).min(250000)).min(1e22)
+	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "120px",
+          height: "120px",
+        },
+      },
+	  						      32: {
+        title: "Lithium II",
+				purchaseLimit: 100,
+        cost(x) {return new Decimal(2500000).pow(x.times(0.2).add(1))},
+		canAfford() {return (player.c.li.gte(this.cost()))},
+        display() { return `Boost Generate Lithium effect (based on Lithium and prev. upgrade level)<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: ${format(this.effect())}x`},
+        buy() {
+          player.c.li = player.c.li.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 25))},
+        effect(x) {
+if (player.c.buyables[32].gte(1)) eff = x.add(1).times(3).pow(player.c.li.pow(0.02).max(1).min(25)).times(player.c.buyables[31])
+	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "120px",
+          height: "120px",
+        },
+      },
+	  						      33: {
+        title: "Lithium III",
+				purchaseLimit: 100,
+        cost(x) {return new Decimal(5e13).pow(x.times(0.2).add(1))},
+		canAfford() {return (player.c.li.gte(this.cost()))},
+        display() { return `Boost Generate Lithium effect (based on Lithium and prev. upgrade level)<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: ${format(this.effect())}x`},
+        buy() {
+          player.c.li = player.c.li.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 25))},
+        effect(x) {
+if (player.c.buyables[33].gte(1)) eff = x.add(1).times(3).pow(player.c.li.pow(0.05).max(1).min(25)).times(player.c.buyables[32].add(player.c.buyables[31]))
+	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "120px",
+          height: "120px",
+        },
+      },
+	  						      34: {
+        title: "Lithium IV",
+				purchaseLimit: 15,
+        cost(x) {return new Decimal(1e161).pow(x.times(0.2).add(1))},
+		canAfford() {return (player.c.li.gte(this.cost()))},
+        display() { return `Boost Generate Lithium effect (based on Lithium and prev. upgrade level)<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: ${format(this.effect())}x`},
+        buy() {
+          player.c.li = player.c.li.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 25))},
+        effect(x) {
+if (player.c.buyables[34].gte(1)) eff = x.add(1).times(8).add(upgradeEffect("c", 32)).add(upgradeEffect("c", 34)).add(upgradeEffect("c", 35)).pow(player.c.li.pow(0.25).max(1).min(25)).times(player.c.buyables[32].add(player.c.buyables[31]).add(player.c.buyables[33]))
+	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "120px",
+          height: "120px",
+        },
+      },
+	  						      35: {
+        title: "Lithium V",
+				purchaseLimit: 11,
+        cost(x) {return new Decimal(1e200).pow(x.times(0.2).add(1))},
+		canAfford() {return (player.c.li.gte(this.cost()))},
+        display() { return `Boost Generate Lithium effect (based on Lithium and prev. upgrade level)<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: ${format(this.effect())}x`},
+        buy() {
+          player.c.li = player.c.li.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 25))},
+        effect(x) {
+if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c", 32)).add(upgradeEffect("c", 34)).add(upgradeEffect("c", 35)).add(buyableEffect("c", 42)).add(buyableEffect("c", 43)).pow(player.c.li.pow(0.25).max(1).min(25)).times(player.c.buyables[32].add(player.c.buyables[31]).add(player.c.buyables[33]).add(player.c.buyables[34]))
+	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "120px",
+          height: "120px",
+        },
+      },
+	  						      41: {
+        title: "Hydrogen Node",
+		purchaseLimit: 1,
+        cost(x) {return new Decimal(1e95).times(x.add(1))},
+		canAfford() {return (player.c.h.gte(this.cost()))},
+        display() {return `Add more base to Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Hydrogen<br>Effect: +${format(this.effect())}`},
+        buy() {
+          player.c.h = player.c.h.sub(this.cost())
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 35))},
+        effect(x) {
+     if (player.c.buyables[41].gte(1)) eff = x.add(100)
+		  	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+	  						      42: {
+        title: "Lithium Node",
+		purchaseLimit: 1,
+        cost(x) {return new Decimal.pow(10, 627).times(x.add(1))},
+		canAfford() {return (player.c.li.gte(this.cost()))},
+        display() {return `Add more base to Lithium V effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: +${format(this.effect())}`},
+        buy() {
+          player.c.li = player.c.li.sub(this.cost())
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 35))},
+        effect(x) {
+     if (player.c.buyables[42].gte(1)) eff = x.add(120000)
+		  	else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+          height: "120px",
+        },
+      },
+	  						      43: {
+        title: "Chemicals Node",
+		purchaseLimit: 1,
+        cost(x) {return new Decimal(5).times(x.add(1))},
+		canAfford() {return (player.c.points.gte(this.cost()))},
+        display() {return `Add more base to Lithium V and Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Chemicals<br>Effect: +${format(this.effect())}`},
+        buy() {
+          player.c.points = player.c.points.sub(this.cost())
+          setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+				unlocked() {return (hasUpgrade("c", 35))},
+        effect(x) {
+     if (player.c.buyables[43].gte(1)) eff = x.add(1e9)
+		  	else eff = new Decimal(1)
           return eff
         },
         style: {
@@ -2803,6 +3047,66 @@ addLayer("a", {
             tooltip: "Mastery Incrementals <br>Reward: 1e30 AP",
 			onComplete() {
 				return player.a.points = player.a.points.add(1e30)
+			},
+		},
+		        61: {
+            name: "NG+ starts gere",
+            done() {
+                if (player.c.points.gte(1)) return true
+            },
+            tooltip: "Obtain 1 Chemical <br>Reward: 1e31 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e31)
+			},
+		},
+		        62: {
+            name: "Hydrogen!",
+            done() {
+                if (player.c.h.gte(1)) return true
+            },
+            tooltip: "Obtain Hydrogen <br>Reward: 1e35 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e35)
+			},
+		},
+		        63: {
+            name: "Mixing Hydrogen",
+            done() {
+                if (player.c.buyables[12].gte(1)) return true
+            },
+            tooltip: "Obtain Mix Hydrogen <br>Reward: 1e36 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e36)
+			},
+		},
+		        64: {
+            name: "Lithium!",
+            done() {
+                if (player.c.li.gte(1)) return true
+            },
+            tooltip: "Obtain Lithium <br>Reward: 1e40 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e40)
+			},
+		},
+		        65: {
+            name: "Lithium x5",
+            done() {
+                if (player.c.buyables[35].gte(1)) return true
+            },
+            tooltip: "Buy Lithium V <br>Reward: 1e45 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e45)
+			},
+		},
+		        66: {
+            name: "<h4>Nodes</h4>",
+            done() {
+                if (player.c.buyables[42].gte(1)) return true
+            },
+            tooltip: "Obtain Chemical Node <br>Reward: 1e50 AP",
+			onComplete() {
+				return player.a.points = player.a.points.add(1e50)
 			},
 		},
 				        71: {

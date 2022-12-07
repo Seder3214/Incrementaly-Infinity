@@ -43,6 +43,7 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if (hasUpgrade("c", 35)) gain = gain.times(player.c.h.pow(1e75))
 			 if (hasUpgrade("c", 24)) gain = gain.times(upgradeEffect("c", 24))
 	if (hasAchievement("a", 11) && (!inChallenge("m", 11) && (!inChallenge("m",12)))) gain = gain.times(player.a.points.add(1).pow(0.56).pow(player.a.points.sub(1.2e6).max(1)))
 	if (hasUpgrade("b", 95)) gain = gain.times(upgradeEffect("b", 95))
