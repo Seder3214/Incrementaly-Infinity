@@ -2430,7 +2430,7 @@ addLayer("c", {
 			cost: new Decimal(5e269),
 			unlocked() {return (player.c.buyables[35].gte(2))},
 			effect() {if (hasUpgrade("c", 31)) return player.c.h
-			else return new Decimal(0)},
+			else return new Decimal(1)},
 						effectDisplay() {return format(upgradeEffect("c",31)) + "x"},
 			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
             currencyInternalName: "li", // Use if using a nonstandard currency
