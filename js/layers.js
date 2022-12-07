@@ -11,7 +11,7 @@ addLayer("b", {
 		auto: true,
     }},
 	automate() {},
-	autoUpgrade() { return (!hasAchievement("a", 71) && player.b.auto)
+	autoUpgrade() { if (hasAchievement("a", 71)) return false
 		else return (hasMilestone("i", 11) && player.b.auto)},
     color() {if (hasAchievement("a", 71)) return "#78a2b7"
 		else return "#9BEDF2"},
@@ -581,6 +581,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		if (hasUpgrade("b", 32)) return player.b.pwr = player.b.pwr.add(tmp.b.effect.times(diff))
 	},
 			passiveGeneration() {
+				if (hasAchievement("a", 71)) return (hasAchievement("a", 71)?0:0)
 				if (hasMilestone("g", 11)) return (hasMilestone("g", 11)?1e30:0)
 				if (hasUpgrade("b", 74)) return (hasUpgrade("b", 74)?5e10:0)
 if (hasUpgrade("b", 73)) return (hasUpgrade("b", 73)?5:0)				
