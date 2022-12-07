@@ -2441,7 +2441,7 @@ addLayer("c", {
 		32: {
 			title: "Lithium VII",
 			description: "Add base to Lithium IV for each buyed upgrade",
-			cost: Decimal.pow(10, 390),
+			cost: Decimal.pow(10, 379),
 			unlocked() {return (hasUpgrade("c", 31))},
 			effect() {if (hasUpgrade("c", 32)) ret = Decimal.pow(2.25, player.c.upgrades.length)
 			else ret = new Decimal(0)
