@@ -2617,7 +2617,7 @@ if (player.c.buyables[33].gte(1)) eff = x.add(1).times(3).pow(player.c.li.pow(0.
 	  						      34: {
         title: "Lithium IV",
 				purchaseLimit: 15,
-        cost(x) {return new Decimal(1e161).pow(x.times(0.2).add(1))},
+        cost(x) {return new Decimal(1e153).pow(x.times(0.2).add(1))},
 		canAfford() {return (player.c.li.gte(this.cost()))},
         display() { return `Boost Generate Lithium effect (based on Lithium and prev. upgrade level)<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: ${format(this.effect())}x`},
         buy() {
