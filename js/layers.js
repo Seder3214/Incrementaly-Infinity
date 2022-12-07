@@ -110,7 +110,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 ]
             },
                     "Physical Phenomenas": {
-						unlocked() {return (player.b.points.gte(1))},
+						unlocked() {return (player.c.points.gte(1))},
                 content: [
                     ["blank", "15px"],
                 ]
