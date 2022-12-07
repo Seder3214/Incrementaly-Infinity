@@ -2721,7 +2721,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
       },
 	},
 	doReset() {
-		layerDataReset("b")
+		if (hasAchievement("a", 71)) layerDataReset("b")
 	},
 	update(diff) {
 				if (player.c.buyables[21].gte(1)) {
