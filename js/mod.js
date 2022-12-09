@@ -64,6 +64,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+function(){return "Current endgame: 1e941 Lithium"},
 ]
 
 // Determines when the game "ends"
