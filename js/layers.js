@@ -653,7 +653,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 			description: "Water amount boosts Lithium gain",
 			cost: new Decimal(278000000),
 						unlocked() {return (hasUpgrade("b", 114))},
-						effect() {if (hasUpgrade("b", 115)) return player.b.l.pow(10)
+						effect() {if (hasUpgrade("b", 115)) return player.b.l.pow(6)
 							else return new Decimal(1)},
 			effectDisplay() {return format(upgradeEffect("b", 121)) + "x"},
 				currencyDisplayName: "L of water", // Use if using a nonstandard currency
@@ -2651,8 +2651,8 @@ addLayer("c", {
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
 				unlocked() {return (hasUpgrade("c", 25))},
-        effect(x) {
- eff = x.add(1).times(player.c.li.pow(0.15).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31)).times(upgradeEffect("b", 121))
+        effect(x) {if (hasUpgrade("b", 121)) eff = x.add(1).times(player.c.li.pow(0.09).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31)).times(upgradeEffect("b", 121))
+ else eff = x.add(1).times(player.c.li.pow(0.15).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31))
           return eff
         },
         style: {
