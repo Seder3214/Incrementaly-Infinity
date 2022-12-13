@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.96.8.6",
-	name: "Literally Chemicals",
+	num: "0.97",
+	name: "Literally Carbon + Steam",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -64,12 +64,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-function(){return "Current endgame: 1e941 Lithium"},
+function(){return "Current endgame: 10 Carbon"},
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("eee280000000"))
+	return player.c.c.gte(10)
 }
 
 

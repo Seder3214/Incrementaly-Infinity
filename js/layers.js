@@ -9,6 +9,7 @@ addLayer("b", {
 		best: new Decimal(0),
         pwr: new Decimal(0),
 		l: new Decimal(0),
+		st: new Decimal(0),
 		auto: true,
     }},
 	automate() {},
@@ -32,7 +33,7 @@ addLayer("b", {
 		else return "normal"}, // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent() {if (hasAchievement("a", 71)) return new Decimal(2)
 		else return new Decimal(0.5)},
-effectDescription() {if (hasAchievement("a",71)) return "<h4 style='color: #808080;'>You have " + format(player.b.l) + "L of water</h4>"},	// Prestige currency exponent
+effectDescription() {if (hasAchievement("a",71)) return "<h4 style='color: #808080;'>You have " + format(player.b.l) + "L of water</h4><br><h4 style='color: #808080;'>You have " + format(player.b.st) + " steam</h4>"},	// Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (hasUpgrade("i", 74)) mult = mult.times(upgradeEffect("i", 74))
@@ -119,14 +120,16 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                     "Physic Upgrades": {
                 content: [
                     ["blank", "15px"],
-                    ["upgrades", [11,12,13,14]]
+                    ["upgrades", [11,12,13]],
+					["buyables", [2]]
                 ]
             },
                     "Physical Phenomenas": {
 						unlocked() {return (player.c.points.gte(1))},
                 content: [
                     ["blank", "15px"],
-					["buyables",[1]]
+					["buyables",[1]],
+					["clickable",[11]],
                 ]
             },
 			                    "Booster Power": {
@@ -629,7 +632,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 			description: "log10(Lithium) boost Water gain",
 			cost: new Decimal(88200),
 						unlocked() {return (hasUpgrade("b", 113))},
-						effect() {if (hasUpgrade("b", 113)) return player.c.li.log10(player.c.li).div(50)
+						effect() {if (hasUpgrade("b", 113)) return player.c.li.log10(player.c.li).div(100)
 							else return new Decimal(1)},
 			effectDisplay() {return format(upgradeEffect("b", 114)) + "x"},
 				currencyDisplayName: "L of water", // Use if using a nonstandard currency
@@ -652,12 +655,128 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 					title: "Water VI",
 			description: "Water amount boosts Lithium gain",
 			cost: new Decimal(278000000),
-						unlocked() {return (hasUpgrade("b", 114))},
-						effect() {if (hasUpgrade("b", 115)) return player.b.l.pow(6)
+						unlocked() {return (hasUpgrade("b", 115))},
+						effect() {if (hasUpgrade("b", 121)) return player.b.l.pow(10)
 							else return new Decimal(1)},
 			effectDisplay() {return format(upgradeEffect("b", 121)) + "x"},
 				currencyDisplayName: "L of water", // Use if using a nonstandard currency
                 currencyInternalName: "l", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				122: {
+					title: "Water VII",
+			description: "Physics boosts Water gain",
+			cost: new Decimal(4.8e9),
+						unlocked() {return (hasUpgrade("b", 121))},
+						effect() {if (hasUpgrade("b", 122)) return player.b.points.pow(1.2)
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 122)) + "x"},
+				currencyDisplayName: "L of water", // Use if using a nonstandard currency
+                currencyInternalName: "l", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				123: {
+					title: "Water VIII",
+			description: "Water amount boosts Hydrogen gain",
+			cost: new Decimal(2e12),
+						unlocked() {return (hasUpgrade("b", 122))},
+						effect() {if (hasUpgrade("b", 123)) return player.b.l.pow(6)
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 123)) + "x"},
+				currencyDisplayName: "L of water", // Use if using a nonstandard currency
+                currencyInternalName: "l", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				124: {
+					title: "Water IX",
+			description: "Hydrogen boosts Lithium gain",
+			cost: new Decimal(7e13),
+						unlocked() {return (hasUpgrade("b", 123))},
+						effect() {if (hasUpgrade("b", 124)) return player.c.h.pow(2)
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 124)) + "x"},
+				currencyDisplayName: "L of water", // Use if using a nonstandard currency
+                currencyInternalName: "l", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				125: {
+					title: "Water X",
+			description() {if (player.b.buyables[12].gte(1)) return "Steam boosts water gain"
+				else return "Lithium/Hydrogen^19 boosts water gain"},
+			cost: new Decimal(1e14),
+						unlocked() {return (hasUpgrade("b", 124))},
+						effect() {if (player.b.buyables[12].gte(1) || player.b.points.gte(210)) return player.b.st.times(3)
+							if (hasUpgrade("b", 125)) return player.c.li.div(player.c.h.pow(19)).times(0.9).min(1e25).max(1)
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 125)) + "x"},
+				currencyDisplayName: "L of water", // Use if using a nonstandard currency
+                currencyInternalName: "l", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				131: {
+					title: "Water XI",
+			description() {return "Twice [Steam Gain] effect"},
+			cost: new Decimal(1e27),
+						unlocked() {return (hasUpgrade("b", 125))},
+						effect() {
+							if (hasUpgrade("b", 131)) return new Decimal(2)
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 131)) + "x"},
+				currencyDisplayName: "L of water", // Use if using a nonstandard currency
+                currencyInternalName: "l", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				132: {
+					title: "Steam I",
+			description() {return "Additional [Water Gain] levels gives a boost to [Steam Gain]"},
+			cost: new Decimal(100000),
+						unlocked() {return (hasUpgrade("b", 131))},
+						effect() {
+							if (hasUpgrade("b", 132)) return player.b.buyables[22]
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 132)) + "x"},
+				currencyDisplayName: "Steam", // Use if using a nonstandard currency
+                currencyInternalName: "st", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				133: {
+					title: "Steam II",
+			description() {return "Physics boosts Steam gain"},
+			cost: new Decimal(1200000),
+						unlocked() {return (hasUpgrade("b", 132))},
+						effect() {
+							if (hasUpgrade("b", 133)) return player.b.points.times(0.2)
+							else return new Decimal(1)},
+			effectDisplay() {return format(upgradeEffect("b", 133)) + "x"},
+				currencyDisplayName: "Steam", // Use if using a nonstandard currency
+                currencyInternalName: "st", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+						134: {
+					title: "Steam III",
+			description() {return "Buyed upgrades boosts Steam gain"},
+			cost: new Decimal(38000000),
+						unlocked() {return (hasUpgrade("b", 133))},
+						effect() {
+							if (hasUpgrade("b", 134)) ret = Decimal.pow(1.4, player.b.upgrades.length)
+							else ret = new Decimal(1)
+						return ret},
+			effectDisplay() {return format(upgradeEffect("b", 134)) + "x"},
+				currencyDisplayName: "Steam", // Use if using a nonstandard currency
+                currencyInternalName: "st", // Use if using a nonstandard currency
+                currencyLayer: "b", // Use if using a nonstandard currency
+		},
+				135: {
+					title: "Steam IV",
+			description() {return "Unlock another element."},
+			cost: new Decimal(3e9),
+						unlocked() {return (hasUpgrade("b", 134))},
+						effect() {
+							if (hasUpgrade("b", 135)) return player.b.st.pow(0.1)
+							else return new Decimal(1)},
+			effectDisplay() {return "+" + format(upgradeEffect("b", 135)) + " Carbon/s"},
+				currencyDisplayName: "Steam", // Use if using a nonstandard currency
+                currencyInternalName: "st", // Use if using a nonstandard currency
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 	},
@@ -674,7 +793,69 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
         },
         unlocked() {return true},
         effect(x) {
-let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("b",112)).times(upgradeEffect("b",113)).times(upgradeEffect("b",114)).times(upgradeEffect("b",115))
+let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("b",112)).times(upgradeEffect("b",113)).times(upgradeEffect("b",114)).times(upgradeEffect("b",115)).times(upgradeEffect("b",122)).times(upgradeEffect("b",125)).times(buyableEffect("b",22))
+          return eff
+        },
+        style: {
+          width: "150px",
+          height: "150px",
+        },
+      },
+						      12: {
+        title: "Create a fog after rain",
+				purchaseLimit: 10,
+        cost(x) {return new Decimal(210).times(x.add(1)).pow(x.add(1))},
+		canAfford() {return (player.b.points.gte(this.cost()))},
+        display() { return `Generate Steam. Stop producing of water per/s.<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Physics<br>Effect: +${format(this.effect())} steam/s`},
+        buy() {
+          player.b.points = player.b.points.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+let eff = x.add(0.45).pow(2).times(buyableEffect("b",21))
+          return eff
+        },
+        style: {
+          width: "150px",
+          height: "150px",
+        },
+      },
+						      21: {
+        title: "Steam Gain",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(82).times(x.add(1))},
+		unlocked() {return player.b.buyables[12].gte(1)},
+		canAfford() {return (player.b.st.gte(this.cost()))},
+        display() { return `Boost Steam gain.<br>Level: ${formatWhole(getBuyableAmount(this.layer, this.id))}/25<br>Cost: ${format(this.cost())} Steam<br>Effect: x${format(this.effect())} to steam gain`},
+        buy() {
+          player.b.st = player.b.st.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        effect(x) {
+if (player.b.buyables[21].gte(1)) eff = x.add(0.75).times(6.45).times(player.b.buyables[22].times(0.5)).times(upgradeEffect("b", 131)).times(upgradeEffect("b", 132)).times(upgradeEffect("b", 133)).times(upgradeEffect("b", 134))
+		else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "150px",
+          height: "150px",
+        },
+      },
+						      22: {
+        title: "Water Gain",
+				purchaseLimit: 10,
+        cost(x) {return new Decimal(1725).times(x.add(1))},
+				unlocked() {return player.b.buyables[12].gte(1)},
+		canAfford() {return (player.b.st.gte(this.cost()))},
+        display() { return `Boost Water gain.<br>Level: ${formatWhole(getBuyableAmount(this.layer, this.id))}/10<br>Cost: ${format(this.cost())} Steam<br>Effect: x${format(this.effect())} to water gain`},
+        buy() {
+          player.b.st = player.b.st.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        effect(x) {
+if (player.b.buyables[22].gte(1)) eff = x.add(1.5).pow(6.5)
+	else eff = new Decimal(1)
           return eff
         },
         style: {
@@ -683,7 +864,27 @@ let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("
         },
       },
 		},
+			clickables: {
+		      11: {
+        display() {return `Respec Phenomenas`},
+        onClick() {
+          if(confirm("Are you sure you want to respec? This will turn off all of Phenomenas except rain")){
+			  player.b.buyables[12] = new Decimal(0)
+player.b.points = new Decimal(0)
+          }
+        },
+        canClick() {return true},
+        style: {
+          width: "100px",
+          minHeight: "50px",
+        },
+      },
+	},
 	update(diff) {
+			if (player.b.buyables[12].gte(1)) {
+				player.b.st = player.b.st.add(buyableEffect("b", 12).times(diff))
+				player.b.l = player.b.l.sub(player.b.l.times(40).times(diff)).max(10)
+			}
 		if (player.b.buyables[11].gte(1)) return player.b.l = player.b.l.add(buyableEffect("b",11).times(diff))
 		if (hasUpgrade("b", 32)) return player.b.pwr = player.b.pwr.add(tmp.b.effect.times(diff))
 	},
@@ -2381,7 +2582,7 @@ addLayer("c", {
     }},
     color: "#d9ff66",
 	branches: ["b"],
-	effectDescription() {return "<h4 style='color: #808080;'>You have " + format(player.c.h) + " Hydrogen</h4><br><h4 style='color: #808080;'>You have " + format(player.c.li) + " Lithium</h4>"},
+	effectDescription() {return "<h4 style='color: #808080;'>You have " + format(player.c.h) + " Hydrogen</h4><br><h4 style='color: #808080;'>You have " + format(player.c.li) + " Lithium</h4><br<h4 style='color: #808080;'>You have " + format(player.c.c) + " Carbon</h4>"},
     requires() { return new Decimal(Decimal.pow(1e280, 0.5e29))},// Can be a function that takes requirement increases into account
     resource: "Chemicals", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
@@ -2612,7 +2813,7 @@ addLayer("c", {
         },
         unlocked() {return true},
         effect(x) {
-			if (hasUpgrade("c", 14)) eff = x.add(upgradeEffect("c", 21)).add(buyableEffect("c", 41)).add(buyableEffect("c", 43)).pow(10).add(upgradeEffect("c", 13)).add(buyableEffect("c", 12)).times(player.c.h.pow(0.2)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12))
+			if (hasUpgrade("c", 14)) eff = x.add(upgradeEffect("c", 21)).add(buyableEffect("c", 41)).add(buyableEffect("c", 43)).pow(10).add(upgradeEffect("c", 13)).add(buyableEffect("c", 12)).times(player.c.h.pow(0.2)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12)).times(upgradeEffect("b", 123))
           else eff = x.add(upgradeEffect("c", 21)).add(upgradeEffect("c", 23)).pow(10).add(upgradeEffect("c", 13)).times(player.c.h.pow(0.15).add(0.5)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12))
           return eff
         },
@@ -2651,7 +2852,7 @@ addLayer("c", {
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
 				unlocked() {return (hasUpgrade("c", 25))},
-        effect(x) {if (hasUpgrade("b", 121)) eff = x.add(1).times(player.c.li.pow(0.09).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31)).times(upgradeEffect("b", 121))
+        effect(x) {if (hasUpgrade("b", 121)) eff = x.add(1).times(player.c.li.pow(0.09).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31))
  else eff = x.add(1).times(player.c.li.pow(0.15).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31))
           return eff
         },
@@ -2756,7 +2957,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(8).add(upgradeEffect("c",
         },
 				unlocked() {return (hasUpgrade("c", 25))},
         effect(x) {
-if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c", 32)).add(upgradeEffect("c", 34)).add(upgradeEffect("c", 35)).add(buyableEffect("c", 42)).add(buyableEffect("c", 43)).pow(player.c.li.pow(0.25).max(1).min(25)).times(player.c.buyables[32].add(player.c.buyables[31]).add(player.c.buyables[33]).add(player.c.buyables[34]))
+if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c", 32)).add(upgradeEffect("c", 34)).add(upgradeEffect("c", 35)).add(buyableEffect("c", 42)).add(buyableEffect("c", 43)).add(upgradeEffect("b", 121)).pow(player.c.li.pow(0.25).max(1).min(25)).times(player.c.buyables[32].add(player.c.buyables[31]).add(player.c.buyables[33]).add(player.c.buyables[34])).times(upgradeEffect("b", 121))
 	else eff = new Decimal(1)
           return eff
         },
@@ -2838,12 +3039,66 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 		}
 	},
 	update(diff) {
+						if (hasUpgrade("b", 135)) {
+							player.c.c = player.c.c.add(upgradeEffect("b", 135).times(diff))
+					player.c.li = player.c.li.add(buyableEffect("c",21).times(diff))
+					player.c.h = player.c.h.add(buyableEffect("c",11).times(diff))}
 				if (player.c.buyables[21].gte(1)) {
 					player.c.li = player.c.li.add(buyableEffect("c",21).times(diff))
 					player.c.h = player.c.h.add(buyableEffect("c",11).times(diff))}
 		if (player.c.buyables[11].gte(1)) return player.c.h = player.c.h.add(buyableEffect("c",11).times(diff))
 	},
     row: 0, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "c", description: "C: Reset for Chemicals", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return (hasAchievement("a", 71))},
+})
+addLayer("cl", {
+    name: "Combining Lab", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "CL", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#d9ff66",
+	branches: ["c"],
+    requires() {return new Decimal(Decimal.pow(1e280, 1e246))},// Can be a function that takes requirement increases into account
+    resource: "Chemicals", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 125, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+				        tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["microtabs", "stuff"],
+        ["blank", "25px"],
+    ],
+	microtabs: {
+    stuff: {
+                    "Combine": {
+                content: [
+                    ["blank", "15px"],
+                    ["buyables", [1,2,4]]
+                ]
+            },
+			                    "Fuses": {
+                content: [
+                    ["blank", "15px"]
+                ]
+            },
+	},
+	},
+    row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "c", description: "C: Reset for Chemicals", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
