@@ -833,7 +833,7 @@ let eff = x.add(0.45).pow(2).times(buyableEffect("b",21))
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
         effect(x) {
-if (player.b.buyables[21].gte(1)) eff = x.add(0.75).times(6.45).times(player.b.buyables[22].times(0.5)).times(upgradeEffect("b", 131)).times(upgradeEffect("b", 132)).times(upgradeEffect("b", 133)).times(upgradeEffect("b", 134))
+if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buyables[22].times(0.5)).times(upgradeEffect("b", 131)).times(upgradeEffect("b", 132)).times(upgradeEffect("b", 133)).times(upgradeEffect("b", 134))
 		else eff = new Decimal(1)
           return eff
         },
