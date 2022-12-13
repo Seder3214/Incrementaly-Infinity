@@ -704,9 +704,9 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 			description() {if (player.b.buyables[12].gte(1)) return "Steam boosts water gain"
 				else return "Lithium/Hydrogen^19 boosts water gain"},
 			cost: new Decimal(1e14),
-						unlocked() {return (hasUpgrade("b", 124))},
+						unlocked() {return (player.b.buyables[12].gte(1) || player.b.points.gte(210))},
 						effect() {if (player.b.buyables[12].gte(1) || player.b.points.gte(210)) return player.b.st.times(3)
-							if (hasUpgrade("b", 125)) return player.c.li.div(player.c.h.pow(19)).times(0.9).min(1e25).max(1)
+							if (hasUpgrade("b", 125)) return player.c.li.div(player.c.h.pow(19)).times(0.9).min(1e15).max(1)
 							else return new Decimal(1)},
 			effectDisplay() {return format(upgradeEffect("b", 125)) + "x"},
 				currencyDisplayName: "L of water", // Use if using a nonstandard currency
