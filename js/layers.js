@@ -146,7 +146,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		11: {
 		title: "Boost!",
 		description: "Boosters boost point gain.",
-		cost: new Decimal(1),
+		cost() {if (hasAchievement("a", 71)) return new Decimal(1250)
+			else return new Decimal(1)},
 		effect() {
 			if (inChallenge("m", 11) && hasUpgrade("b", 21)) return player.b.points.pow(2.2).min(upgradeEffect("b", 21).times(4)).max(1.5)
 			if (inChallenge("m", 11)) return player.b.points.pow(2.2).min(10).max(1.5)
