@@ -2405,7 +2405,7 @@ addLayer("m", {
 		goalDescription() {if (challengeCompletions("m", 11) == 2) return "3e34 Boosters"
 			if (challengeCompletions("m", 11) == 1) return "1.46e12 Boosters"
 			else return "16000000 Boosters"},
- rewardDescription: "Start generating Mastered Boosters and unlock one more row of Mastered Booster upgrades at first and last completion",
+ rewardDescription: "<h5>Start generating Mastered Boosters and unlock one more row of Mastered Booster upgrades at first and last completion</h5>",
  style() {
 	return {
 		'border-top-left-radius': '30px',
@@ -2413,7 +2413,7 @@ addLayer("m", {
 		'border-bottom-right-radius': '0',
 		'border-bottom-left-radius': '30px',
 		'width': '400px',
-		'height': '230px',
+		'height': '250px',
 				'border-right': '2',
 	}
  },
@@ -2432,7 +2432,7 @@ addLayer("m", {
 		'border-bottom-right-radius': '30px',
 		'border-bottom-left-radius': '0',
 		'width': '400px',
-		'height': '230px',
+		'height': '250px',
 		'border-left': '0',
 	}
  },
@@ -3071,7 +3071,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 addLayer("cl", {
     name: "Combining Lab", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CL", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 2, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),

@@ -58,9 +58,10 @@
 }
 
 #version {
-	position: absolute;
+		position: fixed;
 	right: 4px;
-	top: 1060px;
+	bottom: 2px;
+	top: auto;
 	text-align: right;
 	color: var(--points);
 	text-shadow: 0 0 10px var(--points);
