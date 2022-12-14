@@ -704,9 +704,9 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 			description() {if (player.b.buyables[12].gte(1)) return "Steam boosts water gain"
 				else return "Lithium/Hydrogen^19 boosts water gain"},
 			cost: new Decimal(1e14),
-						unlocked() {return (player.b.buyables[12].gte(1) || player.b.points.gte(210))},
+						unlocked() {return (hasUpgrade("b", 124))},
 						effect() {if (player.b.buyables[12].gte(1) || player.b.points.gte(210)) return player.b.st.times(3)
-							if (hasUpgrade("b", 125)) return player.c.li.div(player.c.h.pow(19)).times(0.9).min(1e7).max(1)
+							if (hasUpgrade("b", 125)) return player.c.li.div(player.c.h.pow(19)).times(0.9).min(1e25).max(1)
 							else return new Decimal(1)},
 			effectDisplay() {return format(upgradeEffect("b", 125)) + "x"},
 				currencyDisplayName: "L of water", // Use if using a nonstandard currency
@@ -717,7 +717,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 					title: "Water XI",
 			description() {return "Twice [Steam Gain] effect"},
 			cost: new Decimal(1e27),
-						unlocked() {return (hasUpgrade("b", 125))},
+						unlocked() {return (player.b.buyables[12].gte(1))},
 						effect() {
 							if (hasUpgrade("b", 131)) return new Decimal(2)
 							else return new Decimal(1)},
@@ -2797,6 +2797,19 @@ addLayer("c", {
 						effectDisplay() {return "+" + format(upgradeEffect("c",35))},
 			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
             currencyInternalName: "li", // Use if using a nonstandard currency
+            currencyLayer: "c",
+		},
+		41: {
+			title: "Carbon I",
+			description: "Levels of Lithium I, II and III boosts Carbon gain",
+			cost: Decimal.pow(10, 589),
+			unlocked() {return (hasUpgrade("b", 135))},
+			effect() {if (hasUpgrade("c", 41)) return player.c.buyables[31].add(player.c.buyables[32]).add(player.c.buyables[33])
+			else ret = new Decimal(0)
+		return ret;},
+						effectDisplay() {return "+" + format(upgradeEffect("c",35))},
+			currencyDisplayName: "Lithium", // Use if using a nonstandard currency
+            currencyInternalName: "c", // Use if using a nonstandard currency
             currencyLayer: "c",
 		},
 	},

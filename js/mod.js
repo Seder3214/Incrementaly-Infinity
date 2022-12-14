@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.97.4",
+	num: "0.97.4.1",
 	name: "Literally Carbon + Steam",
 }
 
