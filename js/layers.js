@@ -118,6 +118,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 ]
             },
                     "Physic Upgrades": {
+						unlocked() {return (player.c.points.gte(1))},
                 content: [
                     ["blank", "15px"],
                     ["upgrades", [11,12,13]],
