@@ -1991,7 +1991,7 @@ addLayer("ex", {
 		},
 												54: {
 			title: "Nums Expansion",
-			description: "If Decimal or Boolean level is below 3 and Double-Decimal level is 1, then you will get boost ExBooster gain",
+			description: "If Decimal or Boolean level is < 3 and Double-D level = 1, get boost ExBooster gain",
 						unlocked() {return hasUpgrade("ex", 53)},
 			cost() { return new Decimal(13560)},
 			effect() {if (player.ex.buyables[21].lt(3) && player.ex.buyables[22].lt(3) && player.ex.buyables[24].gte(1)) return player.ex.buyables[21].max(1).times(17).add(player.ex.buyables[22].max(1).times(13))
@@ -3071,7 +3071,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 addLayer("cl", {
     name: "Combining Lab", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CL", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    position: 2, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
@@ -3117,6 +3117,106 @@ addLayer("cl", {
         {key: "c", description: "C: Reset for Chemicals", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return (hasAchievement("a", 71))},
+})
+addLayer("ss", {
+    name: "Sub-Shifter", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "SS", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 2, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#d9ff66",
+	branches: ["c"],
+    requires() {return new Decimal(Decimal.pow(1e280, 1e246))},// Can be a function that takes requirement increases into account
+    resource: "Chemicals", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 125, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+				        tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["microtabs", "stuff"],
+        ["blank", "25px"],
+    ],
+	microtabs: {
+    stuff: {
+                    "Combine": {
+                content: [
+                    ["blank", "15px"],
+                    ["buyables", [1,2,4]]
+                ]
+            },
+			                    "Fuses": {
+                content: [
+                    ["blank", "15px"]
+                ]
+            },
+	},
+	},
+    row: 2, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "c", description: "C: Reset for Chemicals", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return "ghost"},
+})
+addLayer("us", {
+    name: "Upgrade Station", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "US", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#d9ff66",
+	branches: ["c"],
+    requires() {return new Decimal(Decimal.pow(1e280, 1e246))},// Can be a function that takes requirement increases into account
+    resource: "Chemicals", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 125, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+				        tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["microtabs", "stuff"],
+        ["blank", "25px"],
+    ],
+	microtabs: {
+    stuff: {
+                    "Combine": {
+                content: [
+                    ["blank", "15px"],
+                    ["buyables", [1,2,4]]
+                ]
+            },
+			                    "Fuses": {
+                content: [
+                    ["blank", "15px"]
+                ]
+            },
+	},
+	},
+    row: 3, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "c", description: "C: Reset for Chemicals", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return "ghost"},
 })
 addLayer("a", {
     startData() {

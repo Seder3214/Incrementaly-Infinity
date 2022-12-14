@@ -5,7 +5,8 @@ body {
 	--background: #0f0f0f;
 	--color: #dfdfdf;
 	--points: #ffffff;
-	background: var(--background)
+	background: var(--background);
+	background-image: url(https://catherineasquithgallery.com/uploads/posts/2021-03/1614839042_58-p-fon-dlya-fotoshopa-zvyozdnoe-nebo-87.jpg);
 }
 
 /* General text */
