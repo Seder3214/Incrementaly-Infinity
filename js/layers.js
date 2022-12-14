@@ -848,7 +848,7 @@ if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buya
         cost(x) {return new Decimal(1725).times(x.add(1))},
 				unlocked() {return player.b.buyables[12].gte(1)},
 		canAfford() {return (player.b.st.gte(this.cost()))},
-        display() { return `Boost Water gain.<br>Level: ${formatWhole(getBuyableAmount(this.layer, this.id))}/10<br>Cost: ${format(this.cost())} Steam<br>Effect: x${format(this.effect())} to water gain`},
+        display() { return `Boost Water gain.<br>Level: ${formatWhole(getBuyableAmount(this.layer, this.id))}/10<br>Cost: ${format(this.cost())} Steam<br>Effect: x${format(this.effect())} to water and [Steam Gain] gain`},
         buy() {
           player.b.st = player.b.st.sub(this.cost())
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
