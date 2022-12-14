@@ -2861,7 +2861,8 @@ addLayer("c", {
 				purchaseLimit: 1,
         cost(x) {return new Decimal(3).pow(x.add(1))},
 		canAfford() {return (player.c.points.gte(this.cost()))},
-        display() { return `Generate A New Element<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 21)).add(upgradeEffect("c", 23)))}<br>Cost: ${format(this.cost())} Chemicals<br>Element gains: +${format(this.effect())} Lithium/s`
+        display() { return `Generate A New Element<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Chemicals<br>Element gains: +${format(this.effect())} Lithium/s`},
+		buy() {
           player.c.points = player.c.points.sub(this.cost())
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
