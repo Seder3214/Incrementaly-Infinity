@@ -3421,7 +3421,18 @@ addLayer("a", {
 				return player.a.points = player.a.points.add(1e31)
 			},
 		},
-		        61: {
+				        61: {
+            name: "NG+",
+            done() {
+                if (hasAchievement("a", 71)) return true
+            },
+            tooltip: "Enter a NG+",
+			onComplete() {
+				return layerDataReset("b")
+			},
+		},
+
+		        62: {
             name: "Hydrogen!",
             done() {
                 if (player.c.h.gte(1)) return true
@@ -3431,7 +3442,7 @@ addLayer("a", {
 				return player.a.points = player.a.points.add(1e35)
 			},
 		},
-		        62: {
+		        63: {
             name: "Mixing Hydrogen",
             done() {
                 if (player.c.buyables[12].gte(1)) return true
@@ -3441,7 +3452,7 @@ addLayer("a", {
 				return player.a.points = player.a.points.add(1e36)
 			},
 		},
-		        63: {
+		        64: {
             name: "Lithium!",
             done() {
                 if (player.c.li.gte(1)) return true
@@ -3451,7 +3462,7 @@ addLayer("a", {
 				return player.a.points = player.a.points.add(1e40)
 			},
 		},
-		        64: {
+		        65: {
             name: "Lithium x5",
             done() {
                 if (player.c.buyables[35].gte(1)) return true
@@ -3461,7 +3472,7 @@ addLayer("a", {
 				return player.a.points = player.a.points.add(1e45)
 			},
 		},
-		        65: {
+		        66: {
             name: "<h4>Nodes</h4>",
             done() {
                 if (player.c.buyables[42].gte(1)) return true
