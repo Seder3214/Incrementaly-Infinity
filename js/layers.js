@@ -848,7 +848,7 @@ if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buya
         cost(x) {return new Decimal(1725).times(x.add(1))},
 				unlocked() {return player.b.buyables[12].gte(1)},
 		canAfford() {return (player.b.st.gte(this.cost()))},
-        display() { return `Boost Water gain.<br>Level: ${formatWhole(getBuyableAmount(this.layer, this.id))}/10<br>Cost: ${format(this.cost())} Steam<br>Effect: x${format(this.effect())} to water and [Steam Gain] gain`},
+        display() { return `Boost Water gain.<br>Level: ${formatWhole(getBuyableAmount(this.layer, this.id))}/10<br>Cost: ${format(this.cost())} Steam<br>Effect: x${format(this.effect())} to water gain and ${format(player.b.buyables[22].add(1).times(0.5))}x to [Steam Gain] effect`},
         buy() {
           player.b.st = player.b.st.sub(this.cost())
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -2613,10 +2613,10 @@ addLayer("c", {
 			                    "Fuses": {
                 content: [
                     ["blank", "15px"],
-                    ["upgrades", [1,2]],
-					["buyables", [3]],
+                  ["upgrades", [1,2]],
+				["row",[ ["buyables", [3]]]],
 					["blank", "10px"],
-					["upgrades", [3]],
+					["upgrades", [3,4,5]],
                 ]
             },
 	},
@@ -2802,8 +2802,8 @@ addLayer("c", {
 		41: {
 			title: "Carbon I",
 			description: "Levels of Lithium I, II and III boosts Carbon gain",
-			cost: Decimal.pow(10, 589),
-			unlocked() {return (hasUpgrade("b", 135))},
+			cost: Decimal.pow(360, 1),
+			unlocked() {return (hasUpgrade("b", 125))},
 			effect() {if (hasUpgrade("c", 41)) return player.c.buyables[31].add(player.c.buyables[32]).add(player.c.buyables[33])
 			else ret = new Decimal(0)
 		return ret;},
