@@ -1,7 +1,9 @@
 addLayer("b", {
     name: "boosters", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol() {if (hasAchievement("a", 71)) return "PS"
-		else return "B"}, // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol() {if (hasAchievement("a", 71) && options.ru == true) return "ФЗ"
+		if (hasAchievement("a", 71) && options.ru == false) return "PS"
+		if (options.ru == false) return "B"
+		if (options.ru == true) return "У"}, // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
@@ -23,17 +25,22 @@ addLayer("b", {
     requires() {if (hasAchievement("a", 71) && player.b.points.gte(1)) return new Decimal.pow(10,942)
 		if (hasAchievement("a", 71)) return new Decimal.pow(10,941)
 		else return new Decimal(10)}, // Can be a function that takes requirement increases into account
-    resource() {if (hasAchievement("a", 71)) return "Physics"
-		else return "boosters"}, // Name of prestige currency
-    baseResource() {if (hasAchievement("a", 71)) return "Lithium"
-		else return"points"}, // Name of resource prestige is based on
+    resource() {if (hasAchievement("a", 71) && options.ru == true) return "Знаний Физики"
+		if (hasAchievement("a", 71) && options.ru == false) return "Physics"
+		if (options.ru == true) return "ускорителей"
+	if (options.ru == false) return "boosters"}, // Name of prestige currency
+    baseResource() {if (hasAchievement("a", 71) && options.ru == true) return "Литий"
+		if (hasAchievement("a", 71) && options.ru == false) return "Lithium"
+		if (!hasAchievement("a", 71) && options.ru == false) return "points"
+		if (!hasAchievement("a", 71) && options.ru == true) return "очков"}, // Name of resource prestige is based on
     baseAmount() {if (hasAchievement("a", 71)) return player.c.li
 		else return player.points}, // Get the current amount of baseResource
     type() {if (hasAchievement("a", 71)) return "static"
 		else return "normal"}, // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent() {if (hasAchievement("a", 71)) return new Decimal(2)
 		else return new Decimal(0.5)},
-effectDescription() {if (hasAchievement("a",71)) return "<h4 style='color: #808080;'>You have " + format(player.b.l) + "L of water</h4><br><h4 style='color: #808080;'>You have " + format(player.b.st) + " steam</h4>"},	// Prestige currency exponent
+effectDescription() {if (hasAchievement("a", 71) && options.ru == true) return "<h4 style='color: #808080;'>У вас " + format(player.b.l) + " литров воды</h4><br><h4 style='color: #808080;'>У вас " + format(player.b.st) + " дыма</h4>"
+	if (hasAchievement("a", 71) && options.ru == false) return "<h4 style='color: #808080;'>You have " + format(player.b.l) + "L of water</h4><br><h4 style='color: #808080;'>You have " + format(player.b.st) + " steam</h4>"},	// Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (hasUpgrade("i", 74)) mult = mult.times(upgradeEffect("i", 74))
@@ -110,23 +117,46 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
     ],
 	microtabs: {
     stuff: {
-                    "Upgrades": {
-						unlocked() {return (!hasAchievement("a", 71))},
+		       "Upgrades": {
+						unlocked() {return (!hasAchievement("a", 71)&& options.ru == false)},
+                content: [
+                    ["blank", "15px"],
+                    ["upgrades", [1,2,3,4,5,6,7,8,9,10]]
+                ]
+            },
+                    "Улучшения": {
+						unlocked() {return (!hasAchievement("a", 71)&& options.ru == true)},
                 content: [
                     ["blank", "15px"],
                     ["upgrades", [1,2,3,4,5,6,7,8,9,10]]
                 ]
             },
                     "Physic Upgrades": {
-						unlocked() {return (player.c.points.gte(1))},
+						unlocked() {return (player.c.points.gte(1)&& options.ru == false)},
                 content: [
                     ["blank", "15px"],
                     ["upgrades", [11,12,13]],
 					["buyables", [2]]
                 ]
             },
-                    "Physical Phenomenas": {
-						unlocked() {return (player.c.points.gte(1))},
+                    "Улучшение физики": {
+						unlocked() {return (player.c.points.gte(1) && options.ru == true)},
+                content: [
+                    ["blank", "15px"],
+                    ["upgrades", [11,12,13]],
+					["buyables", [2]]
+                ]
+            },
+                    "Физические Явления": {
+						unlocked() {return (player.c.points.gte(1) && options.ru == true)},
+                content: [
+                    ["blank", "15px"],
+					["buyables",[1]],
+					["clickable",[11]],
+                ]
+            },
+                    "ФPhysical Phenomenas": {
+						unlocked() {return (player.c.points.gte(1) && options.ru == false)},
                 content: [
                     ["blank", "15px"],
 					["buyables",[1]],
@@ -134,10 +164,18 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 ]
             },
 			                    "Booster Power": {
-									unlocked() {return hasUpgrade("b", 32)},
+									unlocked() {return (hasUpgrade("b", 32) && options.ru == false)},
                 content: [
                     ["blank", "15px"],
 					["display-text", () => "You have <h2 style='color: #9BEDF2; text-shadow: 0 0 10px #9BEDF2'>" + format(player.b.pwr) + "</h2> Booster Power. <br>" + "You are generating " + format(tmp.b.effect) + " Booster Power/s"],
+                    ["upgrades", [4,5]]
+                ]
+            },
+			                    "Сила Ускорения": {
+									unlocked() {return (hasUpgrade("b", 32) && options.ru == true)},
+                content: [
+                    ["blank", "15px"],
+					["display-text", () => "У вас <h2 style='color: #9BEDF2; text-shadow: 0 0 10px #9BEDF2'>" + format(player.b.pwr) + "</h2> Силы Ускорения. <br>" + "Ты производишь " + format(tmp.b.effect) + " Силы Ускорения/сек"],
                     ["upgrades", [4,5]]
                 ]
             },
@@ -145,8 +183,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 	},
 	upgrades: {
 		11: {
-		title: "Boost!",
-		description: "Boosters boost point gain.",
+		title() {if (options.ru == false) return "Boost!"
+		else return "Ускорение!"},
+		description() {if (options.ru == false) return "Boosters boost point gain."
+		else return "Ускорители увеличивают доход очков."},
 		cost() {if (hasAchievement("a", 71)) return new Decimal(1250)
 			else return new Decimal(1)},
 		effect() {
@@ -158,8 +198,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 11)) + "x"},
 		},
 		12: {
-		title: "Self-boost",
-		description: "Boosters boost booster gain.",
+		title() {if (options.ru == false) return "Self-Boost"
+		else return "Самоускорение"},
+		description() {if (options.ru == false) return "Boosters boost booster gain."
+		else return "Ускорители увеличивают доход ускорителей."},
 		cost: new Decimal(20),
 		unlocked() {return hasUpgrade("b", 11)},
 		effect() {if (inChallenge("m", 11)) return player.b.points.pow(0.6).min(upgradeEffect("b", 22).times(4)).max(1)
@@ -167,8 +209,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 12)) + "x"},
 		},
 		13: {
-		title: "Synergism",
-		description: "Points boost booster gain.",
+		title() {if (options.ru == false) return "Synergizm"
+		else return "Синергия"},
+		description() {if (options.ru == false) return "Points boost boosters gain"
+		else return "Очки увеличивают доход ускорителей."},
 		cost: new Decimal(280),
 				unlocked() {return hasUpgrade("b", 12)},
 		effect() {if (hasUpgrade("i", 73)) return player.points.pow(1e120).min(upgradeEffect("i", 73).times(7)).max(1)
@@ -181,8 +225,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 13)) + "x"},
 		},
 		14: {
-		title: "Best Power",
-		description: "Best Boosters boost booster gain.",
+		title() {if (options.ru == false) return "Best Power"
+		else return "Лучшая Сила"},
+		description() {if (options.ru == false) return "Best Boosters boost booster gain."
+		else return "Максимум Ускорителей увеличивают доход ускорителей"},
 		cost() {if (inChallenge("m", 11)) return new Decimal(1250)
 			else return new Decimal(3200)},
 				unlocked() {return hasUpgrade("b", 13)},
@@ -191,8 +237,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 14)) + "x"},
 		},
 		15: {
-		title: "Point Booster",
-		description: "Point gain boosts themselves",
+		title() {if (options.ru == false) return "Point Booster"
+		else return "Ускоритель очков"},
+		description() {if (options.ru == false) return "Points boosts themselves gain"
+		else return "Очки увеличивают доход самих себя"},
 		cost() {if (inChallenge("m", 11)) return new Decimal(3100)
 			else return new Decimal(25000)},
 				unlocked() {return hasUpgrade("b", 14)},
@@ -200,8 +248,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 15)) + "x"},
 		},
 		21: {
-		title: "Softcap Booster",
-		description: "Increase 'Boost!' softcap by points",
+		title() {if (options.ru == false) return "Softcap Booster"
+		else return "Увеличитель софткапа"},
+		description() {if (options.ru == false) return "Increase [Boost!] softcap by points"
+		else return "Увеличить софткап [Ускорение!] очками"},
 		cost() {if (inChallenge("m", 11)) return new Decimal(15000)
 			else return new Decimal(1005000)},
 		unlocked() {
@@ -212,8 +262,10 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 21)) + "x"},
 		},
 		22: {
-		title: "Boosting Feature",
-		description: "Increase 'Synergism' softcap by best boosters",
+		title() {if (options.ru == false) return "Booster Feature"
+		else return "Плюшка Ускорения"},
+				description() {if (options.ru == false) return "Increase [Synergizm!] softcap by best boosters"
+		else return "Увеличить софткап [Синергия] максимумом ускорителей"},
 		cost() {if (inChallenge("m", 11)) return new Decimal(28000)
 			else return new Decimal(328600000)},
 		unlocked() {return hasUpgrade("b", 21)},
@@ -223,7 +275,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 22)) + "x"},
 		},
 		23: {
-		title: "Ancient Boost!",
+		title() {if (options.ru == false) return "Ancient Booster"
+		else return "Древний ускоритель"},
 		description: "Increase all booster upgrades softcap by 3.00x",
 		cost() {if (inChallenge("m", 11)) return new Decimal(78000)
 			else return new Decimal(4e9)},
@@ -234,7 +287,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 23)) + "x"},
 		},
 		24: {
-		title: "Synergism v2",
+		title() {if (options.ru == false) return "Synergizm v2"
+		else return "Синергия вер.2"},
 		description: "Each booster upgrade boost booster gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(2000000)
 			else return new Decimal(3e11)},
@@ -244,14 +298,16 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 24)) + "x"},
 		},
 		25: {
-		title: "Sneaky Booster",
+		title() {if (options.ru == false) return "Sneaky Booster"
+		else return "Скрытный Ускоритель"},
 		description: "Scale 'Boost!' softcap but decrease its effect",
 		cost() {if (inChallenge("m", 11)) return new Decimal(16000000)
 			else return new Decimal(3e12)},
 		unlocked() {return hasUpgrade("b", 24)},
 		},
 		31: {
-		title: "Booster Booster",
+		title() {if (options.ru == false) return "Booster Booster"
+		else return "Ускоритель-Ускоритель"},
 		description: "Best booster scale booster gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(1e9)
 			else return new Decimal(3e19)},
@@ -261,14 +317,16 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 31)) + "x"},
 		},
 		32: {
-		title: "Super Booster",
+		title() {if (options.ru == false) return "Super Booster"
+		else return "Супер Ускоритель"},
 		description: "Unlock new tab",
 		cost() {if (inChallenge("m", 11)) return new Decimal(1e13)
 			else return new Decimal(1e22)},
 		unlocked() {return hasUpgrade("b", 31)},
 		},
         33: {
-		title: "Boostering",
+		title() {if (options.ru == false) return "Boostering"
+		else return "Ускорение"},
 		description: "Power boost boosters gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(3e28)
 			else return new Decimal(1e40)},
@@ -277,7 +335,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 33)) + "x"},
 		},
 		 34: {
-		title: "Machinering",
+		title() {if (options.ru == false) return "Machinering"
+		else return "Индрустриальность"},
 		description: "Points boost boosters gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(4e30)
 			else return new Decimal(3e45)},
@@ -286,14 +345,16 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return format(upgradeEffect("b", 34)) + "x"},
 		},
 		 35: {
-		title: "Machinering II",
+		title() {if (options.ru == false) return "Machinering II"
+		else return "Индрустриальность II"},
 		description: "Scale up 'Synergism' softcap by ^2",
 		cost() {if (inChallenge("m", 11)) return new Decimal(4e34)
 			else return new Decimal(2e50)},
 		unlocked() {return hasUpgrade("b", 34)},
 		},
 				41: {
-		title: "Booster Effect",
+		title() {if (options.ru == false) return "Booster Effect"
+		else return "Эффект Ускорителя"},
 		description: "Power boosts boosters gain",
 		cost: new Decimal(10),
 		effect() {return player.b.pwr.pow(0.5).max(1).min(30)},
@@ -305,7 +366,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				42: {
-		title: "Booster Power",
+		title() {if (options.ru == false) return "Booster Power"
+		else return "Сила Ускорения"},
 		description: "Boosters boost power gain",
 		cost: new Decimal(15),
 		effect() {return player.b.points.pow(0.5).max(1).min(10)},
@@ -316,7 +378,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				43: {
-		title: "Point Power",
+		title() {if (options.ru == false) return "Points Power"
+		else return "Сила Очков"},
 		description: "Power boost point gain",
 		cost: new Decimal(350),
 		effect() {return player.b.pwr.pow(0.5).max(1).min(100)},
@@ -327,7 +390,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				44: {
-		title: "Exponent Booster",
+		title() {if (options.ru == false) return "Exponent Booster"
+		else return "Экпоненциальный Ускоритель"},
 		description: "Points boosts power gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(3e15)
 			else return new Decimal(5e22)},
@@ -336,7 +400,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		effectDisplay() {return "^" + format(upgradeEffect("b", 44))},
 		},
 				45: {
-		title: "Power Empower",
+		title() {if (options.ru == false) return "Power Empower"
+		else return "Насыщение силой"},
 		description: "Apply 'Exponent Booster' effect to point and booster gain at boosted rate",
 		cost: new Decimal(550),
 		unlocked() {return hasUpgrade("b", 44)},
@@ -345,7 +410,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				51: {
-		title: "Power Ex",
+		title() {if (options.ru == false) return "Power EX"
+		else return "Мега Сила"},
 		description: "Each boosters upgrades gives a boost to Power gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(1e18)
 			else return new Decimal(1e28)},
@@ -356,7 +422,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return "^" + format(upgradeEffect("b", 51))},
 		},
 				52: {
-		title: "Power S",
+		title() {if (options.ru == false) return "Power S"
+		else return "Ультра Сила"},
 		description: "Power gain boosts power gain",
 		cost: new Decimal(90000),
 		unlocked() {return hasUpgrade("b", 51)},
@@ -367,7 +434,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				53: {
-		title: "Power X",
+		title() {if (options.ru == false) return "Power X"
+		else return "Сила X"},
 		description: "Increase 'Exponent Booster' softcap.",
 		cost: new Decimal(2000000),
 		unlocked() {return hasUpgrade("b", 52)},
@@ -379,7 +447,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				54: {
-		title: "Powering Boosters",
+		title() {if (options.ru == false) return "Powering Boosters"
+		else return "Усиление Ускорителей"},
 		description: "Power boosts boosters gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(16000000)
 			else return new Decimal(360000000)},
@@ -391,7 +460,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b",
 		},
 				55: {
-		title: "Power Mastery",
+		title() {if (options.ru == false) return "Power Mastery"
+		else return "Сила Мастерства"},
 		description: "Boosters boost point gain",
 		cost() {if (inChallenge("m", 11)) return new Decimal(5e22)
 			else return new Decimal(5e32)},
@@ -400,7 +470,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return format(upgradeEffect("b", 55)) + "x"},
 		},
 						61: {
-		title: "Power SSR",
+		title() {if (options.ru == false) return "Power SSR"
+		else return "Ультра Мега Сила"},
 		description: "Boosters boost booster gain",
 		cost: new Decimal(1.2e61),
 		unlocked() {
@@ -409,7 +480,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return "^" + format(upgradeEffect("b", 61))},
 		},
 						62: {
-		title: "Mult Booster",
+		title() {if (options.ru == false) return "Mult Booster"
+		else return "Множитель Ускорителя"},
 		description: "Power gain boost boooster gain",
 		cost: new Decimal(1.5e67),
 		unlocked() {return hasUpgrade("b", 61)},
@@ -417,7 +489,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return format(upgradeEffect("b", 62)) + "x"},
 		},
 						63: {
-		title: "Div boost",
+		title() {if (options.ru == false) return "Div Booster"
+		else return "Делитель Ускорителя"},
 		description: "Boost point gain based on boosters/1e10.",
 		cost: new Decimal(3e151),
 		unlocked() {return hasUpgrade("b", 62)},
@@ -425,7 +498,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return format(upgradeEffect("b", 63)) + "x"},
 		},
 						64: {
-		title: "More Points",
+		title() {if (options.ru == false) return "More Points"
+		else return "Больше очков!"},
 		description: "Boost point gain based on Power gain",
 		cost: new Decimal(1e195),
 		unlocked() {return hasUpgrade("b", 63)},
@@ -433,7 +507,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return  format(upgradeEffect("b", 64)) + "x"},
 		},
 								65: {
-		title: "Over Points",
+		title() {if (options.ru == false) return "Over Points"
+		else return "За пределами очков"},
 		description: "Boost point gain based on boosters",
 		cost: new Decimal(3e202),
 		unlocked() {return hasUpgrade("b", 64)},
@@ -441,7 +516,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return  format(upgradeEffect("b", 65)) + "x"},
 		},
 										71: {
-		title: "Start Pos",
+		title() {if (options.ru == false) return "Start Pos"
+		else return "Чекпоинт"},
 		description: "Boost booster gain by points^points",
 		cost: new Decimal(1e204),
 		unlocked() {return hasUpgrade("b", 65)},
@@ -450,31 +526,36 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 						effectDisplay() {return  format(upgradeEffect("b", 71)) + "x"},
 		},
 										72: {
-		title: "Infinity starts here",
+		title() {if (options.ru == false) return "Infinity starts here"
+		else return "Бесконечность начинается здесь"},
 		description: "Gain 100% of boosters per sec",
 		cost: Decimal.pow(10,308),
 		unlocked() {return hasUpgrade("b", 71)},
 		},
 										73: {
-		title: "Infinity Booster",
+		title() {if (options.ru == false) return "Infinity Booster"
+		else return "Ускоритель Бесконечности"},
 		description: "Gain 500% of boosters per sec",
 		cost: Decimal.pow(10,310),
 		unlocked() {return hasUpgrade("b", 72)},
 		},
 										74: {
-		title: "Infinity Overload?",
+		title() {if (options.ru == false) return "Infinity Overload"
+		else return "Перегрузка Бесконечности"},
 		description: "Gain 5e10% of boosters per sec",
 		cost: Decimal.pow(10,311),
 		unlocked() {return hasUpgrade("b", 73)},
 		},
 										75: {
-		title: "Infinery I",
+		title() {if (options.ru == false) return "Infinering I"
+		else return "Обесконечивание I"},
 		description: "Unlock Generators and Incrementals",
 		cost: Decimal.pow(10,321),
 		unlocked() {return hasUpgrade("b", 74)},
 		},
 										81: {
-		title: "Incremental Booster",
+		title() {if (options.ru == false) return "Incremental Booster"
+		else return "Инкрементальный Ускоритель"},
 		description: "Unspent Incrementals boost booster gain",
 		cost: Decimal.pow(10,348),
 						effect() {return player.i.points.add(1).pow(2).min(15).max(1)},
@@ -482,7 +563,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return player.i.best.gte(1)},
 		},
 										82: {
-		title: "Unincremental Booster",
+		title() {if (options.ru == false) return "UnIncremental Booster"
+		else return "Не Инкрементальный Ускоритель"},
 		description: "Best Incrementals boost booster gain",
 		cost: Decimal.pow(10,375),
 						effect() {return player.i.best.add(1).pow(2.5).min(35).max(1)},
@@ -490,7 +572,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 81)},
 		},
 												83: {
-		title: "Effect Booster",
+		title() {if (options.ru == false) return "Effective Booster"
+		else return "Эффективный Ускоритель"},
 		description: "Best and unspent Incrementals boost booster gain",
 		cost: Decimal.pow(10,409),
 						effect() {return player.i.best.add(1).add(player.i.points).pow(2.5).min(35).max(1)},
@@ -498,7 +581,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 82)},
 		},
 														84: {
-		title: "Int Booster",
+		title() {if (options.ru == false) return "Int Booster"
+		else return "Целочисленный Ускоритель"},
 		description: "Decrease Incremental cost by points amount",
 		cost: Decimal.pow(10,463),
 						effect() {return player.points.log10(player.points).pow(5).min(5e8).max(1)},
@@ -506,7 +590,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 83)},
 		},
 														85: {
-		title: "Decrease Booster",
+		title() {if (options.ru == false) return "Decrease Booster"
+		else return "Уменьшающий Ускоритель"},
 		description: "Decrease Incremental cost by boosters",
 		cost: Decimal.pow(10.02,463),
 						effect() {return player.b.points.pow(8).min(1e9).max(1)},
@@ -514,7 +599,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 84)},
 		},
 																91: {
-		title: "Area Booster",
+		title() {if (options.ru == false) return "Area Booster"
+		else return "Зоновый Ускоритель"},
 		description: "Points*Incremental gives an exponental boost to booster gain",
 		cost: Decimal.pow(10.04,514),
 						effect() {return player.points.pow(0.015).times(player.i.points.pow(0.015)).min(150).max(1)},
@@ -522,7 +608,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return (player.i.best.gte(2))},
 		},
 																		92: {
-		title: "Merge Booster",
+		title() {if (options.ru == false) return "Merge Booster"
+		else return "Соединительный Ускоритель"},
 		description: "Boosters*Incremental gives an exponental boost to booster gain",
 		cost: Decimal.pow(10.025,554),
 						effect() {return player.b.points.pow(0.002).times(player.i.points.pow(0.015)).min(150).max(1)},
@@ -530,7 +617,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 91)},
 		},
 																		93: {
-		title: "Ext Booster",
+		title() {if (options.ru == false) return "Extend Booster"
+		else return "Продлить Ускорители"},
 		description: "Boost boosters based on upgrades amount",
 		cost: Decimal.pow(10.025,609),
 						effect() {let ret = Decimal.pow(1.1, player.b.upgrades.length)
@@ -539,7 +627,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return  hasUpgrade("b", 92)},
 		},
 																		94: {
-		title: "Pre-final Booster",
+		title() {if (options.ru == false) return "Semi-final Booster"
+		else return "Полу-финальный Ускоритель"},
 		description: "Boost boosters based on points",
 		cost: Decimal.pow(10,698),
 						effect() {return player.points.pow(0.012).min(500).max(1)},
@@ -547,7 +636,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 93)},
 		},
 																				95: {
-		title: "Final Booster",
+		title() {if (options.ru == false) return "Final Booster"
+		else return "Финальный Ускоритель"},
 		description: "Boost points based on Incrementals",
 		cost: Decimal.pow(10,735),
 						effect() {return player.i.points.pow(100).min(1e24).max(1)},
@@ -555,7 +645,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 94)},
 		},
 																				101: {
-		title: "Mini-Energy Booster",
+		title() {if (options.ru == false) return "Mini-Energy Booster"
+		else return "Мини-энергичный Ускоритель"},
 		description: "Boost Energy gain by points",
 		cost: Decimal.pow(10.01,1212),
 						effect() {return player.points.pow(0.02).min(1e12).max(1)},
@@ -563,7 +654,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("i", 11)},
 		},
 																				102: {
-		title: "Semi-Energy Booster",
+		title() {if (options.ru == false) return "Semi-Energy Booster"
+		else return "Полу-энергичный Ускоритель"},
 		description: "Boost Energy gain by boosters",
 		cost: Decimal.pow(10.01,1262),
 						effect() {return player.b.points.pow(0.15).min(1e12).max(1)},
@@ -571,7 +663,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 101)},
 		},
 																				103: {
-		title: "Energy Booster",
+		title() {if (options.ru == false) return "Energy Booster"
+		else return "Энергичный Ускоритель"},
 		description: "Boost Energy gain by boosters^2",
 		cost: Decimal.pow(10.01,1475),
 						effect() {return player.b.points.pow(0.3).min(1e100).max(1)},
@@ -579,7 +672,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 102)},
 		},
 																				104: {
-		title: "Mega-Energy Booster",
+		title() {if (options.ru == false) return "Mega-Energy Booster"
+		else return "Мега-Энергичный Ускоритель"},
 		description: "Boost Energy gain by boosters^3",
 		cost: Decimal.pow(10.01,3280),
 						effect() {return player.b.points.pow(0.6).min(1e300).max(1)},
@@ -587,7 +681,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 103)},
 		},
 																						105: {
-		title: "Ultra-Energy Booster",
+		title() {if (options.ru == false) return "Ultra-Energy Booster"
+		else return "Ультра-Энергичный Ускоритель"},
 		description: "Boost Energy gain by boosters^10",
 		cost: Decimal.pow(10.01,8680),
 						effect() {return player.b.points.pow(1).min(Decimal.pow(10, 2500)).max(1)},
@@ -595,7 +690,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		unlocked() {return hasUpgrade("b", 104)},
 		},
 				111: {
-					title: "Water I",
+		title() {if (options.ru == false) return "Water I"
+		else return "Вода I"},
 			description: "Water amount boosts [Spawn a rain] effect",
 			cost: new Decimal(135),
 						effect() {if (hasUpgrade("b", 111)) return player.b.l.pow(0.22)
@@ -606,7 +702,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				112: {
-					title: "Water II",
+		title() {if (options.ru == false) return "Water II"
+		else return "Вода II"},
 			description: "Chemicals boost Water gain",
 			cost: new Decimal(350),
 						unlocked() {return (hasUpgrade("b", 111))},
@@ -618,7 +715,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				113: {
-					title: "Water III",
+		title() {if (options.ru == false) return "Water III"
+		else return "Вода III"},
 			description: "log10(Hydrogen) boost Water gain",
 			cost: new Decimal(2780),
 						unlocked() {return (hasUpgrade("b", 112))},
@@ -630,7 +728,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				114: {
-					title: "Water IV",
+		title() {if (options.ru == false) return "Water IV"
+		else return "Вода IV"},
 			description: "log10(Lithium) boost Water gain",
 			cost: new Decimal(88200),
 						unlocked() {return (hasUpgrade("b", 113))},
@@ -642,7 +741,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				115: {
-					title: "Water V",
+		title() {if (options.ru == false) return "Water V"
+		else return "Вода V"},
 			description: "Apply Generate Hydrogen level as a Water boost",
 			cost: new Decimal(6270000),
 						unlocked() {return (hasUpgrade("b", 114))},
@@ -654,7 +754,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				121: {
-					title: "Water VI",
+		title() {if (options.ru == false) return "Water VI"
+		else return "Вода VI"},
 			description: "Water amount boosts Lithium gain",
 			cost: new Decimal(278000000),
 						unlocked() {return (hasUpgrade("b", 115))},
@@ -666,7 +767,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				122: {
-					title: "Water VII",
+		title() {if (options.ru == false) return "Water VII"
+		else return "Вода VII"},
 			description: "Physics boosts Water gain",
 			cost: new Decimal(4.8e9),
 						unlocked() {return (hasUpgrade("b", 121))},
@@ -678,7 +780,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				123: {
-					title: "Water VIII",
+		title() {if (options.ru == false) return "Water VIII"
+		else return "Вода VIII"},
 			description: "Water amount boosts Hydrogen gain",
 			cost: new Decimal(2e12),
 						unlocked() {return (hasUpgrade("b", 122))},
@@ -690,7 +793,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				124: {
-					title: "Water IX",
+		title() {if (options.ru == false) return "Water IX"
+		else return "Вода IX"},
 			description: "Hydrogen boosts Lithium gain",
 			cost: new Decimal(7e13),
 						unlocked() {return (hasUpgrade("b", 123))},
@@ -702,7 +806,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				125: {
-					title: "Water X",
+		title() {if (options.ru == false) return "Water X"
+		else return "Вода X"},
 			description() {if (player.b.buyables[12].gte(1)) return "Steam boosts water gain"
 				else return "Lithium/Hydrogen^19 boosts water gain"},
 			cost: new Decimal(1e14),
@@ -716,7 +821,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				131: {
-					title: "Water XI",
+		title() {if (options.ru == false) return "Water XI"
+		else return "Вода XI"},
 			description() {return "Twice [Steam Gain] effect"},
 			cost: new Decimal(1e27),
 						unlocked() {return (player.b.buyables[12].gte(1))},
@@ -729,7 +835,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				132: {
-					title: "Steam I",
+		title() {if (options.ru == false) return "Steam I"
+		else return "Дым I"},
 			description() {return "Additional [Water Gain] levels gives a boost to [Steam Gain]"},
 			cost: new Decimal(100000),
 						unlocked() {return (hasUpgrade("b", 131))},
@@ -742,7 +849,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				133: {
-					title: "Steam II",
+		title() {if (options.ru == false) return "Steam II"
+		else return "Дым II"},
 			description() {return "Physics boosts Steam gain"},
 			cost: new Decimal(1200000),
 						unlocked() {return (hasUpgrade("b", 132))},
@@ -755,7 +863,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 						134: {
-					title: "Steam III",
+		title() {if (options.ru == false) return "Steam III"
+		else return "Дым III"},
 			description() {return "Buyed upgrades boosts Steam gain"},
 			cost: new Decimal(38000000),
 						unlocked() {return (hasUpgrade("b", 133))},
@@ -769,7 +878,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
                 currencyLayer: "b", // Use if using a nonstandard currency
 		},
 				135: {
-					title: "Steam IV",
+		title() {if (options.ru == false) return "Steam IV"
+		else return "Дым IV"},
 			description() {return "Unlock another element."},
 			cost: new Decimal(3e9),
 						unlocked() {return (hasUpgrade("b", 134))},
@@ -784,7 +894,8 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 	},
 		buyables: {
 						      11: {
-        title: "Spell a rain",
+		title() {if (options.ru == false) return "Spell a rain"
+		else return "Вызвать дождь"},
 				purchaseLimit: 10,
         cost(x) {return new Decimal(1).times(x.add(1)).pow(x.add(1))},
 		canAfford() {return (player.b.points.gte(this.cost()))},
@@ -804,7 +915,8 @@ let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("
         },
       },
 						      12: {
-        title: "Create a fog after rain",
+		title() {if (options.ru == false) return "Create a fog after rain"
+		else return "Создать туман после дождя"},
 				purchaseLimit: 10,
         cost(x) {return new Decimal(210).times(x.add(1)).pow(x.add(1))},
 		canAfford() {return (player.b.points.gte(this.cost()))},
@@ -824,7 +936,8 @@ let eff = x.add(0.45).pow(2).times(buyableEffect("b",21))
         },
       },
 						      21: {
-        title: "Steam Gain",
+		title() {if (options.ru == false) return "Steam Gain"
+		else return "Доход Дыма"},
 				purchaseLimit: 25,
         cost(x) {return new Decimal(82).times(x.add(1))},
 		unlocked() {return player.b.buyables[12].gte(1)},
@@ -845,7 +958,8 @@ if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buya
         },
       },
 						      22: {
-        title: "Water Gain",
+		title() {if (options.ru == false) return "Water Gain"
+		else return "Доход Воды"},
 				purchaseLimit: 10,
         cost(x) {return new Decimal(1725).times(x.add(1))},
 				unlocked() {return player.b.buyables[12].gte(1)},
@@ -868,7 +982,8 @@ if (player.b.buyables[22].gte(1)) eff = x.add(1.5).pow(6.5)
 		},
 			clickables: {
 		      11: {
-        display() {return `Respec Phenomenas`},
+        display() {if (options.ru == false) return `Respec Phenomenas`
+		else return `Сбросить явления`},
         onClick() {
           if(confirm("Are you sure you want to respec? This will turn off all of Phenomenas except rain")){
 			  player.b.buyables[12] = new Decimal(0)

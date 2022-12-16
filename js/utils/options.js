@@ -13,6 +13,7 @@ function getStartOptions() {
 		showStory: true,
 		forceOneTab: false,
 		oldStyle: false,
+        ru: false,
 	}
 }
 
@@ -33,6 +34,9 @@ function updateStyle() {
 	css.href = options.oldStyle ? "oldStyle.css" : "style.css";
 	needCanvasUpdate = true;
 }
+function translateRussian() {
+	options.ru = R_SETTINGS[(R_SETTINGS.indexOf(options.ru) + 1) % 2];
+}
 function changeTreeQuality() {
 	var on = options.hqTree;
 	document.body.style.setProperty('--hqProperty1', on ? "2px solid" : "4px solid");
@@ -46,7 +50,7 @@ function toggleAuto(toggle) {
 }
 
 const MS_DISPLAYS = ["ALL", "LAST, AUTO, INCOMPLETE", "AUTOMATION, INCOMPLETE", "INCOMPLETE", "NONE"];
-
+const R_SETTINGS = ["OFF", "ON"]
 const MS_SETTINGS = ["always", "last", "automation", "incomplete", "never"];
 
 function adjustMSDisp() {
@@ -55,7 +59,14 @@ function adjustMSDisp() {
 function milestoneShown(layer, id) {
 	complete = player[layer].milestones.includes(id);
 	auto = layers[layer].milestones[id].toggles;
-
+	switch (options.ru) {
+		case "ON":
+			return true;
+			break;
+		case "OFF":
+			return false;
+			break;
+	}
 	switch (options.msDisplay) {
 		case "always":
 			return true;
