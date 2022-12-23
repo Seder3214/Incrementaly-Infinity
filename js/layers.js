@@ -3389,7 +3389,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
         },
         unlocked() {return true},
         effect(x) {
-          eff = x.add(1).add(upgradeEffect("c", 52)).add(upgradeEffect("c", 51)).pow(3.5).div(x.add(2)).pow(upgradeEffect("c", 53)).times(upgradeEffect("c", 54)).max(1)
+          if (player.c.buyables[51].gte(1)) eff = x.add(1).add(upgradeEffect("c", 52)).add(upgradeEffect("c", 51)).pow(3.5).div(x.add(2)).pow(upgradeEffect("c", 53)).times(upgradeEffect("c", 54)).max(1)
           return eff
         },
         style: {
