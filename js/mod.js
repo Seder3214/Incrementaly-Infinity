@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.98.1",
+	num: "0.98.2",
 	name: "Literally Beryllium + Energy",
 }
 

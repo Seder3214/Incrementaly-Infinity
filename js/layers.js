@@ -3135,7 +3135,7 @@ addLayer("c", {
 		55: {
 			title: "Beryllium V",
 			description: "Beryllium boosts Lithium gain",
-			cost: Decimal.pow(3e20, 1),
+			cost: Decimal.pow(1e20, 1),
 			unlocked() {return (hasUpgrade("c", 54))},
 			effect() {if (hasUpgrade("c", 55)) return player.c.be.add(1).times(5).pow(1.12)
 			else return new Decimal(1)
