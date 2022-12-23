@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.98",
+	num: "0.98.1",
 	name: "Literally Beryllium + Energy",
 }
 
@@ -64,12 +64,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-function(){return "Current endgame: 10 Carbon"},
+function(){return "Current endgame: 1e14 Energy"},
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.c.c.gte(10)
+	return player.b.e.gte(1e14)
 }
 
 
