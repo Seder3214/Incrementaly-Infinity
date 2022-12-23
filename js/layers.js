@@ -188,7 +188,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		else return "Ускорение!"},
 		description() {if (options.ru == false) return "Boosters boost point gain."
 		else return "Ускорители увеличивают доход очков."},
-		cost() {if (hasAchievement("a", 71)) return new Decimal(1250)
+		cost() {if (hasAchievement("a", 71)) return new Decimal(1e300)
 			else return new Decimal(1)},
 		effect() {
 			if (inChallenge("m", 11) && hasUpgrade("b", 21)) return player.b.points.pow(2.2).min(upgradeEffect("b", 21).times(4)).max(1.5)
