@@ -957,7 +957,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 		title() {if (options.ru == false) return "Energy V"
 		else return "Енергия V"},
 			description() {return "Square second effect of previous upgrade"},
-			cost: new Decimal(2e14),
+			cost: new Decimal(5e13),
 						unlocked() {return (hasUpgrade("b", 144))},
 						effect() {
 							if (hasUpgrade("b", 145)) return new Decimal(2)
