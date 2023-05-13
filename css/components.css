@@ -98,16 +98,17 @@
     cursor: pointer;
     border: none;
     padding: 2px;
-    border-radius: 8px 8px 0 0;
+	width: 10px;
+	height: 10px;
 }
 
 .story-toggle {
     border: none;
     background: black;
     color: white;
-    font-size: 20px;
+    font-size: 10px;
     pointer-events: none;
-    width: 1em;
+    width: 5px;
     display: inline-block;
 }
 

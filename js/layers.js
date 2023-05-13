@@ -885,7 +885,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 			cost: new Decimal(3e9),
 						unlocked() {return (hasUpgrade("b", 134))},
 						effect() {
-							if (hasUpgrade("b", 135)) return player.b.st.pow(0.1)
+							if (hasUpgrade("b", 135)) return player.b.st.pow(0.1).pow(tmp.cl.waterLithiumEff)
 							else return new Decimal(1)},
 			effectDisplay() {return "+" + format(upgradeEffect("b", 135)) + " Carbon/s"},
 				currencyDisplayName: "Steam", // Use if using a nonstandard currency
@@ -947,7 +947,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
 							if (hasUpgrade("b", 144)) ret = player.b.e.max(1).pow(2)
 								ret = softcap(ret, new Decimal(1e3), new Decimal(0.001))
 							return ret},
-			effectDisplay() {if (upgradeEffect("b", 144).gte(1e3)) return "<br>L: ^" + format(upgradeEffect("b", 144)) + " (<i>softcapped</i>),<br>W: x" + format(player.b.points.pow(3).pow(upgradeEffect("b", 145)))
+			effectDisplay() {if (upgradeEffect("b", 144).gte(1e3)) return "<br>L: ^" + format(upgradeEffect("b", 144)) + " (<i>softcapped</i>),<br>W: x" + format(player.b.points.pow(3).pow(upgradeEffect("b", 145)).pow(tmp.cl.waterSteamEff))
 				else return "<br>L: ^" + format(upgradeEffect("b", 144)) + ",<br>W: x" + format(player.b.points.pow(3).pow(upgradeEffect("b", 145)))},
 				currencyDisplayName: "Energy", // Use if using a nonstandard currency
                 currencyInternalName: "e", // Use if using a nonstandard currency
@@ -982,7 +982,7 @@ if (hasUpgrade("b", 41)) mult = mult.times(upgradeEffect("b", 41))
         },
         unlocked() {return true},
         effect(x) {
-let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("b",112)).times(upgradeEffect("b",113)).times(upgradeEffect("b",114)).times(upgradeEffect("b",115)).times(upgradeEffect("b",122)).times(upgradeEffect("b",125)).times(buyableEffect("b",22)).times(player.b.points.pow(3).pow(upgradeEffect("b", 145)))
+let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("b",112)).times(upgradeEffect("b",113)).times(upgradeEffect("b",114)).times(upgradeEffect("b",115)).times(upgradeEffect("b",122)).times(upgradeEffect("b",125)).times(buyableEffect("b",22)).times(player.b.points.pow(3).pow(upgradeEffect("b", 145)).pow(tmp.cl.waterSteamEff)).pow(tmp.cl.waterLithiumEff)
           return eff
         },
         style: {
@@ -1004,7 +1004,7 @@ let eff = x.add(0.45).pow(2).times(upgradeEffect("b",111)).times(upgradeEffect("
         unlocked() {return true},
         effect(x) {
 						if (player.b.buyables[13].gte(1)) eff = new Decimal(0)
-else eff = x.add(0.45).pow(2).times(buyableEffect("b",21)).times(upgradeEffect("c",45))
+else eff = x.add(0.45).pow(2).times(buyableEffect("b",21)).times(upgradeEffect("c",45)).pow(tmp.cl.waterLithiumEff)
           return eff
         },
         style: {
@@ -1025,7 +1025,7 @@ else eff = x.add(0.45).pow(2).times(buyableEffect("b",21)).times(upgradeEffect("
         },
         unlocked() {return true},
         effect(x) {
-if (player.b.l.gte(1e24)) eff = x.add(0.25).pow(2).times(upgradeEffect("b", 141)).times(upgradeEffect("b", 142)).times(upgradeEffect("b", 143))
+if (player.b.l.gte(1e24)) eff = x.add(0.25).pow(2).times(upgradeEffect("b", 141)).times(upgradeEffect("b", 142)).times(upgradeEffect("b", 143)).pow(tmp.cl.waterLithiumEff)
 	else eff = new Decimal(0)
           return eff
         },
@@ -1047,7 +1047,7 @@ if (player.b.l.gte(1e24)) eff = x.add(0.25).pow(2).times(upgradeEffect("b", 141)
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
         effect(x) {
-if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buyables[22].add(1).times(0.5)).times(upgradeEffect("b", 131)).times(upgradeEffect("b", 132)).times(upgradeEffect("b", 133)).times(upgradeEffect("b", 134))
+if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buyables[22].add(1).times(0.5)).times(upgradeEffect("b", 131)).times(upgradeEffect("b", 132)).times(upgradeEffect("b", 133)).times(upgradeEffect("b", 134)).pow(tmp.cl.waterLithiumEff)
 		else eff = new Decimal(1)
           return eff
         },
@@ -1069,7 +1069,7 @@ if (player.b.buyables[21].gte(1)) eff = x.add(1).times(6.45).times(player.b.buya
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
         effect(x) {
-if (player.b.buyables[22].gte(1)) eff = x.add(1.5).pow(6.5)
+if (player.b.buyables[22].gte(1)) eff = x.add(1.5).pow(6.5).pow(tmp.cl.waterLithiumEff)
 	else eff = new Decimal(1)
           return eff
         },
@@ -3038,7 +3038,7 @@ addLayer("c", {
 			description: "log(8) Steam boosts Carbon gain",
 			cost: Decimal.pow(150000, 1),
 			unlocked() {return (hasUpgrade("c", 41))},
-			effect() {if (hasUpgrade("c", 42)) return player.b.st.log(8).pow(upgradeEffect("c", 43)).max(1)
+			effect() {if (hasUpgrade("c", 42)) return player.b.st.max(1).log(8).pow(upgradeEffect("c", 43)).max(1)
 			else return new Decimal(1)},
 						effectDisplay() {return "x" + format(upgradeEffect("c",42))},
 			currencyDisplayName: "Carbon", // Use if using a nonstandard currency
@@ -3159,8 +3159,8 @@ addLayer("c", {
         },
         unlocked() {return true},
         effect(x) {
-			if (hasUpgrade("c", 14)) eff = x.add(upgradeEffect("c", 21)).add(buyableEffect("c", 41)).add(buyableEffect("c", 43)).pow(10).add(upgradeEffect("c", 13)).add(buyableEffect("c", 12)).times(player.c.h.pow(0.2)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12)).times(upgradeEffect("b", 123))
-          else eff = x.add(upgradeEffect("c", 21)).add(upgradeEffect("c", 23)).pow(10).add(upgradeEffect("c", 13)).times(player.c.h.pow(0.15).add(0.5)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12))
+			if (hasUpgrade("c", 14)) eff = x.add(upgradeEffect("c", 21)).add(buyableEffect("c", 41)).add(buyableEffect("c", 43)).pow(10).add(upgradeEffect("c", 13)).add(buyableEffect("c", 12)).times(player.c.h.pow(0.2)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12)).times(upgradeEffect("b", 123)).pow(tmp.cl.waterLithiumEff)
+          else eff = x.add(upgradeEffect("c", 21)).add(upgradeEffect("c", 23)).pow(10).add(upgradeEffect("c", 13)).times(player.c.h.pow(0.15).add(0.5)).times(upgradeEffect("c", 11)).times(upgradeEffect("c", 12)).pow(tmp.cl.waterLithiumEff)
           return eff
         },
         style: {
@@ -3199,8 +3199,8 @@ addLayer("c", {
 			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
 				unlocked() {return (hasUpgrade("c", 25))},
-        effect(x) {if (hasUpgrade("b", 121)) eff = x.add(1).times(player.c.li.pow(0.09).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31))
- else eff = x.add(1).times(player.c.li.pow(0.15).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31))
+        effect(x) {if (hasUpgrade("b", 121)) eff = x.add(1).times(player.c.li.pow(0.09).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31)).pow(tmp.cl.waterLithiumEff)
+ else eff = x.add(1).times(player.c.li.pow(0.15).add(0.75)).times(buyableEffect("c", 31)).times(buyableEffect("c", 32)).times(buyableEffect("c", 33)).times(buyableEffect("c", 34)).times(buyableEffect("c", 35)).times(upgradeEffect("c", 31)).pow(tmp.cl.waterLithiumEff)
           return eff
         },
         style: {
@@ -3318,7 +3318,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 		purchaseLimit: 1,
         cost(x) {return new Decimal(1e95).times(x.add(1))},
 		canAfford() {return (player.c.h.gte(this.cost()))},
-        display() {return `Add more base to Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Hydrogen<br>Effect: +${format(this.effect())}`},
+        display() {return `Add more base to Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Hydrogen<br>Effect: +${format(this.effect())}`},
         buy() {
           player.c.h = player.c.h.sub(this.cost())
           setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -3339,7 +3339,7 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 		purchaseLimit: 1,
         cost(x) {return new Decimal.pow(10, 627).times(x.add(1))},
 		canAfford() {return (player.c.li.gte(this.cost()))},
-        display() {return `Add more base to Lithium V effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: +${format(this.effect())}`},
+        display() {return `Add more base to Lithium V effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Lithium<br>Effect: +${format(this.effect())}`},
         buy() {
           player.c.li = player.c.li.sub(this.cost())
           setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -3360,14 +3360,14 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 		purchaseLimit: 1,
         cost(x) {return new Decimal(5).times(x.add(1))},
 		canAfford() {return (player.c.points.gte(this.cost()))},
-        display() {return `Add more base to Lithium V and Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(upgradeEffect("c", 22)))}<br>Cost: ${format(this.cost())} Chemicals<br>Effect: +${format(this.effect())}`},
+        display() {return `Add more base to Lithium V and Generate Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id).add(tmp.cl.waterSteamEff))}<br>Cost: ${format(this.cost())} Chemicals<br>Effect: +${format(this.effect())}`},
         buy() {
           player.c.points = player.c.points.sub(this.cost())
           setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
 				unlocked() {return (hasUpgrade("c", 35))},
         effect(x) {
-     if (player.c.buyables[43].gte(1)) eff = x.add(1e6)
+     if (player.c.buyables[43].gte(1)) eff = x.add(tmp.cl.waterSteamEff).times(1e6).max(1)
 		  	else eff = new Decimal(1)
           return eff
         },
@@ -3389,7 +3389,8 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
         },
         unlocked() {return true},
         effect(x) {
-          if (player.c.buyables[51].gte(1)) eff = x.add(1).add(upgradeEffect("c", 52)).add(upgradeEffect("c", 51)).pow(3.5).div(x.add(2)).pow(upgradeEffect("c", 53)).times(upgradeEffect("c", 54)).max(1)
+          if (player.c.buyables[51].gte(1)) eff = x.add(1).add(upgradeEffect("c", 52)).add(upgradeEffect("c", 51)).pow(3.5).div(x.add(2)).pow(upgradeEffect("c", 53)).times(upgradeEffect("c", 54)).max(1).pow(tmp.cl.waterLithiumEff)
+			  else return eff = new Decimal(1)
           return eff
         },
         style: {
@@ -3431,19 +3432,32 @@ if (player.c.buyables[34].gte(1)) eff = x.add(1).times(25).add(upgradeEffect("c"
 addLayer("cl", {
     name: "Combining Lab", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CL", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    position: 1,
+nodeStyle() {                 
+if (player.cl.unlocked) return {'background': 'radial-gradient(circle, rgba(217,255,102,1) 30%, rgba(120,162,183,1) 75%)',}                                          
+},	// Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
-		points: new Decimal(0),
+		points: new Decimal(0),	
+		best: new Decimal(0),
+		h: 0,
+		w: 0,
+		st: 0,
+		li: 0,
+		e: 0,
+		br: 0,
+		c: 0,
+		f: 0,
+		
     }},
     color: "#d9ff66",
 	branches: ["c"],
-    requires() {return new Decimal(Decimal.pow(1e280, 1e246))},// Can be a function that takes requirement increases into account
-    resource: "Chemicals", // Name of prestige currency
-    baseResource: "points", // Name of resource prestige is based on
-    baseAmount() {return player.points}, // Get the current amount of baseResource
+    requires() {return new Decimal(30000)},// Can be a function that takes requirement increases into account
+    resource: "Quarks", // Name of prestige currency
+    baseResource: "Physics", // Name of resource prestige is based on
+    baseAmount() {return player.b.points},	// Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 125, // Prestige currency exponent
+    exponent: 1.1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -3459,18 +3473,710 @@ addLayer("cl", {
     ],
 	microtabs: {
     stuff: {
+		                    "Effect Scalers": {
+                content: [
+                    ["blank", "15px"],
+					["infobox", "effects"],
+					["display-text", () => "Water Effects Scalers"],
+					["buyables", [1,2]],
+					["display-text", () => "Lithium Effects Scalers"],
+					["buyables", [3,4]],
+					["display-text", () => "Other Effects Scalers"],
+					["buyables", [5,6]]
+                ]
+            },
                     "Combine": {
                 content: [
                     ["blank", "15px"],
-                    ["buyables", [1,2,4]]
+                    "clickables"
                 ]
             },
-			                    "Fuses": {
+			                    "Modifications": {
                 content: [
-                    ["blank", "15px"]
+                    ["blank", "15px"],
+					"upgrades"
                 ]
             },
 	},
+	},
+		waterSteamEff() {
+		if (player.cl.w > 0 && player.cl.st > 0) eff = player.cl.best.max(1).pow(1.23).times(buyableEffect("cl", 12))
+			else eff = new Decimal(1)
+			return eff;
+	},
+	waterLithiumEff() {
+		if (player.cl.w > 0 && player.cl.li > 0) eff = player.cl.best.max(1.25).pow(0.5).times(buyableEffect("cl", 11))
+						else eff = new Decimal(1)
+		eff = softcap(eff, new Decimal(1.75), new Decimal(0.001))
+			return eff;
+	},
+upgrades: {
+	11: {
+		title: "Unlocking I",
+		description: "Unlock 2 new elements",
+		cost: new Decimal(1),
+	},
+	15: {
+		title: "Unlocking II",
+		description: "Unlock 2 new elements",
+		cost: new Decimal(3),
+	},
+	22: {
+		title: "Unlocking III",
+		description: "Unlock 2 new elements",
+		cost: new Decimal(26),
+	},
+},
+infoboxes: {
+	effects: {
+        body() {if (hasMilestone("cl", 1))return "Water effects: <br>Water-Lithium: ^" + format(tmp.cl.waterLithiumEff) + " to Elements and Phenomenas, Water-Steam: ^" + format(tmp.cl.waterSteamEff)+ " to second [Energy IV] effect, <br> Water-Carbon: x?.?? to ???, Water-Energy: +?.?? to ???, x?.?? to ??? <br> Water-Hydrogen: ^?.?? to ???, Water-Beryllium: ^?.?? to ???<br> Water-Fire: x?.?? to ??? <br> Lithium effects: <br> Lithium-Hydrogen: ^?.?? to ???, Lithium-Carbon: +?.?? and x?.?? to ??? <br> Lithium-Energy: x?.?? to ???, Lithium-Fire: ^?.?? to ??? <br> Lithium-Beryllium: +?.?? to ???, ^?.?? to ???, +?.?? to ??? <br> Carbon effects: <br> Carbon-Energy: ^?.?? to ???, Carbon-Beryllium: x?.?? to ??? <br> Carbon-Fire: x?.?? to ???, +?.?? to ???, Carbon-Hydrogen: ^^?.?? to ??? ,<br> Beryllium effects: <br> Beryllium-Hydrogen: x?.?? + ^?.?? to ???, Beryllium-Energy: +?.??/s <br> Beryllium-Fire: +?.?? to ??? <br> Energy effects: <br> Energy-Hydrogen: x?.?? to ???, ^?.?? to ???, Energy-Fire: +?.??/s <br> Fire effects: <br>Fire-Hydrogen: x?.?? to +?.??/s"
+			if (hasMilestone("cl", 0))return "Water effects: <br>Water-Lithium: ^" + format(tmp.cl.waterLithiumEff) + " to Elements and Phenomenas, Water-Steam: ^?.?? to ???, <br> Water-Carbon: x?.?? to ???, Water-Energy: +?.?? to ???, x?.?? to ??? <br> Water-Hydrogen: ^?.?? to ???, Water-Beryllium: ^?.?? to ???<br> Water-Fire: x?.?? to ??? <br> Lithium effects: <br> Lithium-Hydrogen: ^?.?? to ???, Lithium-Carbon: +?.?? and x?.?? to ??? <br> Lithium-Energy: x?.?? to ???, Lithium-Fire: ^?.?? to ??? <br> Lithium-Beryllium: +?.?? to ???, ^?.?? to ???, +?.?? to ??? <br> Carbon effects: <br> Carbon-Energy: ^?.?? to ???, Carbon-Beryllium: x?.?? to ??? <br> Carbon-Fire: x?.?? to ???, +?.?? to ???, Carbon-Hydrogen: ^^?.?? to ??? ,<br> Beryllium effects: <br> Beryllium-Hydrogen: x?.?? + ^?.?? to ???, Beryllium-Energy: +?.??/s <br> Beryllium-Fire: +?.?? to ??? <br> Energy effects: <br> Energy-Hydrogen: x?.?? to ???, ^?.?? to ???, Energy-Fire: +?.??/s <br> Fire effects: <br>Fire-Hydrogen: x?.?? to +?.??/s" },
+		style: {
+			'border-radius': '0%',
+		},
+	},
+},
+buyables: {
+		  						      11: {
+        title: "Water-Lithium Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(98000).times(x.add(1))},
+		canAfford() {return (player.b.points.gte(this.cost()))},
+        display() { return `Scale Water-Lithium effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Physics<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.points = player.b.points.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[11].gte(1)) eff = x.add(1).pow(0.01).max(1)
+			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-right': '-14px',
+        },
+      },
+		  						      12: {
+        title: "Water-Steam Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e280).times(x.times(6).add(1))},
+		canAfford() {return (player.b.st.gte(this.cost()))},
+        display() { return `Scale Water-Steam effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Steam<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.st = player.b.st.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[12].gte(1)) eff = x.add(1).times(1.35)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+        },
+      },
+		  						      13: {
+        title: "Water-Carbon Scaler",
+				purchaseLimit: 25,
+        cost(x) {return Decimal.pow(10, 620).pow(x.add(1))},
+		canAfford() {return (player.b.l.gte(this.cost()))},
+        display() { return `Scale Water-Carbon effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Water<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.l = player.b.l.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[13].gte(1)) eff = x.add(1).times(1.05)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+21: {
+        title: "Water-Energy Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e45).times(x.times(10).max(1))},
+		canAfford() {return (player.b.e.gte(this.cost()))},
+        display() { return `Scale Water-Energy effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Energy<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.e = player.b.e.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[21].gte(1)) eff = x.add(1).times(1.01)
+			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-right': '-14px',
+        },
+      },
+		  						      22: {
+        title: "Water-Beryllium Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e68).pow(x.add(1))},
+		canAfford() {return (player.c.be.gte(this.cost()))},
+        display() { return `Scale Water-Beryllium effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Beryllium<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.be = player.c.be.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[22].gte(1)) eff = x.add(1).times(1.75)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+        },
+      },
+		  						      23: {
+        title: "Water-Fire Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(782000).pow(x.add(1))},
+		canAfford() {return (player.b.l.gte(this.cost()))},
+        display() { return `Scale Water-Fire effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Fire<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.l = player.b.l.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[23].gte(1)) eff = x.add(1).times(1.05)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+ 31: {
+        title: "Water-Lithium Scaler II",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(34650000).times(x.add(1))},
+		canAfford() {return (player.b.points.gte(this.cost()))},
+        display() { return `Scale Water-Lithium effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Physics<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.points = player.b.points.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[31].gte(1)) eff = x.add(1).times(1.07)
+			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-right': '-14px',
+        },
+      },
+		  						      32: {
+        title: "Lithium-Hydrogen Scaler",
+				purchaseLimit: 25,
+        cost(x) {return Decimal.pow(10, 20860).times(x.add(10).max(1))},
+		canAfford() {return (player.c.h.gte(this.cost()))},
+        display() { return `Scale Lithium-Hydrogen effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Hydrogen<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.h = player.c.h.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[32].gte(1)) eff = x.add(1).times(2.05)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+        },
+      },
+		  						      33: {
+        title: "Lithium-Carbon Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e60).pow(x.add(1))},
+		canAfford() {return (player.c.c.gte(this.cost()))},
+        display() { return `Scale Lithium-Carbon effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Carbon<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.c = player.c.c.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[33].gte(1)) eff = x.add(1).times(1.05)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+41: {
+        title: "Lithium-Energy Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e65).times(x.times(10).max(1))},
+		canAfford() {return (player.b.e.gte(this.cost()))},
+        display() { return `Scale Lithium-Energy effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Energy<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.e = player.b.e.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[21].gte(1)) eff = x.add(1).times(1.07)
+			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-right': '-14px',
+        },
+      },
+		  						      42: {
+        title: "Lithium-Beryllium Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e170).times(x.times(7).max(1))},
+		canAfford() {return (player.c.be.gte(this.cost()))},
+        display() { return `Scale Lithium-Beryllium effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Beryllium<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.be = player.c.be.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[22].gte(1)) eff = x.add(1).times(1.25)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+        },
+      },
+		  						      43: {
+        title: "Lithium-Fire Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(4600000).times(x.add(1))},
+		canAfford() {return (player.b.l.gte(this.cost()))},
+        display() { return `Scale Lithium-Fire effect<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Fire<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.l = player.b.l.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[23].gte(1)) eff = x.add(1).times(2.15)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+		  						      51: {
+        title: "Carbon effects Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e65).times(x.times(8).max(1))},
+		canAfford() {return (player.c.c.gte(this.cost()))},
+        display() { return `Double Carbon effects<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Carbon<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.c = player.c.c.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[51].gte(1)) eff = x.add(1).times(2.15)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '0px',
+        },
+      },
+		  						      52: {
+        title: "Beryllium effects Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e220).times(x.add(1))},
+		canAfford() {return (player.c.be.gte(this.cost()))},
+        display() { return `Double Beryllium effects<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Beryllium<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.be = player.c.be.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[52].gte(1)) eff = x.add(1).times(2)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+		  						      53: {
+        title: "Fire effects Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e12).times(x.add(1))},
+		canAfford() {return (player.b.l.gte(this.cost()))},
+        display() { return `Double Fire effects<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Fire<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.l = player.b.l.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[53].gte(1)) eff = x.add(1).times(2)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+		  						      61: {
+        title: "Hydrogen effects Scaler",
+				purchaseLimit: 25,
+        cost(x) {return Decimal.pow(10, 122250).times(x.add(1))},
+		canAfford() {return (player.c.h.gte(this.cost()))},
+        display() { return `Double Hydrogen effects<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Hydrogen<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.c.h = player.c.h.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[61].gte(1)) eff = x.add(1).times(2)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '0px',
+        },
+      },
+		  						      62: {
+        title: "Energy effects Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(1e59).times(x.add(1))},
+		canAfford() {return (player.b.e.gte(this.cost()))},
+        display() { return `Double Energy effects<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Energy<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.b.e = player.b.e.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[61].gte(1)) eff = x.add(1).times(2)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+		  						      63: {
+        title: "Base Boost Scaler",
+				purchaseLimit: 25,
+        cost(x) {return new Decimal(4).times(x.add(1))},
+		canAfford() {return (player.cl.points.gte(this.cost()))},
+        display() { return `Scale Base Boost<br>Level: ${format(getBuyableAmount(this.layer, this.id))}<br>Cost: ${format(this.cost())} Quarks<br>Boost: x${format(this.effect())}`},
+        buy() {
+          player.cl.points = player.cl.points.sub(this.cost())
+			  setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+        unlocked() {return true},
+        effect(x) {
+          if (player.cl.buyables[62].gte(1)) eff = x.add(1).times(1.07)
+			 			  else eff = new Decimal(1)
+          return eff
+        },
+        style: {
+          width: "175px",
+		  'border-radius': '0%',
+          height: "100px",
+		      'margin-left': '-14px',
+        },
+      },
+},
+	milestones: {
+    0: {
+        requirementDescription: "Reveal Water-Lithium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.w > 0 && player.cl.li >0) },
+    },
+    1: {
+        requirementDescription: "Reveal Water-Steam effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.w > 0 && player.cl.st >0) },
+    },
+    2: {
+        requirementDescription: "Reveal Water-Carbon effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.w > 0 && player.cl.c >0) },
+    },
+    3: {
+        requirementDescription: "Reveal Water-Energy effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.w > 0 && player.cl.e >0) },
+    },
+    4: {
+        requirementDescription: "Reveal Water-Beryllium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.w > 0 && player.cl.br >0) },
+    },
+    5: {
+        requirementDescription: "Reveal Water-Fire effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.w > 0 && player.cl.f >0) },
+    },
+    6: {
+        requirementDescription: "Reveal Hydrogen-Lithium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.h > 0 && player.cl.li >0) },
+    },
+    7: {
+        requirementDescription: "Reveal Hydrogen-Steam effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.h > 0 && player.cl.st >0) },
+    },
+    8: {
+        requirementDescription: "Reveal Hydrogen-Carbon effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.h > 0 && player.cl.c >0) },
+    },
+    9: {
+        requirementDescription: "Reveal Hydrogen-Energy effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.h > 0 && player.cl.e >0) },
+    },
+    11: {
+       requirementDescription: "Reveal Hydrogen-Beryllium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.h > 0 && player.cl.br >0) },
+    },
+    12: {
+        requirementDescription: "Reveal Hydrogen-Fire effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.h > 0 && player.cl.f >0) },
+    },
+    13: {
+        requirementDescription: "Reveal Lithium-Carbon effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.li > 0 && player.cl.c >0) },
+    },
+    14: {
+        requirementDescription: "Reveal Lithium-Energy effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.li > 0 && player.cl.e >0) },
+    },
+    15: {
+       requirementDescription: "Reveal Lithium-Beryllium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.li > 0 && player.cl.br >0) },
+    },
+    16: {
+        requirementDescription: "Reveal Lithium-Fire effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.li > 0 && player.cl.f >0) },
+    },
+    17: {
+        requirementDescription: "Reveal Steam-Carbon effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.st > 0 && player.cl.c >0) },
+    },
+    18: {
+        requirementDescription: "Reveal Steam-Energy effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.st > 0 && player.cl.e >0) },
+    },
+    19: {
+       requirementDescription: "Reveal Steam-Beryllium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.st > 0 && player.cl.br >0) },
+    },
+    21: {
+        requirementDescription: "Reveal Steam-Fire effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.st > 0 && player.cl.f >0) },
+    },
+    22: {
+        requirementDescription: "Reveal Energy-Beryllium effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.e > 0 && player.cl.br >0) },
+    },
+    23: {
+       requirementDescription: "Reveal Energy-Fire effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.e > 0 && player.cl.f >0) },
+    },
+    24: {
+        requirementDescription: "Reveal Energy-Carbon effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.e > 0 && player.cl.c >0) },
+    },
+    25: {
+        requirementDescription: "Reveal Beryllium-Carbon effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.br > 0 && player.cl.c >0) },
+    },
+    26: {
+        requirementDescription: "Reveal Beryllium-Fire effect",
+        effectDescription() {return "Find a new effect"},
+        done() { return (player.cl.br > 0 && player.cl.f >0) },
+    },
+	},
+	clickables: {
+		      11: {
+				  title: "Water",
+        display() {return "Combine this with other upgrades to get some effects. <br>Chosen: " + formatWhole(player.cl.w) + "/1"},
+		unlocked() {return (hasUpgrade("cl", 11))},
+		canClick() {if (player.cl.h > 0 ) return false
+			if (player.cl.w < 1) return true},
+		onClick() {
+			 return player.cl.w ++
+		},
+      },
+		      12: {
+				  title: "Hydrogen",
+        display() {return "Combine this with other upgrades to get some effects.<br>Chosen: " + formatWhole(player.cl.h) + "/1"},
+		unlocked() {return (hasUpgrade("cl", 15))},
+		canClick() {if (player.cl.w > 0) return false
+			if (player.cl.h < 1) return true},
+		onClick() {
+			return player.cl.h ++
+		},
+      },
+		      21: {
+				  title: "Steam",
+        display() {return "Combine this with other upgrades to get some effects.<br>Chosen: " + formatWhole(player.cl.st) + "/1"},
+		unlocked() {return (hasUpgrade("cl", 15))},
+		canClick() {if (player.cl.li > 0) return false
+			if (player.cl.st < 1) return true},	
+		onClick() {
+return player.cl.st ++
+		},
+      },
+	  		      22: {
+					  title: "Lithium",
+        display() {return "Combine this with other upgrades to get some effects.<br>Chosen: " + formatWhole(player.cl.li) + "/1"},
+		unlocked() {return (hasUpgrade("cl", 11))},
+		canClick() {if (player.cl.st > 0) return false
+			if (player.cl.li < 1) return true},
+				onClick() {
+			return player.cl.li ++
+		},
+      },
+		      31: {
+				  title: "Energy",
+        display() {return "Combine this with other upgrades to get some effects"},
+		unlocked() {return (hasUpgrade("cl", 22))},
+		canClick() {if (player.cl.c > 0) return false
+			if (player.cl.e < 1) return true},
+				onClick() {
+			return player.cl.e ++
+		},
+      },
+	  32: {
+		  title: "Carbon",
+        display() {return "Combine this with other upgrades to get some effects"},
+		unlocked() {return (hasUpgrade("cl", 22))},
+		canClick() {if (player.cl.e > 0) return false
+			if (player.cl.c < 1) return true},
+				onClick() {
+			return player.cl.c ++
+		},
+      },
+		      41: {
+		 title: "Beryllium",
+        display() {return "Combine this with other upgrades to get some effects"},
+		unlocked() {return (hasUpgrade("cl", 22))},
+		canClick() {if (player.cl.f > 0) return false
+			if (player.cl.br < 1) return true},
+				onClick() {
+			return player.cl.br ++
+		},
+      },
+	  		      42: {
+					  title: "Fire",
+        display() {return "Combine this with other upgrades to get some effects"},
+		unlocked() {return (hasUpgrade("cl", 22))},
+				onClick() {
+			return player.cl.f ++
+		},
+		canClick() {if (player.cl.br > 0) return false
+			if (player.cl.f < 1) return true},
+      },
+	  51: {
+		  display() {return "Respec combinations"},
+		canClick() {return true},
+		  onClick() {
+		  if(confirm("Are you sure you want to respec? This will reset current combinations!")) {
+		  player.cl.w = 0,
+		  player.cl.h = 0,
+		  player.cl.c = 0,
+		  player.cl.br = 0,
+		  player.cl.w = 0,
+		  player.cl.st = 0,
+		  player.cl.e = 0,
+		  player.cl.f = 0,
+		  player.cl.li = 0
+		  }
+		  },
+	  },
+	},
+	doReset() {
+		layerDataReset("b")
+		layerDataReset("c")
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
